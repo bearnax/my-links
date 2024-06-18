@@ -1,21 +1,22 @@
 html {
     height: 100%;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    background: rgb(90,33,129);
-    background-repeat:no-repeat;
-    background: linear-gradient(0deg, rgba(90,33,129,1) 0%, rgba(144,15,84,1) 33%, rgba(219,64,43,1) 58%, rgba(213,147,55,1) 79%, rgba(252,193,69,1) 100%);
 }
 
 body {
-    padding: 1em;
+    background: rgb(90,33,129);
+    background-repeat:no-repeat;
+    background-attachment: scroll;
+    background: linear-gradient(0deg, rgba(90,33,129,1) 0%, rgba(144,15,84,1) 33%, rgba(219,64,43,1) 58%, rgba(213,147,55,1) 79%, rgba(252,193,69,1) 100%);
+    margin: 0;
     font-family: 'Fira Code', 'Times New Roman', Times, serif;
     font-size: 14px;
     display: grid;
     column-gap: 10px;
     grid-template-columns: auto 30% 30% 30% auto;
+}
+
+h2 {
+    font-size: 20px;
 }
 
 .col2 {
@@ -36,7 +37,7 @@ div {
     justify-content: left;
 }
 
-.box-link {
+.box-link, table {
     background-color: white;
     color: #1C1C1C;
     border: 1px solid #1C1C1C;
@@ -50,8 +51,16 @@ div {
     transition: box-shadow .15s,transform .15s;
     touch-action: manipulation;
     will-change: box-shadow,transform;
-    padding: 12px;
+    padding: 10px;
     margin-bottom: 10px;
+}
+
+table {
+    cursor: default;
+}
+
+td {
+    border-bottom: 1px dotted #1C1C1C;
 }
 
 .box-link:focus {
@@ -72,9 +81,34 @@ div {
 .inline-link {
     color: black;
     text-decoration: none;
+    padding: 6px;
+    margin-bottom: 6px;
+    background-color: rgba(245, 238, 220, 0.8);
 }
 
 .inline-link:hover {
-    color: rgb(218, 206, 186);
+    color: rgb(61, 5, 69);
     text-decoration: underline;
+}
+
+
+@media only screen and (max-width: 600px) {
+    html {
+        height: 100vh;
+    }
+
+    body {
+        padding: .2em;
+        font-family: 'Fira Code', 'Times New Roman', Times, serif;
+        font-size: 18px;
+        display: grid;
+        grid-template-columns: auto 95% auto;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+
+    }
+
+    .col2, .col3, .col4 {
+        grid-column: 2;
+    }
 }
