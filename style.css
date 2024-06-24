@@ -1,18 +1,17 @@
 html {
-    height: 100%;
+    height: 100vh;
 }
 
 body {
     background: rgb(90,33,129);
-    background-repeat: no-repeat;
-    background-attachment: fixed;
     background: linear-gradient(0deg, rgba(90,33,129,1) 0%, rgba(144,15,84,1) 33%, rgba(219,64,43,1) 58%, rgba(213,147,55,1) 79%, rgba(252,193,69,1) 100%);
-    margin: 0;
-    font-family: 'Fira Code', 'Times New Roman', Times, serif;
+    font-family: 'Inter', sans-serif;
     font-size: 18px;
     display: grid;
     column-gap: 10px;
     grid-template-columns: auto 380px 380px auto;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 h2 {
@@ -91,6 +90,10 @@ td {
     text-decoration: underline;
 }
 
+footer {
+    margin-top: 350px;
+}
+
 
 @media only screen and (max-width: 800px) {
     html {
@@ -99,7 +102,6 @@ td {
 
     body {
         padding: .2em;
-        font-family: 'Fira Code', 'Times New Roman', Times, serif;
         font-size: 18px;
         display: grid;
         grid-template-columns: auto 95% auto;
