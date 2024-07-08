@@ -10,11 +10,44 @@ body {
     text-align: center;
     display: grid;
     column-gap: 10px;
-    grid-template-columns: auto 580px auto;
+    grid-template-columns: auto 290px 290px auto;
     background-repeat: no-repeat;
     background-attachment: fixed;
     color: #FEFEFE;
 }
+
+header {
+    grid-column: 2 / 4;
+}
+
+.page-title {
+    text-align: left;
+    grid-column: 2;
+}
+
+.header-nav {
+    grid-column: 3;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.nav-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+}
+
+
+
+body > div {
+    grid-column: 2 / 4;
+}
+
+.notes {
+    text-align: left;
+}
+
 
 h2 {
     font-size: 20px;
