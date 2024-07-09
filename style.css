@@ -3,10 +3,10 @@ html {
 }
 
 body {
-    background: #121212;
+    background: #232323;
     font-family: 'Inter', sans-serif;
     font-size: 16px;
-    text-align: center;
+    text-align: left;
     display: grid;
     column-gap: 10px;
     grid-template-columns: auto 290px 290px auto;
@@ -44,7 +44,7 @@ body {
 
 .compact-list {
     grid-column: 2 / 4;
-    background-color: #232323;
+    background-color: #121212;
     /* border: 1px solid #FEFEFE; */
     border-radius: 10px;
     display: flex;
@@ -56,7 +56,7 @@ body {
 
 .list-link {
     color: #DEDEDE;
-    background-color: #232323;
+    background-color: #121212;
     appearance: none;   
     box-sizing: border-box;
     cursor: pointer;
@@ -78,16 +78,33 @@ body {
     border-radius: 8px;
 }
 
+.compact-list-header {
+    padding: 10px 0 5px 5px;
+}
+
 .compact-list-title {
     margin: 0;
-    padding: 0;
     font-weight: 600;
 }
 
-.compact-list-description {
+.compact-list-subtitle {
+    margin: 0;
+    font-weight: 200;
+    font-size: 12px;
+    color: #808d8c;
+}
+
+.compact-list-link-title {
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+}
+
+.compact-list-link-description {
     margin: 2px 0 0 0;
     padding: 0;
-    font-weight: 300;
+    font-weight: 200;
+    font-size: 12px;
     color: #808d8c;
 }
 
