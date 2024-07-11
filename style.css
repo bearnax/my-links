@@ -4,6 +4,7 @@ html {
 
 body {
     background: #232323;
+    background: linear-gradient(180deg, rgba(90,33,129,1) 0%, rgba(144,15,84,1) 33%, rgba(219,64,43,1) 58%, rgba(213,147,55,1) 79%, rgba(252,193,69,1) 100%);
     font-family: 'Inter', sans-serif;
     font-size: 16px;
     text-align: left;
