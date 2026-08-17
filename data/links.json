@@ -1,0 +1,242 @@
+{
+  "favorites": [
+    {
+      "label": "Twitch",
+      "url": "https://www.twitch.tv",
+      "search": "twitch twitch.tv streaming"
+    },
+    {
+      "label": "Gmail",
+      "url": "https://www.gmail.com",
+      "search": "gmail email google"
+    },
+    {
+      "label": "Youtube",
+      "url": "https://www.youtube.com",
+      "search": "youtube video"
+    }
+  ],
+  "sections": [
+    {
+      "id": "quick-access",
+      "title": "Quick Access",
+      "type": "links",
+      "open": true,
+      "links": [
+        {
+          "label": "My Personal Site",
+          "url": "https://www.willbrodnax.com",
+          "search": "personal site willbrodnax"
+        },
+        {
+          "label": "My GitHub",
+          "url": "https://github.com/bearnax",
+          "search": "github repos code bearnax"
+        }
+      ]
+    },
+    {
+      "id": "cnn",
+      "title": "CNN",
+      "type": "links",
+      "open": false,
+      "links": [
+        {
+          "label": "CNN Homepage",
+          "url": "https://www.cnn.com",
+          "search": "cnn homepage cnn.com"
+        },
+        {
+          "label": "Live Page",
+          "url": "https://www.cnn.com/videos/live",
+          "search": "cnn live"
+        },
+        {
+          "label": "Watch Page",
+          "url": "https://www.cnn.com/videos",
+          "search": "cnn watch videos"
+        },
+        {
+          "label": "CNN Headlines",
+          "url": "https://www.cnn.com/videos/fast/cnn-headlines",
+          "search": "cnn headlines"
+        },
+        {
+          "label": "CNN Shorts",
+          "url": "https://www.cnn.com/shorts/cnn-shorts",
+          "search": "cnn shorts"
+        }
+      ]
+    },
+    {
+      "id": "nerd-alert",
+      "title": "Nerd Alert",
+      "type": "links",
+      "open": false,
+      "links": [
+        {
+          "label": "Elden Ring, Google Sheets",
+          "url": "https://docs.google.com/spreadsheets/d/1RYeJTBAWSoCjFOFpsF0qLeKUQNjtJN_BdOQy7ijERbY/edit?usp=sharing",
+          "search": "elden ring google sheets weapons"
+        },
+        {
+          "label": "Weapon AR Calculator Basic",
+          "url": "https://eldenring.tclark.io/",
+          "search": "elden ring weapon ar calculator basic"
+        },
+        {
+          "label": "Weapon AR Calculator Pro",
+          "url": "https://www.tarnished.dev/weapon-calculator",
+          "search": "elden ring weapon ar calculator pro tarnished"
+        },
+        {
+          "label": "Elden Ring Wiki",
+          "url": "https://eldenring.wiki.fextralife.com/Elden+Ring+Wiki",
+          "search": "elden ring wiki fextralife"
+        }
+      ]
+    },
+    {
+      "id": "projects-personal",
+      "title": "Projects — Personal",
+      "type": "projects",
+      "open": false,
+      "projects": [
+        {
+          "emoji": "🐴",
+          "name": "Lil Sebastian",
+          "status": "done",
+          "statusLabel": "Complete",
+          "search": "lil sebastian scavenger hunt paige horse complete",
+          "live": "https://bearnax.github.io/limited-grammar/",
+          "repo": "https://github.com/bearnax/limited-grammar"
+        },
+        {
+          "emoji": "🏀",
+          "name": "MML",
+          "status": "wip",
+          "statusLabel": "Server side only",
+          "search": "mml march madness basketball simulator",
+          "live": null,
+          "repo": "https://github.com/bearnax/hq"
+        },
+        {
+          "emoji": "💍",
+          "name": "Elden Ring Build Selector",
+          "status": "live",
+          "statusLabel": "Live",
+          "search": "elden ring build selector",
+          "live": "https://bearnax.github.io/potential-chainsaw/",
+          "repo": "https://github.com/bearnax/potential-chainsaw"
+        },
+        {
+          "emoji": "🔗",
+          "name": "My Links",
+          "status": "live",
+          "statusLabel": "Live",
+          "search": "my links personal bookmarks",
+          "live": "https://bearnax.github.io/my-links/",
+          "repo": "https://github.com/bearnax/my-links"
+        },
+        {
+          "emoji": "🎙️",
+          "name": "Customer Feedback Loop",
+          "status": "wip",
+          "statusLabel": "Not deployed",
+          "search": "customer feedback loop llm cloudflare worker",
+          "live": null,
+          "repo": "https://github.com/bearnax/miniature-succotash"
+        },
+        {
+          "emoji": "👑",
+          "name": "Master Control",
+          "status": "idea",
+          "statusLabel": "Idea",
+          "search": "master control agent manager",
+          "live": null,
+          "repo": "https://github.com/bearnax/hq"
+        }
+      ]
+    },
+    {
+      "id": "projects-tip",
+      "title": "Projects — Take It Personal",
+      "type": "projects",
+      "open": false,
+      "projects": [
+        {
+          "emoji": "🪵",
+          "name": "Pitch Mill",
+          "status": "wip",
+          "statusLabel": "In use",
+          "search": "pitch mill storylines",
+          "live": null,
+          "repo": "https://github.com/bearnax/tip-pitch-mill"
+        },
+        {
+          "emoji": "📰",
+          "name": "The Newsroom",
+          "status": "wip",
+          "statusLabel": "In progress",
+          "search": "newsroom editorial content",
+          "live": null,
+          "repo": "https://github.com/bearnax/tip-newsroom"
+        },
+        {
+          "emoji": "👨🏻‍🦱",
+          "name": "A.W. Sterling",
+          "status": "idea",
+          "statusLabel": "Archive",
+          "search": "aw sterling tip scout archive",
+          "live": null,
+          "repo": "https://github.com/bearnax/tip-scout",
+          "note": "(formerly TIP Scout)"
+        },
+        {
+          "emoji": "🐕",
+          "name": "Feist — Daily GM",
+          "status": "wip",
+          "statusLabel": "Needs a loop",
+          "search": "feist daily gm agent loop",
+          "live": null,
+          "repo": "https://github.com/bearnax/hq"
+        }
+      ]
+    },
+    {
+      "id": "projects-work",
+      "title": "Projects — Work",
+      "type": "projects",
+      "open": false,
+      "projects": [
+        {
+          "emoji": "🃏",
+          "name": "Fibbly",
+          "status": "live",
+          "statusLabel": "Live",
+          "search": "fibbly planning poker",
+          "live": null,
+          "repo": "https://github.com/bearnax/hq"
+        },
+        {
+          "emoji": "🐂",
+          "name": "Yak Shaving",
+          "status": "idea",
+          "statusLabel": "Idea",
+          "search": "yak shaving dockerize cloudflare",
+          "live": null,
+          "repo": null
+        },
+        {
+          "emoji": "🎫",
+          "name": "Ticket Refinement Tool",
+          "status": "idea",
+          "statusLabel": "Ad hoc",
+          "search": "ticket writing refinement tool",
+          "live": null,
+          "repo": null
+        }
+      ]
+    }
+  ]
+}
