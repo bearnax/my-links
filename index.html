@@ -9,58 +9,289 @@
     <link rel="icon" type="image/x-icon" href="static/icons/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;600;700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
   </head>
-  
+
   <body>
-    <div class="link-section header"> 
-      <h1>Will's Links</h1>
-      <p>Fav App Quick Access</p>
-      <div class="links-nav">
-        <a class="logo-link" href="https://www.twitch.tv">
-          <img src="static/logos/twitch.png"/>
-          Twitch
-        </a>
-        <a class="logo-link" href="https://www.gmail.com">
-          <img  src="static/logos/gmail.webp"/>
-          Gmail
-        </a>
-        <a class="logo-link" href="https://www.youtube.com">
-          <img  src="static/logos/youtube.png"/>
-          Youtube
-        </a>
-      </div>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+
+    <div class="wrap">
+      <main id="main-content">
+
+        <nav class="top-nav" id="top-nav">
+          <div class="search-wrap">
+            <input type="search" id="link-search" class="search-input" placeholder="Find a link&hellip;" aria-label="Find a link">
+            <button type="button" class="nav-btn nav-btn--circle" id="search-toggle" aria-label="Toggle search" aria-expanded="false">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="20" y1="20" x2="15.5" y2="15.5"></line></svg>
+            </button>
+          </div>
+          <div class="sections-wrap">
+            <button type="button" class="nav-btn nav-btn--pill" id="sections-toggle" aria-expanded="false" aria-controls="sections-menu">Sections</button>
+            <nav class="sections-menu" id="sections-menu" aria-label="Jump to section" hidden>
+              <a href="#favorites">Favorites</a>
+              <a href="#quick-access">Quick Access</a>
+              <a href="#cnn">CNN</a>
+              <a href="#nerd-alert">Nerd Alert</a>
+              <a href="#projects-personal">Projects &mdash; Personal</a>
+              <a href="#projects-tip">Projects &mdash; Take It Personal</a>
+              <a href="#projects-work">Projects &mdash; Work</a>
+            </nav>
+          </div>
+        </nav>
+
+        <header class="page-header">
+          <h1>Will's Links</h1>
+          <p class="subtitle">Personal link hub</p>
+          <div class="divider"></div>
+        </header>
+
+        <section id="favorites" class="favorites-section" data-section aria-labelledby="favorites-heading">
+          <h2 id="favorites-heading">Favorites</h2>
+          <div class="favorites-row">
+            <a class="favorite-link" data-search="twitch twitch.tv streaming" href="https://www.twitch.tv">
+              <img class="favorite-icon" src="https://www.google.com/s2/favicons?sz=64&domain=twitch.tv" alt="">
+              Twitch
+            </a>
+            <a class="favorite-link" data-search="gmail email google" href="https://www.gmail.com">
+              <img class="favorite-icon" src="https://www.google.com/s2/favicons?sz=64&domain=gmail.com" alt="">
+              Gmail
+            </a>
+            <a class="favorite-link" data-search="youtube video" href="https://www.youtube.com">
+              <img class="favorite-icon" src="https://www.google.com/s2/favicons?sz=64&domain=youtube.com" alt="">
+              Youtube
+            </a>
+          </div>
+        </section>
+
+        <details id="quick-access" class="section-panel" data-section open>
+          <summary>Quick Access</summary>
+          <div class="link-list">
+            <a class="box-link" data-search="personal site willbrodnax" href="https://www.willbrodnax.com">
+              <span class="favicon-chip"><img src="https://www.google.com/s2/favicons?sz=64&domain=willbrodnax.com" alt=""></span>
+              My Personal Site
+            </a>
+            <a class="box-link" data-search="github repos code bearnax" href="https://github.com/bearnax">
+              <span class="favicon-chip"><img src="https://www.google.com/s2/favicons?sz=64&domain=github.com" alt=""></span>
+              My GitHub
+            </a>
+          </div>
+        </details>
+
+        <details id="cnn" class="section-panel" data-section open>
+          <summary>CNN</summary>
+          <div class="link-list">
+            <a class="box-link" data-search="cnn homepage cnn.com" href="https://www.cnn.com">
+              <span class="favicon-chip"><img src="https://www.google.com/s2/favicons?sz=64&domain=cnn.com" alt=""></span>
+              CNN Homepage
+            </a>
+            <a class="box-link" data-search="cnn live" href="https://www.cnn.com/videos/live">
+              <span class="favicon-chip"><img src="https://www.google.com/s2/favicons?sz=64&domain=cnn.com" alt=""></span>
+              Live Page
+            </a>
+            <a class="box-link" data-search="cnn watch videos" href="https://www.cnn.com/videos">
+              <span class="favicon-chip"><img src="https://www.google.com/s2/favicons?sz=64&domain=cnn.com" alt=""></span>
+              Watch Page
+            </a>
+            <a class="box-link" data-search="cnn headlines" href="https://www.cnn.com/videos/fast/cnn-headlines">
+              <span class="favicon-chip"><img src="https://www.google.com/s2/favicons?sz=64&domain=cnn.com" alt=""></span>
+              CNN Headlines
+            </a>
+            <a class="box-link" data-search="cnn shorts" href="https://www.cnn.com/shorts/cnn-shorts">
+              <span class="favicon-chip"><img src="https://www.google.com/s2/favicons?sz=64&domain=cnn.com" alt=""></span>
+              CNN Shorts
+            </a>
+          </div>
+        </details>
+
+        <details id="nerd-alert" class="section-panel" data-section open>
+          <summary>Nerd Alert</summary>
+          <div class="link-list">
+            <a class="box-link" data-search="elden ring google sheets weapons" href="https://docs.google.com/spreadsheets/d/1RYeJTBAWSoCjFOFpsF0qLeKUQNjtJN_BdOQy7ijERbY/edit?usp=sharing">
+              <span class="favicon-chip"><img src="https://www.google.com/s2/favicons?sz=64&domain=docs.google.com" alt=""></span>
+              Elden Ring, Google Sheets
+            </a>
+            <a class="box-link" data-search="elden ring weapon ar calculator basic" href="https://eldenring.tclark.io/">
+              <span class="favicon-chip"><img src="https://www.google.com/s2/favicons?sz=64&domain=eldenring.tclark.io" alt=""></span>
+              Weapon AR Calculator Basic
+            </a>
+            <a class="box-link" data-search="elden ring weapon ar calculator pro tarnished" href="https://www.tarnished.dev/weapon-calculator">
+              <span class="favicon-chip"><img src="https://www.google.com/s2/favicons?sz=64&domain=tarnished.dev" alt=""></span>
+              Weapon AR Calculator Pro
+            </a>
+            <a class="box-link" data-search="elden ring wiki fextralife" href="https://eldenring.wiki.fextralife.com/Elden+Ring+Wiki">
+              <span class="favicon-chip"><img src="https://www.google.com/s2/favicons?sz=64&domain=eldenring.wiki.fextralife.com" alt=""></span>
+              Elden Ring Wiki
+            </a>
+          </div>
+        </details>
+
+        <details id="projects-personal" class="section-panel" data-section open>
+          <summary>Projects &mdash; Personal</summary>
+          <div class="project-list">
+
+            <div class="project" data-search="lil sebastian scavenger hunt paige horse complete">
+              <div class="project-info">
+                <span class="project-name">🐴 Lil Sebastian</span>
+                <span class="project-status status-done">Complete</span>
+              </div>
+              <div class="split-link">
+                <a href="https://bearnax.github.io/limited-grammar/">⚡️ Live</a>
+                <a href="https://github.com/bearnax/limited-grammar">🔗 Repo</a>
+              </div>
+            </div>
+
+            <div class="project" data-search="mml march madness basketball simulator">
+              <div class="project-info">
+                <span class="project-name">🏀 MML</span>
+                <span class="project-status status-wip">Server side only</span>
+              </div>
+              <div class="split-link">
+                <span class="no-link">⚡️ Live</span>
+                <a href="https://github.com/bearnax/hq">🔗 Repo</a>
+              </div>
+            </div>
+
+            <div class="project" data-search="elden ring build selector">
+              <div class="project-info">
+                <span class="project-name">💍 Elden Ring Build Selector</span>
+                <span class="project-status status-live">Live</span>
+              </div>
+              <div class="split-link">
+                <a href="https://bearnax.github.io/potential-chainsaw/">⚡️ Live</a>
+                <a href="https://github.com/bearnax/potential-chainsaw">🔗 Repo</a>
+              </div>
+            </div>
+
+            <div class="project" data-search="my links personal bookmarks">
+              <div class="project-info">
+                <span class="project-name">🔗 My Links</span>
+                <span class="project-status status-live">Live</span>
+              </div>
+              <div class="split-link">
+                <a href="https://bearnax.github.io/my-links/">⚡️ Live</a>
+                <a href="https://github.com/bearnax/my-links">🔗 Repo</a>
+              </div>
+            </div>
+
+            <div class="project" data-search="customer feedback loop llm cloudflare worker">
+              <div class="project-info">
+                <span class="project-name">🎙️ Customer Feedback Loop</span>
+                <span class="project-status status-wip">Not deployed</span>
+              </div>
+              <div class="split-link">
+                <span class="no-link">⚡️ Live</span>
+                <a href="https://github.com/bearnax/miniature-succotash">🔗 Repo</a>
+              </div>
+            </div>
+
+            <div class="project" data-search="master control agent manager">
+              <div class="project-info">
+                <span class="project-name">👑 Master Control</span>
+                <span class="project-status status-idea">Idea</span>
+              </div>
+              <div class="split-link">
+                <span class="no-link">⚡️ Live</span>
+                <a href="https://github.com/bearnax/hq">🔗 Repo</a>
+              </div>
+            </div>
+
+          </div>
+        </details>
+
+        <details id="projects-tip" class="section-panel" data-section open>
+          <summary>Projects &mdash; Take It Personal</summary>
+          <div class="project-list">
+
+            <div class="project" data-search="pitch mill storylines">
+              <div class="project-info">
+                <span class="project-name">🪵 Pitch Mill</span>
+                <span class="project-status status-wip">In use</span>
+              </div>
+              <div class="split-link">
+                <span class="no-link">⚡️ Live</span>
+                <a href="https://github.com/bearnax/tip-pitch-mill">🔗 Repo</a>
+              </div>
+            </div>
+
+            <div class="project" data-search="newsroom editorial content">
+              <div class="project-info">
+                <span class="project-name">📰 The Newsroom</span>
+                <span class="project-status status-wip">In progress</span>
+              </div>
+              <div class="split-link">
+                <span class="no-link">⚡️ Live</span>
+                <a href="https://github.com/bearnax/tip-newsroom">🔗 Repo</a>
+              </div>
+            </div>
+
+            <div class="project" data-search="aw sterling tip scout archive">
+              <div class="project-info">
+                <span class="project-name">👨🏻&zwj;🦳 A.W. Sterling <span class="project-note">(formerly TIP&nbsp;Scout)</span></span>
+                <span class="project-status status-old">Archive</span>
+              </div>
+              <div class="split-link">
+                <span class="no-link">⚡️ Live</span>
+                <a href="https://github.com/bearnax/tip-scout">🔗 Repo</a>
+              </div>
+            </div>
+
+            <div class="project" data-search="feist daily gm agent loop">
+              <div class="project-info">
+                <span class="project-name">🐕 Feist &mdash; Daily GM</span>
+                <span class="project-status status-wip">Needs a loop</span>
+              </div>
+              <div class="split-link">
+                <span class="no-link">⚡️ Live</span>
+                <a href="https://github.com/bearnax/hq">🔗 Repo</a>
+              </div>
+            </div>
+
+          </div>
+        </details>
+
+        <details id="projects-work" class="section-panel" data-section open>
+          <summary>Projects &mdash; Work</summary>
+          <div class="project-list">
+
+            <div class="project" data-search="fibbly planning poker">
+              <div class="project-info">
+                <span class="project-name">🃏 Fibbly</span>
+                <span class="project-status status-live">Live</span>
+              </div>
+              <div class="split-link">
+                <span class="no-link">⚡️ Live</span>
+                <a href="https://github.com/bearnax/hq">🔗 Repo</a>
+              </div>
+            </div>
+
+            <div class="project" data-search="yak shaving dockerize cloudflare">
+              <div class="project-info">
+                <span class="project-name">🐂 Yak Shaving</span>
+                <span class="project-status status-idea">Idea</span>
+              </div>
+              <div class="split-link">
+                <span class="no-link">⚡️ Live</span>
+                <span class="no-link">🔗 Repo</span>
+              </div>
+            </div>
+
+            <div class="project" data-search="ticket writing refinement tool">
+              <div class="project-info">
+                <span class="project-name">🎫 Ticket Refinement Tool</span>
+                <span class="project-status status-idea">Ad hoc</span>
+              </div>
+              <div class="split-link">
+                <span class="no-link">⚡️ Live</span>
+                <span class="no-link">🔗 Repo</span>
+              </div>
+            </div>
+
+          </div>
+        </details>
+
+      </main>
     </div>
 
-    <div class="link-section">
-        <h2>CNN</h2>
-        <a class="box-link" href="https://www.cnn.com">CNN Homepage</a>
-        <a class="box-link" href="https://www.cnn.com/videos/live">Live Page</a>
-        <a class="box-link" href="https://www.cnn.com/videos">Watch Page</a>
-        <a class="box-link" href="https://www.cnn.com/videos/fast/cnn-headlines">CNN Headlines</a>
-        <a class="box-link" href="https://www.cnn.com/shorts/cnn-shorts">CNN Shorts</a>
-    </div>
-
-    <div class="link-section">
-      <h2>Quick Access</h2>
-      <a class="box-link" href="https://www.willbrodnax.com">My Personal Site</a>
-    </div>
-
-    <div class="link-section">
-      <h2>Nerd Alert</h2>
-      <a class="box-link" href="https://docs.google.com/spreadsheets/d/1RYeJTBAWSoCjFOFpsF0qLeKUQNjtJN_BdOQy7ijERbY/edit?usp=sharing">Elden Ring, Google Sheets</a>
-      <a class="box-link" href="https://eldenring.tclark.io/">Weapon AR Calculator Basic</a>
-      <a class="box-link" href="https://www.tarnished.dev/weapon-calculator">Weapon AR Calculator Pro</a>
-      <a class="box-link" href="https://eldenring.wiki.fextralife.com/Elden+Ring+Wiki">Elden Ring Wiki</a>
-    </div>
-
-    <footer class="link-section">
-      <p>.</p>
-    </footer>
-	
-    <!-- Link Templates Below -->
-    <!-- <a class="box-link" href=""></a> -->
-    <!-- <li><a class="inline-link" href=""></a> -->
-    <!-- <script src="index.js"></script> -->
+    <script src="index.js"></script>
   </body>
 </html>
