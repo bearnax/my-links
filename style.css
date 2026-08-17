@@ -1,5 +1,5 @@
 html {
-    height: 100vh;
+    min-height: 100vh;
 }
 
 body {
@@ -89,6 +89,108 @@ h2 {
     transform: translateY(2px);
 }
 
+/* Projects: [ name/status | live link | repo link ] */
+
+.project {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background-color: rgba(255,255,255,0.12);
+    border: 1px solid rgba(254,254,254,0.6);
+    border-radius: 5px;
+    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(255, 255, 255, 0.3) 0 7px 13px -3px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.project-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    min-width: 0;
+}
+
+.project-name {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.project-note {
+    font-weight: 400;
+    font-size: 12px;
+    opacity: 0.75;
+}
+
+.project-status {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: 2px 8px;
+    border: 1px solid rgba(254,254,254,0.5);
+    background-color: rgba(0,0,0,0.15);
+}
+
+.status-live {
+    background-color: rgba(88, 214, 141, 0.35);
+}
+
+.status-done {
+    background-color: rgba(93, 173, 226, 0.35);
+}
+
+.status-wip {
+    background-color: rgba(252, 193, 69, 0.35);
+}
+
+.status-idea, .status-old {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+.split-link {
+    display: flex;
+    flex-shrink: 0;
+    border: 1px solid #FEFEFE;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.split-link a, .split-link .no-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    font-size: 13px;
+    padding: 10px 14px;
+    color: #FEFEFE;
+    text-decoration: none;
+    background-color: rgba(255,255,255,0.2);
+    transition: background-color .15s;
+}
+
+.split-link > * + * {
+    border-left: 1px solid #FEFEFE;
+}
+
+.split-link a:hover {
+    background-color: rgba(255,255,255,0.45);
+}
+
+.split-link a:active {
+    box-shadow: #D6D6E7 0 3px 7px inset;
+}
+
+.split-link .no-link {
+    background-color: rgba(0,0,0,0.2);
+    opacity: 0.4;
+    cursor: not-allowed;
+    text-decoration: line-through;
+}
+
 .inline-link {
     color: black;
     text-decoration: none;
@@ -103,7 +205,7 @@ h2 {
 }
 
 footer {
-    margin-top: 350px;
+    margin-top: 100px;
 }
 
 
@@ -120,5 +222,15 @@ footer {
 
     .col2, .col3, .col4 {
         grid-column: 2;
+    }
+
+    .project {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .split-link a, .split-link .no-link {
+        flex: 1;
     }
 }
