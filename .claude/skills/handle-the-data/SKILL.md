@@ -12,6 +12,12 @@ humans to edit is this Google Sheet:
 **Sheet**: https://docs.google.com/spreadsheets/d/1-N1-rREX72eqmdyA-cGBr9UQsO2pGfTQ15KVFn5WH2k/edit
 **File ID**: `1-N1-rREX72eqmdyA-cGBr9UQsO2pGfTQ15KVFn5WH2k`
 
+There's also a code-only path for this: the `.github/workflows/sync-links.yml`
+GitHub Action does the same pull/validate/diff/PR sequence without any LLM
+involved (triggerable via `workflow_dispatch`, e.g. `gh workflow run
+sync-links.yml`). Use this skill when a human is driving the conversation;
+use the Action when you just need the sync to happen from code.
+
 This skill pulls the sheet, regenerates `data/links.json`, and opens a PR with
 the diff. It never pushes straight to `main`.
 

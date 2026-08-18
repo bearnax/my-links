@@ -1,0 +1,85 @@
+name: Sync links data from sheet
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  SHEET_ID: "1-N1-rREX72eqmdyA-cGBr9UQsO2pGfTQ15KVFn5WH2k"
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Fetch sheet as CSV
+        run: |
+          curl -sSLf -o /tmp/links-sync.csv \
+            "https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv"
+
+      - name: Validate and convert sheet
+        run: |
+          python3 scripts/sync-links.py /tmp/links-sync.csv /tmp/links-sync-out.json \
+            2>&1 | tee /tmp/links-sync-validate.log
+          exit "${PIPESTATUS[0]}"
+        shell: bash
+
+      - name: Report validation failure
+        if: failure()
+        run: |
+          {
+            echo "### Sheet validation failed"
+            echo '```'
+            cat /tmp/links-sync-validate.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Diff against data/links.json
+        id: diff
+        run: |
+          if diff -q /tmp/links-sync-out.json data/links.json > /dev/null; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Summarize changes
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          python3 scripts/diff-links.py data/links.json /tmp/links-sync-out.json > /tmp/links-sync-summary.md
+          cat /tmp/links-sync-summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Open pull request
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          branch="links-sync-$(date +%Y%m%d)"
+
+          if gh pr list --head "$branch" --state open --json number --jq '. | length' | grep -qv '^0$'; then
+            echo "An open PR already exists for branch $branch; skipping."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git checkout -b "$branch"
+          cp /tmp/links-sync-out.json data/links.json
+          git add data/links.json
+          git commit -m "Sync links data from sheet"
+          git push -u origin "$branch"
+
+          gh pr create \
+            --title "Sync links data from sheet ($(date +%Y-%m-%d))" \
+            --body-file /tmp/links-sync-summary.md \
+            --base main \
+            --head "$branch"
