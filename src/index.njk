@@ -1,3 +1,4 @@
+{% import "cards.njk" as cards -%}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -32,7 +33,9 @@
 
             <div class="sections-wrap">
               <button type="button" class="ghost-btn" id="sections-toggle" aria-expanded="false" aria-controls="sections-menu">Sections</button>
-              <nav class="sections-menu" id="sections-menu" aria-label="Jump to section" hidden></nav>
+              <nav class="sections-menu" id="sections-menu" aria-label="Jump to section" hidden>
+                {%- for sec in links.sections %}<a href="#{{ sec.id }}">{{ sec.title }}</a>{% endfor -%}
+              </nav>
             </div>
 
             <button type="button" class="ghost-btn ghost-btn--icon" id="theme-toggle" aria-label="Toggle light and dark">
@@ -43,10 +46,14 @@
 
         <section class="favorites-section" data-section aria-labelledby="favorites-heading">
           <h2 class="eyebrow" id="favorites-heading">Favorites</h2>
-          <div class="favorites-row" id="favorites-row"></div>
+          <div class="favorites-row" id="favorites-row">
+            {%- for fav in links.favorites %}{{ cards.favorite(fav) }}{% endfor -%}
+          </div>
         </section>
 
-        <div id="sections-container"></div>
+        <div id="sections-container">
+          {%- for sec in links.sections %}{{ cards.section(sec, loop.index) }}{% endfor -%}
+        </div>
 
         <p class="empty-state" id="empty-state" hidden>Nothing here by that name.</p>
 
