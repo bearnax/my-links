@@ -52,5 +52,14 @@
     "Sites": [
       "Personal"
     ]
+  },
+  {
+    "Slug": "people",
+    "Title": "People",
+    "Order": 7,
+    "Open": false,
+    "Sites": [
+      "Personal"
+    ]
   }
 ]

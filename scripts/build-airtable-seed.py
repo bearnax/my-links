@@ -17,9 +17,81 @@ import sys
 
 SITE_PERSONAL = "Personal"
 
+# The People type is new — it has no equivalent in data/links.json, so these
+# records are seeded rather than migrated. Every URL here was supplied by Will
+# or already lives in the repo's own data; none were guessed. Where a person's
+# other profiles are unknown the fields stay blank and the renderer skips them,
+# which is the correct outcome for a public page.
+PEOPLE = [
+    {
+        "Name": "Will Brodnax",
+        "Note": "",
+        # Both taken from the Quick Access section of data/links.json.
+        "Website": "https://www.willbrodnax.com",
+        "GitHub": "https://github.com/bearnax",
+        "LinkedIn": "",
+        "X": "",
+        "Instagram": "",
+        "Email": "",
+        "Search": "will brodnax me personal site github",
+    },
+    {
+        "Name": "Steph Garrett",
+        "Note": "Take It Personal",
+        "Website": "https://substack.com/@steph4sum",
+        "GitHub": "",
+        "LinkedIn": "",
+        "X": "",
+        "Instagram": "",
+        "Email": "",
+        "Search": "steph garrett substack take it personal",
+    },
+    {
+        "Name": "Jamie Renell",
+        "Note": "",
+        "Website": "https://www.imdb.com/name/nm1143549/",
+        "GitHub": "",
+        "LinkedIn": "",
+        "X": "",
+        "Instagram": "",
+        "Email": "",
+        "Search": "jamie renell imdb",
+    },
+    {
+        "Name": "Ron Swanson",
+        "Note": "(fictional)",
+        "Website": "https://en.wikipedia.org/wiki/Ron_Swanson",
+        "GitHub": "",
+        "LinkedIn": "",
+        "X": "",
+        "Instagram": "",
+        "Email": "",
+        "Search": "ron swanson parks and recreation pawnee",
+    },
+    {
+        "Name": "Ted Lasso",
+        "Note": "(fictional)",
+        "Website": "https://en.wikipedia.org/wiki/Ted_Lasso",
+        "GitHub": "",
+        "LinkedIn": "",
+        "X": "",
+        "Instagram": "",
+        "Email": "",
+        "Search": "ted lasso richmond believe",
+    },
+]
+
+PEOPLE_SECTION = {
+    "Slug": "people",
+    "Title": "People",
+    # Appended after the existing sections so the migration does not renumber
+    # anything already on the site. Reordering is a drag in Airtable now.
+    "Open": False,
+}
+
 
 def build(data):
-    sections, websites, projects, resources = [], [], [], []
+    sections, websites, projects, resources, people = [], [], [], [], []
 
     for order, sec in enumerate(data.get("sections", []), start=1):
         sections.append({
@@ -87,11 +159,27 @@ def build(data):
             row["Favorite"] = True
             row["Favorite Order"] = i
 
+    sections.append({
+        "Slug": PEOPLE_SECTION["Slug"],
+        "Title": PEOPLE_SECTION["Title"],
+        "Order": len(sections) + 1,
+        "Open": PEOPLE_SECTION["Open"],
+        "Sites": [SITE_PERSONAL],
+    })
+    for i, person in enumerate(PEOPLE, start=1):
+        people.append(dict(
+            person,
+            Section=PEOPLE_SECTION["Slug"],
+            Order=i,
+            Sites=[SITE_PERSONAL],
+        ))
+
     return {
         "Sections": sections,
         "Websites": websites,
         "Projects": projects,
         "Project Resources": resources,
+        "People": people,
     }
 
 
