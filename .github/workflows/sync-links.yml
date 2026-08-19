@@ -60,7 +60,9 @@ jobs:
       - name: Open pull request
         if: steps.diff.outputs.changed == 'true'
         env:
-          GH_TOKEN: ${{ github.token }}
+          # A PAT with repo scope in SYNC_PR_TOKEN lets the job open the PR even when
+          # "Allow GitHub Actions to create and approve pull requests" is turned off.
+          GH_TOKEN: ${{ secrets.SYNC_PR_TOKEN || github.token }}
         run: |
           branch="links-sync-$(date +%Y%m%d)"
 
@@ -76,10 +78,37 @@ jobs:
           cp /tmp/links-sync-out.json data/links.json
           git add data/links.json
           git commit -m "Sync links data from sheet"
-          git push -u origin "$branch"
 
-          gh pr create \
+          # Force is safe here: we bailed out above if an open PR targets this branch,
+          # and links-sync-* branches are only ever written by this job. It lets a
+          # rerun replace a leftover branch from an earlier run that failed after push.
+          git push --force -u origin "$branch"
+
+          if gh pr create \
             --title "Sync links data from sheet ($(date +%Y-%m-%d))" \
             --body-file /tmp/links-sync-summary.md \
             --base main \
-            --head "$branch"
+            --head "$branch" 2> /tmp/links-sync-pr.log; then
+            exit 0
+          fi
+
+          cat /tmp/links-sync-pr.log >&2
+
+          if ! grep -q "not permitted to create or approve pull requests" /tmp/links-sync-pr.log; then
+            exit 1
+          fi
+
+          # The synced data is pushed and safe; only PR creation is blocked by repo
+          # policy. Surface the compare link instead of failing the whole sync.
+          {
+            echo "### Branch pushed, but the pull request could not be opened"
+            echo
+            echo "GitHub Actions is not allowed to create pull requests in this repository."
+            echo "Turn on **Settings -> Actions -> General -> Workflow permissions ->**"
+            echo "**Allow GitHub Actions to create and approve pull requests**, or add a"
+            echo '`SYNC_PR_TOKEN` secret holding a PAT with `repo` scope.'
+            echo
+            echo "The synced data is on \`$branch\`. Open the PR here:"
+            echo
+            echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/compare/main...${branch}?expand=1"
+          } >> "$GITHUB_STEP_SUMMARY"
