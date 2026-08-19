@@ -24,6 +24,14 @@ export default function (eleventyConfig) {
     return String(index).padStart(2, "0");
   });
 
+  // A section of plain link rows is laid out tighter than one of cards.
+  // Computed here rather than in the template: Nunjucks has no Jinja-style
+  // `selectattr(attr, test, value)`, and the version that silently misfired
+  // produced a link list for a section full of projects.
+  eleventyConfig.addFilter("isLinkList", function (items) {
+    return (items || []).every(function (item) { return item.type === "website"; });
+  });
+
   // `search` is optional in the data; fall back to the lowercased label.
   eleventyConfig.addFilter("searchTerms", function (item) {
     return item.search || (item.label || item.name || "").toLowerCase();

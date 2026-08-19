@@ -37,6 +37,8 @@
         "name": "fldbh5hW47WO1Ypy2",
         "note": "fldam4YL6tQkl4DgB",
         "website": "fldAcNnJFw32lbFKL",
+        "wikipedia": "fldfBmBt8Me3F1a85",
+        "imdb": "fldDIQX3cn6xmATbd",
         "github": "fldRzf4PTyWn5TZYv",
         "linkedin": "fldX3znMe3q0pSlf5",
         "x": "fld9LpAjpS0dSQ8UU",
@@ -72,6 +74,14 @@
       }
     }
   },
-  "statuses": ["live", "done", "wip", "idea"],
-  "sites": ["Personal", "Work"]
+  "statuses": [
+    "live",
+    "done",
+    "wip",
+    "idea"
+  ],
+  "sites": [
+    "Personal",
+    "Work"
+  ]
 }

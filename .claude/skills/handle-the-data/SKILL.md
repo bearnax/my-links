@@ -1,89 +1,84 @@
 ---
 name: handle-the-data
-description: Sync the links/projects data on the site from the Google Sheet source of truth. Use when asked to sync, update, pull, or refresh the site's links from the sheet, or when the human says they've edited the "Will's Links" data sheet and want it reflected on the site.
+description: Sync the links/projects/people data on the site from the Airtable source of truth. Use when asked to sync, update, pull, or refresh the site's links, or when the human says they've edited the Links CMS Airtable base and want it reflected on the site.
 ---
 
 # Handle the Data
 
-`data/links.json` drives everything rendered on the page (favorites, sections,
-links, projects). It is a **generated file** — the actual source of truth for
-humans to edit is this Google Sheet:
+`data/links.json` drives everything rendered on the page. It is a **generated
+file** — the source of truth is the **Links CMS** Airtable base:
 
-**Sheet**: https://docs.google.com/spreadsheets/d/1-N1-rREX72eqmdyA-cGBr9UQsO2pGfTQ15KVFn5WH2k/edit
-**File ID**: `1-N1-rREX72eqmdyA-cGBr9UQsO2pGfTQ15KVFn5WH2k`
+**Base**: `app1bBKfPU7TpXAgm` (workspace: Production DBs)
 
-There's also a code-only path for this: the `.github/workflows/sync-links.yml`
-GitHub Action does the same pull/validate/diff/PR sequence without any LLM
-involved (triggerable via `workflow_dispatch`, e.g. `gh workflow run
-sync-links.yml`). Use this skill when a human is driving the conversation;
-use the Action when you just need the sync to happen from code.
+`data/links.json` is deliberately kept as the seam between Airtable and the
+site. The Eleventy build reads the committed file, never Airtable directly, so
+a build works offline and every data change lands as a reviewable diff.
 
-This skill pulls the sheet, regenerates `data/links.json`, and opens a PR with
-the diff. It never pushes straight to `main`.
+There's also a code-only path: the `.github/workflows/sync-links.yml` GitHub
+Action does the same pull/validate/diff/PR sequence with no LLM involved
+(`workflow_dispatch`, plus a weekday schedule). Use this skill when a human is
+driving; use the Action when the sync just needs to happen.
 
 ## Schema
 
-The sheet is one flat tab. One row per favorite, link, or project. Columns:
+Five tables. `data/airtable-schema.json` holds every table and field ID —
+**address the base by ID, never by display name**, so fields can be renamed in
+Airtable without breaking the build.
 
-| column | meaning |
+| table | holds |
 |---|---|
-| `group_id` | slug for the section (`favorites` for the favorites row, else e.g. `cnn`, `projects-work`) |
-| `group_title` | section heading text, e.g. `CNN`, `Projects — Work` |
-| `group_kind` | `favorites` \| `links` \| `projects` |
-| `group_order` | sort order of sections (favorites is always first, kind of order `0`) |
-| `group_open` | `TRUE`/`FALSE` — whether the section is expanded by default (ignored for favorites) |
-| `item_order` | sort order of rows within their group |
-| `label` | link label, or project name |
-| `url` | link URL (favorites/links only — leave blank for projects) |
-| `search` | search keywords; falls back to lowercased label if blank |
-| `emoji` | project emoji prefix (projects only) |
-| `note` | optional parenthetical note after a project name, e.g. `(formerly TIP Scout)` |
-| `status` | project status: `done` \| `live` \| `wip` \| `idea` (projects only) |
-| `status_label` | human status text shown next to the dot, e.g. `Not deployed` |
-| `live_url` | project's live URL, blank if none |
-| `repo_url` | project's repo URL, blank if none |
+| `Sections` | slug, title, order, open-by-default, sites |
+| `Websites` | simple link rows; `Favorite` also puts one in the top strip |
+| `People` | name, note, and profile URLs (Website, Wikipedia, IMDB, GitHub, LinkedIn, X, Instagram, Email) |
+| `Projects` | emoji, status, status label, note |
+| `Project Resources` | child of Projects — arbitrary Label + URL rows |
 
-`scripts/sync-links.py` (in this repo) implements this schema — read it if
-anything above is ambiguous. It raises on malformed rows rather than silently
-dropping data, so trust its errors.
+Two things worth knowing about the model:
+
+- **Sections do not declare a type.** Each item carries its own `type`
+  (`website` / `person` / `project`) and the renderer dispatches per item, so a
+  section can mix them.
+- **`Status` must be one of `live` / `done` / `wip` / `idea`.** These map to
+  CSS classes for the status dot's colour, so a new option renders a grey dot.
+  `Status Label` beside it is free text and can say anything.
 
 ## Process
 
 1. **Conflict check.** Before touching anything:
    - `git status` — the working tree must be clean. If it isn't, stop and ask
-     the human what to do with the in-progress work rather than clobbering it.
-   - `git fetch origin main && git log HEAD..origin/main` — make sure you're
-     about to branch from the latest `main`. If your local `main` is behind,
-     update it first (`git checkout main && git pull origin main`).
-   - Check for an existing open PR from a previous run of this skill (branch
-     prefix `links-sync-`) via the GitHub MCP tools. If one is open and
-     unmerged, don't open a second one — either update that PR's branch or
-     tell the human it's already pending review.
+     rather than clobbering in-progress work.
+   - `git fetch origin main && git log HEAD..origin/main` — branch from the
+     latest `main`.
+   - Check for an open PR from a previous run (branch prefix `links-sync-`)
+     via the GitHub MCP tools. If one is open, update it or say it's pending
+     rather than opening a second.
 
-2. **Pull the sheet.** Use `mcp__Google_Drive__download_file_content` on the
-   file ID above with `exportMimeType: "text/csv"`. The result's `content` is
-   base64 — decode it to get the CSV text. (Don't use `read_file_content` for
-   this — its markdown-table export has mangled multi-byte emoji in testing.
-   The CSV export round-trips cleanly.) Save it to a temp file.
+2. **Pull the base.** `python3 scripts/sync-links.py /tmp/links-sync-out.json`
+   with `AIRTABLE_TOKEN` set to a token scoped to the base (read is enough).
+   Without a token, or without network access to `api.airtable.com`, use
+   `--from-dir tests/fixtures/airtable` to build from the committed fixtures —
+   useful for testing the transform, but it is **not** a real sync and must
+   never be committed as one.
 
-3. **Validate before writing.** Run the converter against a scratch path first:
-   `python3 scripts/sync-links.py /tmp/links-sync.csv /tmp/links-sync-out.json`
-   If it raises (bad `group_kind`, bad `status`, missing required field),
-   stop here and report the exact row/error back to the human — do not open a
-   PR with partial or guessed data.
+3. **Read the warnings.** The sync skips records it cannot place rather than
+   failing: a person or project with no `Section` has nowhere to render.
+   Every skip prints `warning:` on stderr. Relay these to the human — a
+   skipped record is almost always an oversight in the base, not a decision.
+   Malformed rows (bad status, missing URL) raise instead; report the exact
+   error and stop.
 
-4. **Diff.** Compare `/tmp/links-sync-out.json` against the repo's
-   `data/links.json`. If they're identical, there's nothing to do — say so
-   and stop (no branch, no PR).
+4. **Diff.** Compare against the repo's `data/links.json`. Identical means
+   there is nothing to do — say so and stop, no branch and no PR.
 
-5. **Branch, commit, PR.** If there's a real diff:
-   - `git checkout -b links-sync-YYYYMMDD` off latest `main`.
+5. **Build before proposing.** `npm ci && npm run build`. The PR deploys on
+   merge, so a build failure belongs here, not on `main`.
+
+6. **Branch, commit, PR.** If there's a real diff:
+   - `git checkout -b links-sync-YYYYMMDD` off the latest `main`.
    - Copy the validated output over `data/links.json`.
-   - Commit with a message summarizing what changed (added/removed/edited
-     favorites, links, or projects — describe them by name, not just "update
-     data").
-   - Push and open a PR. In the PR body, list the concrete changes (e.g. "Add
-     project: Foo (wip)", "Edit link: CNN Shorts URL", "Remove favorite:
-     Old Thing") by diffing the old and new JSON — don't just say "synced
-     from sheet."
-   - Leave the PR for human review/merge — this skill does not merge.
+   - Commit describing what changed by name, not just "update data".
+   - Use `python3 scripts/diff-links.py <old> <new>` for the PR body — it
+     names added, removed, and edited items and which fields changed.
+   - Include any `warning:` lines in the PR body so skipped records are
+     visible to the reviewer.
+   - Leave the PR for human review. This skill does not merge.

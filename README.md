@@ -32,15 +32,54 @@ Pages must be set to _Settings → Pages → Build and deployment → Source →
 ## Editing links
 
 The site is built from `data/links.json`, which is generated — don't hand-edit
-it. The actual source of truth is a Google Sheet; edit rows there, then run
-the `handle-the-data` Claude Code skill (`.claude/skills/handle-the-data/`) to
-pull the sheet, regenerate `data/links.json`, and open a PR with the diff.
+it. The source of truth is the **Links CMS** Airtable base (`app1bBKfPU7TpXAgm`,
+in the Production DBs workspace). Edit records there, then run the
+`handle-the-data` Claude Code skill (`.claude/skills/handle-the-data/`) to pull
+the base, regenerate `data/links.json`, and open a PR with the diff.
 
-The same sync also runs as the **Sync links data from sheet** GitHub Action
-(run it from the Actions tab). For it to open the PR itself, turn on
-_Settings → Actions → General → Workflow permissions →_ **Allow GitHub Actions
-to create and approve pull requests** — the default `GITHUB_TOKEN` cannot
-create PRs without it, no matter what `permissions:` the workflow declares.
-Alternatively, set a `SYNC_PR_TOKEN` repository secret to a PAT with `repo`
-scope. With neither, the job still pushes the synced branch and prints a
-compare link in the run summary for you to open the PR by hand.
+The committed JSON is deliberately the seam between Airtable and the site: the
+build never calls Airtable, so it works offline and every data change arrives
+as a reviewable diff rather than appearing silently on the live page.
+
+### Card types
+
+| type | table | renders as |
+|---|---|---|
+| `website` | Websites | a link row; flag `Favorite` to also pin it to the top strip |
+| `person` | People | name, optional note, and whichever profile links are filled in |
+| `project` | Projects | emoji, name, status dot, and its Project Resources links |
+
+Sections don't declare a type — each item carries its own, so a section can mix
+them. `Status` must be one of `live` / `done` / `wip` / `idea`; those map to the
+dot's colour. The label beside the dot is free text.
+
+### Running a sync by hand
+
+```sh
+export AIRTABLE_TOKEN=...        # scoped to the base; read access is enough
+python3 scripts/sync-links.py    # writes data/links.json
+python3 scripts/diff-links.py <old.json> <new.json>   # markdown change summary
+```
+
+Without a token you can still exercise the transform against committed
+fixtures, which is how it is tested where `api.airtable.com` is unreachable:
+
+```sh
+python3 scripts/sync-links.py --from-dir tests/fixtures/airtable /tmp/out.json
+```
+
+Records that can't be placed — a person or project with no section — are
+skipped with a `warning:` on stderr rather than failing the run. Malformed
+rows (a bad status, a missing URL) raise instead.
+
+### The scheduled sync
+
+The **Sync links data from Airtable** GitHub Action runs the same
+pull/validate/build/diff/PR sequence on weekday mornings and on demand from the
+Actions tab. It needs an `AIRTABLE_TOKEN` repository secret holding a personal
+access token with `data.records:read` scoped to the base.
+
+For it to open the PR itself, turn on _Settings → Actions → General → Workflow
+permissions →_ **Allow GitHub Actions to create and approve pull requests**, or
+set a `SYNC_PR_TOKEN` secret to a PAT with `repo` scope. With neither, the job
+still pushes the synced branch and prints a compare link in the run summary.
