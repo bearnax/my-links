@@ -1,14 +1,15 @@
-name: Sync links data from sheet
+name: Sync links data from Airtable
 
 on:
   workflow_dispatch: {}
+  schedule:
+    # Weekday mornings, off the hour so this is not queued with everything
+    # else that runs at :00.
+    - cron: "23 12 * * 1-5"
 
 permissions:
   contents: write
   pull-requests: write
-
-env:
-  SHEET_ID: "1-N1-rREX72eqmdyA-cGBr9UQsO2pGfTQ15KVFn5WH2k"
 
 jobs:
   sync:
@@ -20,27 +21,44 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Fetch sheet as CSV
+      - name: Build links.json from Airtable
+        env:
+          # A personal access token scoped to the Links CMS base. Read-only is
+          # enough — this job never writes back to Airtable.
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: |
-          curl -sSLf -o /tmp/links-sync.csv \
-            "https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv"
-
-      - name: Validate and convert sheet
-        run: |
-          python3 scripts/sync-links.py /tmp/links-sync.csv /tmp/links-sync-out.json \
-            2>&1 | tee /tmp/links-sync-validate.log
+          if [ -z "$AIRTABLE_TOKEN" ]; then
+            echo "::error::AIRTABLE_TOKEN secret is not set. Create a token with data.records:read scoped to the Links CMS base and add it as a repository secret."
+            exit 1
+          fi
+          python3 scripts/sync-links.py /tmp/links-sync-out.json 2>&1 | tee /tmp/links-sync.log
           exit "${PIPESTATUS[0]}"
         shell: bash
 
-      - name: Report validation failure
+      - name: Report sync failure
         if: failure()
         run: |
           {
-            echo "### Sheet validation failed"
+            echo "### Airtable sync failed"
             echo '```'
-            cat /tmp/links-sync-validate.log
+            tail -c 4000 /tmp/links-sync.log 2>/dev/null || echo "(no log)"
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Surface warnings
+        if: success()
+        run: |
+          # Warnings mean a record could not be placed — a person with no
+          # section, say. The sync deliberately does not fail on these, so
+          # they need somewhere visible to land.
+          if grep -q '^warning:' /tmp/links-sync.log; then
+            {
+              echo "### Records skipped"
+              echo '```'
+              grep '^warning:' /tmp/links-sync.log
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       - name: Diff against data/links.json
         id: diff
@@ -56,6 +74,22 @@ jobs:
         run: |
           python3 scripts/diff-links.py data/links.json /tmp/links-sync-out.json > /tmp/links-sync-summary.md
           cat /tmp/links-sync-summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/setup-node@v4
+        if: steps.diff.outputs.changed == 'true'
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Check the site still builds with the new data
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          # The PR would deploy on merge, so a build failure should surface
+          # here rather than on main.
+          cp /tmp/links-sync-out.json data/links.json
+          npm ci
+          npm run build
+          test -s _site/index.html
 
       - name: Open pull request
         if: steps.diff.outputs.changed == 'true'
@@ -75,9 +109,8 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           git checkout -b "$branch"
-          cp /tmp/links-sync-out.json data/links.json
           git add data/links.json
-          git commit -m "Sync links data from sheet"
+          git commit -m "Sync links data from Airtable"
 
           # Force is safe here: we bailed out above if an open PR targets this branch,
           # and links-sync-* branches are only ever written by this job. It lets a
@@ -85,7 +118,7 @@ jobs:
           git push --force -u origin "$branch"
 
           if gh pr create \
-            --title "Sync links data from sheet ($(date +%Y-%m-%d))" \
+            --title "Sync links data from Airtable ($(date +%Y-%m-%d))" \
             --body-file /tmp/links-sync-summary.md \
             --base main \
             --head "$branch" 2> /tmp/links-sync-pr.log; then
