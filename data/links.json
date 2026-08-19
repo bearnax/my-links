@@ -368,7 +368,7 @@
         {
           "type": "person",
           "name": "Leslie Knope",
-          "search": "ted lasso richmond believe",
+          "search": "leslie knope parks and rec",
           "links": [
             {
               "label": "Wikipedia",
@@ -380,6 +380,22 @@
             }
           ],
           "note": "President?"
+        },
+        {
+          "type": "person",
+          "name": "Tom Loftis",
+          "search": "tom loftis widows bay",
+          "links": [
+            {
+              "label": "Wikipedia",
+              "url": "https://en.wikipedia.org/wiki/Matthew_Rhys"
+            },
+            {
+              "label": "IMDB",
+              "url": "https://www.imdb.com/name/nm0722629/"
+            }
+          ],
+          "note": "Mayor, Widow's Bay"
         }
       ]
     }
