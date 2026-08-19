@@ -1,0 +1,170 @@
+[
+  {
+    "Name": "My Personal Site",
+    "URL": "https://www.willbrodnax.com",
+    "Search": "personal site willbrodnax",
+    "Section": "quick-access",
+    "Order": 1,
+    "Favorite": false,
+    "Favorite Order": null,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "My GitHub",
+    "URL": "https://github.com/bearnax",
+    "Search": "github repos code bearnax",
+    "Section": "quick-access",
+    "Order": 2,
+    "Favorite": false,
+    "Favorite Order": null,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "Elden Ring, Google Sheets",
+    "URL": "https://docs.google.com/spreadsheets/d/1RYeJTBAWSoCjFOFpsF0qLeKUQNjtJN_BdOQy7ijERbY/edit?usp=sharing",
+    "Search": "elden ring google sheets weapons",
+    "Section": "nerd-alert",
+    "Order": 1,
+    "Favorite": false,
+    "Favorite Order": null,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "Weapon AR Calculator Basic",
+    "URL": "https://eldenring.tclark.io/",
+    "Search": "elden ring weapon ar calculator basic",
+    "Section": "nerd-alert",
+    "Order": 2,
+    "Favorite": false,
+    "Favorite Order": null,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "Weapon AR Calculator Pro",
+    "URL": "https://www.tarnished.dev/weapon-calculator",
+    "Search": "elden ring weapon ar calculator pro tarnished",
+    "Section": "nerd-alert",
+    "Order": 3,
+    "Favorite": false,
+    "Favorite Order": null,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "Fextralife, Elden Ring Wiki",
+    "URL": "https://eldenring.wiki.fextralife.com/Elden+Ring+Wiki",
+    "Search": "elden ring wiki fextralife",
+    "Section": "nerd-alert",
+    "Order": 4,
+    "Favorite": false,
+    "Favorite Order": null,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "CNN Homepage",
+    "URL": "https://www.cnn.com",
+    "Search": "cnn homepage cnn.com",
+    "Section": "cnn",
+    "Order": 1,
+    "Favorite": false,
+    "Favorite Order": null,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "Live Page",
+    "URL": "https://www.cnn.com/videos/live",
+    "Search": "cnn live",
+    "Section": "cnn",
+    "Order": 2,
+    "Favorite": false,
+    "Favorite Order": null,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "Watch Page",
+    "URL": "https://www.cnn.com/videos",
+    "Search": "cnn watch videos",
+    "Section": "cnn",
+    "Order": 3,
+    "Favorite": false,
+    "Favorite Order": null,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "CNN Headlines",
+    "URL": "https://www.cnn.com/videos/fast/cnn-headlines",
+    "Search": "cnn headlines",
+    "Section": "cnn",
+    "Order": 4,
+    "Favorite": false,
+    "Favorite Order": null,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "CNN Shorts",
+    "URL": "https://www.cnn.com/shorts/cnn-shorts",
+    "Search": "cnn shorts",
+    "Section": "cnn",
+    "Order": 5,
+    "Favorite": false,
+    "Favorite Order": null,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "Twitch",
+    "URL": "https://www.twitch.tv",
+    "Search": "twitch twitch.tv streaming",
+    "Section": "",
+    "Order": null,
+    "Favorite": true,
+    "Favorite Order": 1,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "Gmail",
+    "URL": "https://www.gmail.com",
+    "Search": "gmail email google",
+    "Section": "",
+    "Order": null,
+    "Favorite": true,
+    "Favorite Order": 2,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "Youtube",
+    "URL": "https://www.youtube.com",
+    "Search": "youtube video",
+    "Section": "",
+    "Order": null,
+    "Favorite": true,
+    "Favorite Order": 3,
+    "Sites": [
+      "Personal"
+    ]
+  }
+]
