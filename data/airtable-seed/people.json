@@ -1,0 +1,82 @@
+[
+  {
+    "Name": "Will Brodnax",
+    "Note": "",
+    "Website": "https://www.willbrodnax.com",
+    "GitHub": "https://github.com/bearnax",
+    "LinkedIn": "",
+    "X": "",
+    "Instagram": "",
+    "Email": "",
+    "Search": "will brodnax me personal site github",
+    "Section": "people",
+    "Order": 1,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "Steph Garrett",
+    "Note": "Take It Personal",
+    "Website": "https://substack.com/@steph4sum",
+    "GitHub": "",
+    "LinkedIn": "",
+    "X": "",
+    "Instagram": "",
+    "Email": "",
+    "Search": "steph garrett substack take it personal",
+    "Section": "people",
+    "Order": 2,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "Jamie Renell",
+    "Note": "",
+    "Website": "https://www.imdb.com/name/nm1143549/",
+    "GitHub": "",
+    "LinkedIn": "",
+    "X": "",
+    "Instagram": "",
+    "Email": "",
+    "Search": "jamie renell imdb",
+    "Section": "people",
+    "Order": 3,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "Ron Swanson",
+    "Note": "(fictional)",
+    "Website": "https://en.wikipedia.org/wiki/Ron_Swanson",
+    "GitHub": "",
+    "LinkedIn": "",
+    "X": "",
+    "Instagram": "",
+    "Email": "",
+    "Search": "ron swanson parks and recreation pawnee",
+    "Section": "people",
+    "Order": 4,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "Ted Lasso",
+    "Note": "(fictional)",
+    "Website": "https://en.wikipedia.org/wiki/Ted_Lasso",
+    "GitHub": "",
+    "LinkedIn": "",
+    "X": "",
+    "Instagram": "",
+    "Email": "",
+    "Search": "ted lasso richmond believe",
+    "Section": "people",
+    "Order": 5,
+    "Sites": [
+      "Personal"
+    ]
+  }
+]

@@ -1,0 +1,158 @@
+[
+  {
+    "Name": "Lil Sebastian",
+    "Emoji": "🐴",
+    "Status": "done",
+    "Status Label": "Complete",
+    "Note": "",
+    "Search": "lil sebastian scavenger hunt paige horse complete",
+    "Section": "projects-personal",
+    "Order": 1,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "MML",
+    "Emoji": "🏀",
+    "Status": "wip",
+    "Status Label": "Server side only",
+    "Note": "",
+    "Search": "mml march madness basketball simulator",
+    "Section": "projects-personal",
+    "Order": 2,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "Elden Ring Build Selector",
+    "Emoji": "💍",
+    "Status": "live",
+    "Status Label": "Live",
+    "Note": "",
+    "Search": "elden ring build selector",
+    "Section": "projects-personal",
+    "Order": 3,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "My Links (this site)",
+    "Emoji": "🔗",
+    "Status": "live",
+    "Status Label": "Live",
+    "Note": "",
+    "Search": "my links personal bookmarks",
+    "Section": "projects-personal",
+    "Order": 4,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "Customer Feedback Loop",
+    "Emoji": "🎙️",
+    "Status": "wip",
+    "Status Label": "Not deployed",
+    "Note": "",
+    "Search": "customer feedback loop llm cloudflare worker",
+    "Section": "projects-personal",
+    "Order": 5,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "Pitch Mill",
+    "Emoji": "🪵",
+    "Status": "wip",
+    "Status Label": "In use",
+    "Note": "",
+    "Search": "pitch mill storylines",
+    "Section": "projects-tip",
+    "Order": 1,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "The Newsroom",
+    "Emoji": "📰",
+    "Status": "wip",
+    "Status Label": "In progress",
+    "Note": "",
+    "Search": "newsroom editorial content",
+    "Section": "projects-tip",
+    "Order": 2,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "A.W. Sterling",
+    "Emoji": "👨🏻‍🦱",
+    "Status": "idea",
+    "Status Label": "Archive",
+    "Note": "(formerly TIP Scout)",
+    "Search": "aw sterling tip scout archive",
+    "Section": "projects-tip",
+    "Order": 3,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "Feist — Daily GM",
+    "Emoji": "🐕",
+    "Status": "wip",
+    "Status Label": "Needs a loop",
+    "Note": "",
+    "Search": "feist daily gm agent loop",
+    "Section": "projects-tip",
+    "Order": 4,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "Fibbly",
+    "Emoji": "🃏",
+    "Status": "idea",
+    "Status Label": "Ad hoc",
+    "Note": "",
+    "Search": "fibbly planning poker",
+    "Section": "projects-work",
+    "Order": 1,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "Yak Shaving",
+    "Emoji": "🐂",
+    "Status": "idea",
+    "Status Label": "Idea",
+    "Note": "",
+    "Search": "yak shaving dockerize cloudflare",
+    "Section": "projects-work",
+    "Order": 2,
+    "Sites": [
+      "Personal"
+    ]
+  },
+  {
+    "Name": "Ticket Refinement Tool",
+    "Emoji": "🎫",
+    "Status": "idea",
+    "Status Label": "Ad hoc",
+    "Note": "",
+    "Search": "ticket writing refinement tool",
+    "Section": "projects-work",
+    "Order": 3,
+    "Sites": [
+      "Personal"
+    ]
+  }
+]

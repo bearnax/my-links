@@ -1,0 +1,15 @@
+Name,URL,Search,Section,Order,Favorite,Favorite Order,Sites
+My Personal Site,https://www.willbrodnax.com,personal site willbrodnax,quick-access,1,False,,Personal
+My GitHub,https://github.com/bearnax,github repos code bearnax,quick-access,2,False,,Personal
+"Elden Ring, Google Sheets",https://docs.google.com/spreadsheets/d/1RYeJTBAWSoCjFOFpsF0qLeKUQNjtJN_BdOQy7ijERbY/edit?usp=sharing,elden ring google sheets weapons,nerd-alert,1,False,,Personal
+Weapon AR Calculator Basic,https://eldenring.tclark.io/,elden ring weapon ar calculator basic,nerd-alert,2,False,,Personal
+Weapon AR Calculator Pro,https://www.tarnished.dev/weapon-calculator,elden ring weapon ar calculator pro tarnished,nerd-alert,3,False,,Personal
+"Fextralife, Elden Ring Wiki",https://eldenring.wiki.fextralife.com/Elden+Ring+Wiki,elden ring wiki fextralife,nerd-alert,4,False,,Personal
+CNN Homepage,https://www.cnn.com,cnn homepage cnn.com,cnn,1,False,,Personal
+Live Page,https://www.cnn.com/videos/live,cnn live,cnn,2,False,,Personal
+Watch Page,https://www.cnn.com/videos,cnn watch videos,cnn,3,False,,Personal
+CNN Headlines,https://www.cnn.com/videos/fast/cnn-headlines,cnn headlines,cnn,4,False,,Personal
+CNN Shorts,https://www.cnn.com/shorts/cnn-shorts,cnn shorts,cnn,5,False,,Personal
+Twitch,https://www.twitch.tv,twitch twitch.tv streaming,,,True,1,Personal
+Gmail,https://www.gmail.com,gmail email google,,,True,2,Personal
+Youtube,https://www.youtube.com,youtube video,,,True,3,Personal
