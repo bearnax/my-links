@@ -1,0 +1,15 @@
+{
+  "name": "my-links",
+  "version": "1.0.0",
+  "description": "Will's personal link hub — a static site built from data/links.json",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "build": "eleventy",
+    "serve": "eleventy --serve"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0"
+  }
+}

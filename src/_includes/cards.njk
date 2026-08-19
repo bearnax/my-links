@@ -1,0 +1,26 @@
+{#
+  One macro per card type. These are the templates that replaced the
+  `render*()` functions that used to build the same markup in the browser —
+  markup lives here now, and `index.js` only handles interaction.
+
+  The macros deliberately emit no whitespace between elements: several of the
+  containers are flex, and the rendered DOM is diffed against the old
+  client-rendered output to prove the migration changed nothing.
+#}
+
+{% macro favorite(fav) -%}
+<a class="favorite-link" href="{{ fav.url }}" data-search="{{ fav | searchTerms }}"><img src="{{ fav.url | faviconUrl }}" alt="">{{ fav.label }}</a>
+{%- endmacro %}
+
+{% macro linkRow(link) -%}
+<a class="row-link" href="{{ link.url }}" data-search="{{ link | searchTerms }}"><img src="{{ link.url | faviconUrl }}" alt=""><span class="row-label">{{ link.label }}</span><span class="row-arrow">↗</span></a>
+{%- endmacro %}
+
+{% macro project(p) -%}
+<div class="project" data-search="{{ p | searchTerms }}"><div class="project-info"><span class="project-name">{% if p.emoji %}{{ p.emoji }} {% endif %}{{ p.name }}{% if p.note %} <span class="project-note">{{ p.note }}</span>{% endif %}</span><span class="project-status"><span class="dot dot-{{ p.status }}"></span>{{ p.statusLabel }}</span></div><div class="project-links">{% if p.live %}<a class="pl pl-live" href="{{ p.live }}">Live</a>{% else %}<span class="pl pl-off">Live</span>{% endif %}{% if p.repo %}<a class="pl" href="{{ p.repo }}">Repo</a>{% else %}<span class="pl pl-off">Repo</span>{% endif %}</div></div>
+{%- endmacro %}
+
+{% macro section(sec, index) -%}
+{% set items = sec.projects if sec.type == "projects" else sec.links -%}
+<details id="{{ sec.id }}" class="section-panel" data-section="" data-num="{{ index | sectionNumber }}"{% if sec.open %} open=""{% endif %}><summary><span class="sec-num">{{ index | sectionNumber }}</span><span class="sec-title">{{ sec.title }}</span><span class="sec-rule"></span><span class="sec-count">{{ items | length }} link{% if items | length != 1 %}s{% endif %}</span><span class="sec-glyph"></span></summary><div class="{{ "project-list" if sec.type == "projects" else "link-list" }}">{% for item in items %}{% if sec.type == "projects" %}{{ project(item) }}{% else %}{{ linkRow(item) }}{% endif %}{% endfor %}</div></details>
+{%- endmacro %}

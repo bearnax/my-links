@@ -1,11 +1,37 @@
 # my-links
-A single HTML, public facing website with my most used links (i.e. my universal bookmarks)
+A public facing website with my most used links (i.e. my universal bookmarks)
 
 Live on [Github Pages](https://bearnax.github.io/my-links/)
 
+## Building
+
+The site is generated with [Eleventy](https://www.11ty.dev/) from
+`data/links.json`. The cards are rendered at build time, so the page ships as
+real HTML and works with JavaScript disabled; `src/index.js` only handles
+search, the theme toggle, and the section menu.
+
+```sh
+npm install
+npm run build   # writes _site/
+npm run serve   # local dev server with live reload
+```
+
+| path | what it is |
+|---|---|
+| `data/links.json` | generated data, the input to the build |
+| `src/index.njk` | the page shell |
+| `src/_includes/cards.njk` | one macro per card type (favorite, link, project) |
+| `src/_data/links.js` | reads `data/links.json` into the templates |
+| `src/style.css`, `src/index.js`, `src/static/` | copied through to `_site/` as-is |
+
+Deploys happen from the **Build and deploy site** GitHub Action on every push
+to `main`. Because the site is built rather than served from the repo as-is,
+Pages must be set to _Settings → Pages → Build and deployment → Source →_
+**GitHub Actions**.
+
 ## Editing links
 
-The page renders from `data/links.json`, which is generated — don't hand-edit
+The site is built from `data/links.json`, which is generated — don't hand-edit
 it. The actual source of truth is a Google Sheet; edit rows there, then run
 the `handle-the-data` Claude Code skill (`.claude/skills/handle-the-data/`) to
 pull the sheet, regenerate `data/links.json`, and open a PR with the diff.

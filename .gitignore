@@ -164,3 +164,7 @@ cython_debug/
 # Mac Stuff
 .DS_store
 .DS_Store
+
+# Node / Eleventy
+node_modules/
+_site/
