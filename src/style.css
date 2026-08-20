@@ -166,7 +166,7 @@ a { color: inherit; text-decoration: none; }
     /* Letters pulled tight inside each word, the gaps between words opened
        back up so the words still read as separate blocks. */
     letter-spacing: -.045em;
-    word-spacing: .28em;
+    word-spacing: .18em;
     text-transform: lowercase;
 }
 
