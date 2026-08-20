@@ -9,7 +9,26 @@
     <link rel="icon" type="image/x-icon" href="static/icons/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..900&display=swap" rel="stylesheet">
+    {#
+      The palette is settled before first paint so the page never flashes one
+      colour and lands on another. Kept inline for that reason — index.js is a
+      module and therefore deferred. A saved override from the footer picker
+      wins; with none saved, one of the three flats is drawn at random.
+    #}
+    <script>
+      (function () {
+        var random = ["blue", "green", "rust"];
+        var all = random.concat(["velvet"]);
+        var saved = null;
+        try { saved = localStorage.getItem("wl-palette"); } catch (e) {}
+        document.documentElement.setAttribute(
+          "data-palette",
+          all.indexOf(saved) !== -1
+            ? saved
+            : random[Math.floor(Math.random() * random.length)]);
+      })();
+    </script>
   </head>
 
   <body>
@@ -19,29 +38,8 @@
       <main id="main-content">
 
         <header class="page-header">
-          <div class="brand">
-            <h1>Will's Links</h1>
-            <span class="brand-rule"></span>
-            <span class="brand-label">Personal link hub</span>
-          </div>
-
-          <div class="header-tools">
-            <div class="search-wrap">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="20" y1="20" x2="15.5" y2="15.5"></line></svg>
-              <input type="search" id="link-search" class="search-input" placeholder="Find a link" aria-label="Find a link">
-            </div>
-
-            <div class="sections-wrap">
-              <button type="button" class="ghost-btn" id="sections-toggle" aria-expanded="false" aria-controls="sections-menu">Sections</button>
-              <nav class="sections-menu" id="sections-menu" aria-label="Jump to section" hidden>
-                {%- for sec in links.sections %}<a href="#{{ sec.id }}">{{ sec.title }}</a>{% endfor -%}
-              </nav>
-            </div>
-
-            <button type="button" class="ghost-btn ghost-btn--icon" id="theme-toggle" aria-label="Toggle light and dark">
-              <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="5.2"></circle><line x1="12" y1="1.6" x2="12" y2="4"></line><line x1="12" y1="20" x2="12" y2="22.4"></line><line x1="1.6" y1="12" x2="4" y2="12"></line><line x1="20" y1="12" x2="22.4" y2="12"></line><line x1="4.6" y1="4.6" x2="6.3" y2="6.3"></line><line x1="17.7" y1="17.7" x2="19.4" y2="19.4"></line><line x1="4.6" y1="19.4" x2="6.3" y2="17.7"></line><line x1="17.7" y1="6.3" x2="19.4" y2="4.6"></line></svg>
-            </button>
-          </div>
+          <h1 class="brand">Will's<br>Links</h1>
+          <p class="brand-label">Personal link<br>hub</p>
         </header>
 
         <section class="favorites-section" data-section aria-labelledby="favorites-heading">
@@ -55,9 +53,18 @@
           {%- for sec in links.sections %}{{ cards.section(sec, loop.index) }}{% endfor -%}
         </div>
 
-        <p class="empty-state" id="empty-state" hidden>Nothing here by that name.</p>
-
       </main>
+
+      <footer class="page-footer">
+        <p class="footer-label" id="palette-label">Style</p>
+        <div class="palette-picker" id="palette-picker" role="group" aria-labelledby="palette-label">
+          <button type="button" class="palette-btn" data-palette-choice="blue" aria-pressed="false"><span class="swatch swatch-blue" aria-hidden="true"></span>Blue</button>
+          <button type="button" class="palette-btn" data-palette-choice="green" aria-pressed="false"><span class="swatch swatch-green" aria-hidden="true"></span>Green</button>
+          <button type="button" class="palette-btn" data-palette-choice="rust" aria-pressed="false"><span class="swatch swatch-rust" aria-hidden="true"></span>Rust</button>
+          <button type="button" class="palette-btn" data-palette-choice="velvet" aria-pressed="false"><span class="swatch swatch-velvet" aria-hidden="true"></span>Velvet</button>
+          <button type="button" class="palette-btn" data-palette-choice="" aria-pressed="false">Shuffle each load</button>
+        </div>
+      </footer>
     </div>
 
     <script src="index.js" type="module"></script>

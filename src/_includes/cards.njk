@@ -9,32 +9,32 @@
 #}
 
 {% macro favorite(fav) -%}
-<a class="favorite-link" href="{{ fav.url }}" data-search="{{ fav | searchTerms }}"><img src="{{ fav.url | faviconUrl }}" alt="">{{ fav.label }}</a>
+<a class="favorite-link" href="{{ fav.url }}" data-search="{{ fav | searchTerms }}">{{ fav.label }}</a>
 {%- endmacro %}
 
 {% macro linkRow(link) -%}
-<a class="row-link" href="{{ link.url }}" data-search="{{ link | searchTerms }}"><img src="{{ link.url | faviconUrl }}" alt=""><span class="row-label">{{ link.label }}</span><span class="row-arrow">↗</span></a>
+<a class="row-link" href="{{ link.url }}" data-search="{{ link | searchTerms }}"><span class="row-label">{{ link.label }}</span></a>
 {%- endmacro %}
 
 {#
   Person and project share the card frame: a name, an optional note, and a
-  row of labelled links. Only the middle differs — a project also carries a
-  status dot. Keeping one frame means the CSS stays shared.
+  row of labelled links. A project's status is deliberately not rendered —
+  the row is just the links. Keeping one frame means the CSS stays shared.
 
   A link labelled "Live" keeps the accent treatment it had when Live and Repo
   were fixed columns. Everything else renders plain, so an arbitrary resource
   does not quietly claim the emphasis meant for a deployed site.
 #}
 {% macro cardLinks(links) -%}
-<div class="project-links">{% for link in links %}<a class="pl{% if link.label == "Live" %} pl-live{% endif %}" href="{{ link.url }}">{{ link.label }}</a>{% endfor %}</div>
+{% for link in links %}<a class="pl{% if link.label == "Live" %} pl-live{% endif %}" href="{{ link.url }}">{{ link.label }}</a>{% endfor %}
 {%- endmacro %}
 
 {% macro person(p) -%}
-<div class="person" data-search="{{ p | searchTerms }}"><div class="project-info"><span class="project-name">{{ p.name }}{% if p.note %} <span class="project-note">{{ p.note }}</span>{% endif %}</span></div>{{ cardLinks(p.links) }}</div>
+<div class="person" data-search="{{ p | searchTerms }}"><div class="project-info"><span class="project-name">{{ p.name }}</span>{% if p.note %}<span class="project-note">{{ p.note }}</span>{% endif %}</div><div class="project-links">{{ cardLinks(p.links) }}</div></div>
 {%- endmacro %}
 
 {% macro project(p) -%}
-<div class="project" data-search="{{ p | searchTerms }}"><div class="project-info"><span class="project-name">{% if p.emoji %}{{ p.emoji }} {% endif %}{{ p.name }}{% if p.note %} <span class="project-note">{{ p.note }}</span>{% endif %}</span><span class="project-status"><span class="dot dot-{{ p.status }}"></span>{{ p.statusLabel }}</span></div>{{ cardLinks(p.links) }}</div>
+<div class="project" data-search="{{ p | searchTerms }}"><div class="project-info"><span class="project-name">{{ p.name }}</span>{% if p.note %}<span class="project-note">{{ p.note }}</span>{% endif %}</div><div class="project-links">{{ cardLinks(p.links) }}</div></div>
 {%- endmacro %}
 
 {% macro item(it) -%}
@@ -45,8 +45,11 @@
   A section's list class follows what is actually in it: a list of plain link
   rows is tighter than one of cards. Mixed sections get the card spacing,
   which is the more forgiving of the two.
+
+  The +/- glyph sits to the left of the title and is driven purely by the
+  panel's open state, so keyboard toggling of the <summary> keeps it honest.
 #}
 {% macro section(sec, index) -%}
 {% set isLinkList = sec.items | isLinkList -%}
-<details id="{{ sec.id }}" class="section-panel" data-section="" data-num="{{ index | sectionNumber }}"{% if sec.open %} open=""{% endif %}><summary><span class="sec-num">{{ index | sectionNumber }}</span><span class="sec-title">{{ sec.title }}</span><span class="sec-rule"></span><span class="sec-count">{{ sec.items | length }} link{% if sec.items | length != 1 %}s{% endif %}</span><span class="sec-glyph"></span></summary><div class="{{ "link-list" if isLinkList else "project-list" }}">{% for it in sec.items %}{{ item(it) }}{% endfor %}</div></details>
+<details id="{{ sec.id }}" class="section-panel" data-section="" data-num="{{ index | sectionNumber }}"{% if sec.open %} open=""{% endif %}><summary><span class="sec-glyph" aria-hidden="true"></span><span class="sec-num">{{ index | sectionNumber }}</span><span class="sec-title">{{ sec.title }}</span></summary><div class="{{ "link-list" if isLinkList else "project-list" }}">{% for it in sec.items %}{{ item(it) }}{% endfor %}</div></details>
 {%- endmacro %}

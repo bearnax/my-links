@@ -1,98 +1,73 @@
+/* Behaviour over the markup Eleventy already rendered from data/links.json
+   (see src/_includes/cards.njk).
+
+   Two things live here: remembering which sections the reader left open, and
+   the footer's palette override. The +/- glyph is pure CSS off the <details>
+   open state, and the palette itself is applied by the inline script in the
+   head so it is settled before first paint — this file only records the
+   choice and keeps the buttons in sync. */
+
 (function () {
+  var STORE_KEY = 'wl-open-sections';
+  var PALETTE_KEY = 'wl-palette';
+
+  /* Palette override */
+
   var root = document.documentElement;
-  var main = document.getElementById('main-content');
-  var searchInput = document.getElementById('link-search');
-  var sectionsToggle = document.getElementById('sections-toggle');
-  var sectionsMenu = document.getElementById('sections-menu');
-  var themeToggle = document.getElementById('theme-toggle');
-  var emptyState = document.getElementById('empty-state');
+  var picker = document.getElementById('palette-picker');
+  var buttons = Array.prototype.slice.call(
+    picker.querySelectorAll('[data-palette-choice]'));
 
-  /* Theme */
+  var savedPalette = null;
+  try { savedPalette = localStorage.getItem(PALETTE_KEY); } catch (e) {}
 
-  var stored = null;
-  try { stored = localStorage.getItem('wl-theme'); } catch (e) {}
-  root.setAttribute('data-theme', stored || 'light');
+  syncButtons(savedPalette);
 
-  themeToggle.addEventListener('click', function () {
-    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
-    try { localStorage.setItem('wl-theme', next); } catch (e) {}
+  picker.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-palette-choice]');
+    if (!btn) return;
+
+    var choice = btn.dataset.paletteChoice;
+    try {
+      if (choice) localStorage.setItem(PALETTE_KEY, choice);
+      else localStorage.removeItem(PALETTE_KEY);
+    } catch (err) {}
+
+    /* An empty choice means "go back to random", which only takes effect on
+       the next load; the colour already on screen is a fair draw, so leave
+       it alone rather than reshuffling under the reader. */
+    if (choice) root.setAttribute('data-palette', choice);
+    syncButtons(choice || null);
   });
 
-  /* Interactions (search, sections menu, link counts).
-
-     The cards themselves are rendered at build time by Eleventy from
-     data/links.json — see src/_includes/cards.njk. This file only wires up
-     behaviour over the markup that is already in the document. */
-
-  initInteractions();
-
-  function initInteractions() {
-    var panels = Array.prototype.slice.call(document.querySelectorAll('.section-panel'));
-
-    function setSectionsOpen(open) {
-      sectionsMenu.hidden = !open;
-      sectionsToggle.setAttribute('aria-expanded', String(open));
-    }
-
-    sectionsToggle.addEventListener('click', function (e) {
-      e.stopPropagation();
-      setSectionsOpen(sectionsMenu.hidden);
-    });
-
-    sectionsMenu.addEventListener('click', function (e) {
-      if (e.target.tagName !== 'A') return;
-      var target = document.querySelector(e.target.getAttribute('href'));
-      if (target) target.open = true;
-      setSectionsOpen(false);
-    });
-
-    document.addEventListener('click', function (e) {
-      if (!sectionsMenu.parentNode.contains(e.target)) setSectionsOpen(false);
-    });
-
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') setSectionsOpen(false);
-    });
-
-    panels.forEach(function (panel) {
-      var count = panel.querySelectorAll('[data-search]').length;
-      var countEl = panel.querySelector('.sec-count');
-      if (countEl) countEl.textContent = count === 1 ? '1 link' : count + ' links';
-    });
-
-    var restore = new WeakMap();
-    panels.forEach(function (p) { restore.set(p, p.open); });
-
-    searchInput.addEventListener('input', function (e) {
-      var q = e.target.value.trim().toLowerCase();
-      var anyVisible = false;
-
-      main.querySelectorAll('[data-search]').forEach(function (el) {
-        var match = !q || el.dataset.search.indexOf(q) !== -1 ||
-          el.textContent.toLowerCase().indexOf(q) !== -1;
-        el.style.display = match ? '' : 'none';
-        if (match) anyVisible = true;
-      });
-
-      main.querySelectorAll('[data-section]').forEach(function (sec) {
-        var items = sec.querySelectorAll('[data-search]');
-        var visible = Array.prototype.some.call(items, function (el) {
-          return el.style.display !== 'none';
-        });
-        sec.style.display = q && !visible ? 'none' : '';
-        if (sec.tagName === 'DETAILS') {
-          sec.open = q ? visible : restore.get(sec);
-        }
-      });
-
-      emptyState.hidden = !q || anyVisible;
-    });
-
-    panels.forEach(function (panel) {
-      panel.addEventListener('toggle', function () {
-        if (!searchInput.value.trim()) restore.set(panel, panel.open);
-      });
+  function syncButtons(active) {
+    buttons.forEach(function (btn) {
+      var choice = btn.dataset.paletteChoice;
+      btn.setAttribute('aria-pressed',
+        String(active ? choice === active : choice === ''));
     });
   }
+
+  /* Section open state */
+
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.section-panel'));
+
+  var stored = null;
+  try { stored = JSON.parse(localStorage.getItem(STORE_KEY)); } catch (e) {}
+
+  if (stored && typeof stored === 'object') {
+    panels.forEach(function (panel) {
+      if (Object.prototype.hasOwnProperty.call(stored, panel.id)) {
+        panel.open = !!stored[panel.id];
+      }
+    });
+  }
+
+  panels.forEach(function (panel) {
+    panel.addEventListener('toggle', function () {
+      var state = {};
+      panels.forEach(function (p) { state[p.id] = p.open; });
+      try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
+    });
+  });
 })();
