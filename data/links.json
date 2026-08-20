@@ -30,15 +30,21 @@
         },
         {
           "type": "website",
-          "label": "My GitHub",
+          "label": "Personal GitHub (Bearnax)",
           "url": "https://github.com/bearnax",
           "search": "github repos code bearnax"
+        },
+        {
+          "type": "website",
+          "label": "Work Github (Will-Brodnax)",
+          "url": "https://github.com/will-brodnax",
+          "search": "github repos code will-brodnax"
         }
       ]
     },
     {
       "id": "projects-personal",
-      "title": "Projects — Personal",
+      "title": "Personal Projects",
       "open": false,
       "items": [
         {
@@ -61,7 +67,7 @@
         },
         {
           "type": "project",
-          "name": "MML",
+          "name": "MML Simulator",
           "emoji": "🏀",
           "status": "wip",
           "statusLabel": "Server side only",
@@ -93,7 +99,7 @@
         },
         {
           "type": "project",
-          "name": "My Links (this site)",
+          "name": "My-Links (this site)",
           "emoji": "🔗",
           "status": "live",
           "statusLabel": "Live",
@@ -158,7 +164,7 @@
     },
     {
       "id": "projects-tip",
-      "title": "Projects — Take It Personal",
+      "title": "Take It Personal",
       "open": false,
       "items": [
         {
@@ -222,7 +228,7 @@
     },
     {
       "id": "projects-work",
-      "title": "Projects — Work",
+      "title": "Work Related",
       "open": false,
       "items": [
         {
@@ -255,7 +261,7 @@
         },
         {
           "type": "project",
-          "name": "Ticket Refinement Tool",
+          "name": "Retrograde",
           "emoji": "🎫",
           "status": "idea",
           "statusLabel": "Ad hoc",
@@ -266,7 +272,7 @@
     },
     {
       "id": "cnn",
-      "title": "CNN",
+      "title": "CNN Quick Links",
       "open": false,
       "items": [
         {
