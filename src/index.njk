@@ -11,15 +11,22 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..900&display=swap" rel="stylesheet">
     {#
-      The palette is picked before first paint so the page never flashes one
-      colour and settles on another. Kept inline for that reason — index.js is
-      a module and therefore deferred.
+      The palette is settled before first paint so the page never flashes one
+      colour and lands on another. Kept inline for that reason — index.js is a
+      module and therefore deferred. A saved override from the footer picker
+      wins; with none saved, one of the three flats is drawn at random.
     #}
     <script>
       (function () {
-        var palettes = ["blue", "green", "rust"];
+        var random = ["blue", "green", "rust"];
+        var all = random.concat(["velvet"]);
+        var saved = null;
+        try { saved = localStorage.getItem("wl-palette"); } catch (e) {}
         document.documentElement.setAttribute(
-          "data-palette", palettes[Math.floor(Math.random() * palettes.length)]);
+          "data-palette",
+          all.indexOf(saved) !== -1
+            ? saved
+            : random[Math.floor(Math.random() * random.length)]);
       })();
     </script>
   </head>
@@ -47,6 +54,17 @@
         </div>
 
       </main>
+
+      <footer class="page-footer">
+        <p class="footer-label" id="palette-label">Style</p>
+        <div class="palette-picker" id="palette-picker" role="group" aria-labelledby="palette-label">
+          <button type="button" class="palette-btn" data-palette-choice="blue" aria-pressed="false"><span class="swatch swatch-blue" aria-hidden="true"></span>Blue</button>
+          <button type="button" class="palette-btn" data-palette-choice="green" aria-pressed="false"><span class="swatch swatch-green" aria-hidden="true"></span>Green</button>
+          <button type="button" class="palette-btn" data-palette-choice="rust" aria-pressed="false"><span class="swatch swatch-rust" aria-hidden="true"></span>Rust</button>
+          <button type="button" class="palette-btn" data-palette-choice="velvet" aria-pressed="false"><span class="swatch swatch-velvet" aria-hidden="true"></span>Velvet</button>
+          <button type="button" class="palette-btn" data-palette-choice="" aria-pressed="false">Shuffle each load</button>
+        </div>
+      </footer>
     </div>
 
     <script src="index.js" type="module"></script>

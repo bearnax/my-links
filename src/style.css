@@ -1,8 +1,12 @@
 /*
-  One flat, high-contrast poster of a page. The palette is chosen at random on
-  each load by the inline script in index.njk, which stamps `data-palette` on
-  <html> before first paint; everything below reads from the three tokens it
-  switches.
+  One flat, high-contrast poster of a page. The palette is stamped on <html>
+  as `data-palette` by the inline script in index.njk, before first paint —
+  either a saved override from the footer picker or, by default, one of the
+  three flats at random. Everything below reads from the tokens it switches.
+
+  `velvet` is the fourth option and the odd one out: the same three hues
+  deepened to near-black and swirled together behind the page, with every
+  row in the light ink rather than the alternating deep shade.
 */
 
 :root {
@@ -21,6 +25,12 @@ html[data-palette="green"] {
 html[data-palette="rust"] {
     --bg: oklch(40% 0.14 35);
     --ink-deep: oklch(28% 0.12 33);
+}
+
+html[data-palette="velvet"] {
+    --bg: oklch(13% 0.02 280);
+    /* Every row reads light here — there is no second ink. */
+    --ink-deep: var(--cream);
 }
 
 * { box-sizing: border-box; }
@@ -195,6 +205,106 @@ a { color: inherit; text-decoration: none; }
 
 .pl { text-decoration: underline; text-underline-offset: 3px; }
 .pl:hover { color: var(--ink-deep); }
+
+/* Velvet: three near-black hues drifting over one another. Two stacked
+   layers on fixed pseudo-elements — the colour wash and a fine grain — so
+   the swirl sits behind the page without the content ever moving. */
+
+html[data-palette="velvet"] body::before,
+html[data-palette="velvet"] body::after {
+    content: "";
+    position: fixed;
+    inset: -30%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+html[data-palette="velvet"] body::before {
+    background:
+        radial-gradient(48% 42% at 22% 26%, oklch(22% 0.11 265) 0%, transparent 62%),
+        radial-gradient(52% 46% at 78% 30%, oklch(20% 0.07 145) 0%, transparent 64%),
+        radial-gradient(46% 44% at 60% 76%, oklch(23% 0.10 35) 0%, transparent 62%),
+        radial-gradient(60% 50% at 12% 82%, oklch(18% 0.06 265) 0%, transparent 66%),
+        var(--bg);
+    filter: blur(24px) saturate(1.15);
+    animation: velvet-drift 38s ease-in-out infinite alternate;
+}
+
+/* Fractal noise, inlined so the page stays self-contained. Multiplied over
+   the wash it reads as cloth rather than as a screen gradient. */
+html[data-palette="velvet"] body::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+    opacity: .32;
+}
+
+@keyframes velvet-drift {
+    0%   { transform: translate3d(-3%, -2%, 0) scale(1.06) rotate(-2deg); }
+    50%  { transform: translate3d(3%, 2%, 0) scale(1.14) rotate(2deg); }
+    100% { transform: translate3d(-2%, 3%, 0) scale(1.08) rotate(-1deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html[data-palette="velvet"] body::before { animation: none; }
+}
+
+/* Footer: style overrides */
+
+.page-footer {
+    border-top: 2px solid var(--cream);
+    margin-top: 64px;
+    padding-top: 10px;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+}
+
+.footer-label,
+.palette-btn {
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+.palette-picker { display: flex; flex-wrap: wrap; gap: 8px 14px; }
+
+.palette-btn {
+    background: none;
+    border: 0;
+    padding: 0;
+    color: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.palette-btn[aria-pressed="true"] { text-decoration: none; }
+.palette-btn[aria-pressed="true"] .swatch { box-shadow: 0 0 0 2px var(--cream); }
+
+.swatch {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--swatch);
+    box-shadow: 0 0 0 1px var(--cream);
+}
+
+.swatch-blue { --swatch: oklch(33% 0.16 265); }
+.swatch-green { --swatch: oklch(36% 0.09 140); }
+.swatch-rust { --swatch: oklch(40% 0.14 35); }
+/* Drawn a little lighter than the backdrop it stands for: at 11px the true
+   near-blacks read as an empty hole rather than as a swirl. */
+.swatch-velvet {
+    background:
+        conic-gradient(from 210deg, oklch(34% 0.15 265), oklch(32% 0.10 145),
+                       oklch(36% 0.14 35), oklch(34% 0.15 265));
+}
 
 @media (max-width: 540px) {
     .page-header { flex-direction: column; gap: 12px; }
