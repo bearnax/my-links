@@ -1,13 +1,14 @@
-Name,Emoji,Status,Status Label,Note,Search,Section,Order,Sites
-Lil Sebastian,🐴,done,Complete,,lil sebastian scavenger hunt paige horse complete,projects-personal,1,Personal
-MML,🏀,wip,Server side only,,mml march madness basketball simulator,projects-personal,2,Personal
-Elden Ring Build Selector,💍,live,Live,,elden ring build selector,projects-personal,3,Personal
-My Links (this site),🔗,live,Live,,my links personal bookmarks,projects-personal,4,Personal
-Customer Feedback Loop,🎙️,wip,Not deployed,,customer feedback loop llm cloudflare worker,projects-personal,5,Personal
-Pitch Mill,🪵,wip,In use,,pitch mill storylines,projects-tip,1,Personal
-The Newsroom,📰,wip,In progress,,newsroom editorial content,projects-tip,2,Personal
-A.W. Sterling,👨🏻‍🦱,idea,Archive,(formerly TIP Scout),aw sterling tip scout archive,projects-tip,3,Personal
-Feist — Daily GM,🐕,wip,Needs a loop,,feist daily gm agent loop,projects-tip,4,Personal
-Fibbly,🃏,idea,Ad hoc,,fibbly planning poker,projects-work,1,Personal
-Yak Shaving,🐂,idea,Idea,,yak shaving dockerize cloudflare,projects-work,2,Personal
-Ticket Refinement Tool,🎫,idea,Ad hoc,,ticket writing refinement tool,projects-work,3,Personal
+Name,Emoji,Status,Status Label,Note,Search,Section,Order
+Lil Sebastian,🐴,done,Complete,,lil sebastian scavenger hunt paige horse complete,projects-personal,1
+MML Simulator,🏀,wip,Server side only,,mml march madness basketball simulator,projects-personal,2
+Elden Ring Build Selector,💍,live,Live,,elden ring build selector,projects-personal,3
+My-Links (this site),🔗,live,Live,,my links personal bookmarks,projects-personal,4
+Customer Feedback Loop,🎙️,wip,Not deployed,,customer feedback loop llm cloudflare worker,projects-personal,5
+Take It Personal Podcast,🎙️,live,Live,,take it personal podcast pod,projects-tip,1
+The Newsroom,📰,wip,In progress,,newsroom editorial content,projects-tip,2
+A.W. Sterling,👨🏻‍🦱,idea,Archive,(formerly TIP Scout),aw sterling tip scout archive,projects-tip,3
+Feist,🐕,wip,Needs a loop,,feist daily gm agent loop,projects-tip,4
+Pitch Mill,🪵,wip,In use,,pitch mill storylines,projects-tip,5
+By-Will,🪡,wip,In progress,,will by will work,projects-work,1
+Fibbly,🃏,idea,Ad hoc,,fibbly planning poker,projects-work,2
+Retrograde,🎫,idea,Ad hoc,,ticket writing refinement tool,projects-work,3

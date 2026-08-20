@@ -8,8 +8,12 @@
    choice and keeps the buttons in sync. */
 
 (function () {
-  var STORE_KEY = 'wl-open-sections';
-  var PALETTE_KEY = 'wl-palette';
+  /* Namespaced per site so two sibling deployments on the same origin (or on
+     one github.io host) do not overwrite each other's saved state. The prefix
+     comes from data/site.json via the body attribute — see src/_data/site.js. */
+  var PREFIX = document.body.dataset.storagePrefix || 'links';
+  var STORE_KEY = PREFIX + '-open-sections';
+  var PALETTE_KEY = PREFIX + '-palette';
 
   /* Palette override */
 

@@ -3,63 +3,42 @@
     "Slug": "quick-access",
     "Title": "Quick Access",
     "Order": 1,
-    "Open": true,
-    "Sites": [
-      "Personal"
-    ]
+    "Open": true
   },
   {
     "Slug": "projects-personal",
-    "Title": "Projects — Personal",
+    "Title": "Personal Projects",
     "Order": 2,
-    "Open": false,
-    "Sites": [
-      "Personal"
-    ]
+    "Open": false
   },
   {
     "Slug": "nerd-alert",
     "Title": "Nerd Alert",
     "Order": 3,
-    "Open": false,
-    "Sites": [
-      "Personal"
-    ]
+    "Open": false
   },
   {
     "Slug": "projects-tip",
-    "Title": "Projects — Take It Personal",
+    "Title": "Take It Personal",
     "Order": 4,
-    "Open": false,
-    "Sites": [
-      "Personal"
-    ]
+    "Open": false
   },
   {
     "Slug": "projects-work",
-    "Title": "Projects — Work",
+    "Title": "Work Related",
     "Order": 5,
-    "Open": false,
-    "Sites": [
-      "Personal"
-    ]
+    "Open": false
   },
   {
     "Slug": "cnn",
-    "Title": "CNN",
+    "Title": "CNN Quick Links",
     "Order": 6,
-    "Open": false,
-    "Sites": [
-      "Personal"
-    ]
+    "Open": false
   },
   {
     "Slug": "people",
     "Title": "People",
     "Order": 7,
-    "Open": false,
-    "Sites": [
-      "Personal"
-    ]
+    "Open": false
   }
 ]

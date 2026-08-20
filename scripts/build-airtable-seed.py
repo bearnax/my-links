@@ -1,96 +1,32 @@
 #!/usr/bin/env python3
-"""Turn the current data/links.json into per-table seed records for Airtable.
+"""Turn a data/links.json into per-table seed records for a fresh Airtable base.
 
 Usage: build-airtable-seed.py [links.json] [out_dir]
 
-This is a one-shot migration aid, not part of the ongoing sync. It exists so
-the initial Airtable base is populated from the data the site already ships
-rather than by hand — every record here is derived, nothing is invented.
+Populating a new base by hand is the slowest part of standing up a fork, so
+this derives the records from data the site already ships. Every record here
+comes from the input file — nothing is invented, and no site's own contacts
+are baked into this script.
 
 Writes one JSON file per table, plus matching CSVs so the same seed can be
 loaded either through the API or through Airtable's CSV import.
+
+To start a fork from an empty base, point this at a links.json with the
+sections you want and no items, or just create the sections by hand — the
+schema comes from scripts/init-base.py, not from here.
 """
 import csv
 import json
 import os
 import sys
 
-SITE_PERSONAL = "Personal"
-
-# The People type is new — it has no equivalent in data/links.json, so these
-# records are seeded rather than migrated. Every URL here was supplied by Will
-# or already lives in the repo's own data; none were guessed. Where a person's
-# other profiles are unknown the fields stay blank and the renderer skips them,
-# which is the correct outcome for a public page.
-PEOPLE = [
-    {
-        "Name": "Will Brodnax",
-        "Note": "",
-        # Both taken from the Quick Access section of data/links.json.
-        "Website": "https://www.willbrodnax.com",
-        "GitHub": "https://github.com/bearnax",
-        "LinkedIn": "",
-        "X": "",
-        "Instagram": "",
-        "Email": "",
-        "Search": "will brodnax me personal site github",
-    },
-    {
-        "Name": "Steph Garrett",
-        "Note": "Take It Personal",
-        "Website": "https://substack.com/@steph4sum",
-        "GitHub": "",
-        "LinkedIn": "",
-        "X": "",
-        "Instagram": "",
-        "Email": "",
-        "Search": "steph garrett substack take it personal",
-    },
-    {
-        "Name": "Jamie Renell",
-        "Note": "",
-        "Website": "https://www.imdb.com/name/nm1143549/",
-        "GitHub": "",
-        "LinkedIn": "",
-        "X": "",
-        "Instagram": "",
-        "Email": "",
-        "Search": "jamie renell imdb",
-    },
-    {
-        "Name": "Ron Swanson",
-        "Note": "(fictional)",
-        "Website": "https://en.wikipedia.org/wiki/Ron_Swanson",
-        "GitHub": "",
-        "LinkedIn": "",
-        "X": "",
-        "Instagram": "",
-        "Email": "",
-        "Search": "ron swanson parks and recreation pawnee",
-    },
-    {
-        "Name": "Ted Lasso",
-        "Note": "(fictional)",
-        "Website": "https://en.wikipedia.org/wiki/Ted_Lasso",
-        "GitHub": "",
-        "LinkedIn": "",
-        "X": "",
-        "Instagram": "",
-        "Email": "",
-        "Search": "ted lasso richmond believe",
-    },
-]
-
-PEOPLE_SECTION = {
-    "Slug": "people",
-    "Title": "People",
-    # Appended after the existing sections so the migration does not renumber
-    # anything already on the site. Reordering is a drag in Airtable now.
-    "Open": False,
-}
-
 
 def build(data):
+    """Fan data/links.json back out into one list of rows per table.
+
+    Sections carry a mixed `items` list where each item declares its own
+    `type`; this is the inverse of the join scripts/sync-links.py performs.
+    """
     sections, websites, projects, resources, people = [], [], [], [], []
 
     for order, sec in enumerate(data.get("sections", []), start=1):
@@ -99,43 +35,62 @@ def build(data):
             "Title": sec["title"],
             "Order": order,
             "Open": bool(sec.get("open")),
-            "Sites": [SITE_PERSONAL],
         })
 
-        for i, item in enumerate(sec.get("links", []), start=1):
-            websites.append({
-                "Name": item["label"],
-                "URL": item["url"],
-                "Search": item.get("search", ""),
-                "Section": sec["id"],
-                "Order": i,
-                "Favorite": False,
-                "Favorite Order": None,
-                "Sites": [SITE_PERSONAL],
-            })
+        for i, item in enumerate(sec.get("items", []), start=1):
+            kind = item.get("type")
 
-        for i, item in enumerate(sec.get("projects", []), start=1):
-            projects.append({
-                "Name": item["name"],
-                "Emoji": item.get("emoji", ""),
-                "Status": item["status"],
-                "Status Label": item["statusLabel"],
-                "Note": item.get("note", ""),
-                "Search": item.get("search", ""),
-                "Section": sec["id"],
-                "Order": i,
-                "Sites": [SITE_PERSONAL],
-            })
-            # Live/Repo become ordinary resource rows, so a project can carry
-            # any number of links rather than exactly these two.
-            for label, key in (("Live", "live"), ("Repo", "repo")):
-                if item.get(key):
+            if kind == "website":
+                websites.append({
+                    "Name": item["label"],
+                    "URL": item["url"],
+                    "Search": item.get("search", ""),
+                    "Section": sec["id"],
+                    "Order": i,
+                    "Favorite": False,
+                    "Favorite Order": None,
+                })
+
+            elif kind == "person":
+                row = {
+                    "Name": item["name"],
+                    "Note": item.get("note", ""),
+                    "Search": item.get("search", ""),
+                    "Section": sec["id"],
+                    "Order": i,
+                }
+                # Profile links are stored as a list of {label, url}; the base
+                # keeps one column per service. Email arrives as a mailto:.
+                for link in item.get("links", []):
+                    label, url = link["label"], link["url"]
+                    if label == "Email":
+                        row["Email"] = url[len("mailto:"):] if url.startswith("mailto:") else url
+                    else:
+                        row[label] = url
+                people.append(row)
+
+            elif kind == "project":
+                projects.append({
+                    "Name": item["name"],
+                    "Emoji": item.get("emoji", ""),
+                    "Status": item["status"],
+                    "Status Label": item.get("statusLabel", item["status"]),
+                    "Note": item.get("note", ""),
+                    "Search": item.get("search", ""),
+                    "Section": sec["id"],
+                    "Order": i,
+                })
+                for j, link in enumerate(item.get("links", []), start=1):
                     resources.append({
-                        "Label": label,
-                        "URL": item[key],
+                        "Label": link["label"],
+                        "URL": link["url"],
                         "Project": item["name"],
-                        "Order": 1 if label == "Live" else 2,
+                        "Order": j,
                     })
+
+            else:
+                print(f"warning: item {i} in section '{sec['id']}' has unknown "
+                      f"type {kind!r}; skipped", file=sys.stderr)
 
     # Favorites are websites flagged for the top row. They are their own list
     # in the JSON, so match them back onto the website rows by URL.
@@ -143,7 +98,7 @@ def build(data):
     for i, fav in enumerate(data.get("favorites", []), start=1):
         row = by_url.get(fav["url"])
         if row is None:
-            # A favorite that is not already a section link still needs a home.
+            # A favorite that is not also a section link still needs a home.
             row = {
                 "Name": fav["label"],
                 "URL": fav["url"],
@@ -152,27 +107,20 @@ def build(data):
                 "Order": None,
                 "Favorite": True,
                 "Favorite Order": i,
-                "Sites": [SITE_PERSONAL],
             }
             websites.append(row)
         else:
             row["Favorite"] = True
             row["Favorite Order"] = i
 
-    sections.append({
-        "Slug": PEOPLE_SECTION["Slug"],
-        "Title": PEOPLE_SECTION["Title"],
-        "Order": len(sections) + 1,
-        "Open": PEOPLE_SECTION["Open"],
-        "Sites": [SITE_PERSONAL],
-    })
-    for i, person in enumerate(PEOPLE, start=1):
-        people.append(dict(
-            person,
-            Section=PEOPLE_SECTION["Slug"],
-            Order=i,
-            Sites=[SITE_PERSONAL],
-        ))
+    # People rows are ragged — each person fills in a different subset of the
+    # profile columns — but the CSV writer needs one stable header, so pad
+    # every row to the same shape.
+    if people:
+        columns = ["Name", "Note", "Website", "Wikipedia", "IMDB", "GitHub",
+                   "LinkedIn", "X", "Instagram", "Email", "Search",
+                   "Section", "Order"]
+        people = [{c: p.get(c, "") for c in columns} for p in people]
 
     return {
         "Sections": sections,

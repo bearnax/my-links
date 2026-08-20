@@ -3,6 +3,8 @@
     "Name": "Will Brodnax",
     "Note": "",
     "Website": "https://www.willbrodnax.com",
+    "Wikipedia": "",
+    "IMDB": "",
     "GitHub": "https://github.com/bearnax",
     "LinkedIn": "",
     "X": "",
@@ -10,15 +12,14 @@
     "Email": "",
     "Search": "will brodnax me personal site github",
     "Section": "people",
-    "Order": 1,
-    "Sites": [
-      "Personal"
-    ]
+    "Order": 1
   },
   {
     "Name": "Steph Garrett",
     "Note": "Take It Personal",
     "Website": "https://substack.com/@steph4sum",
+    "Wikipedia": "",
+    "IMDB": "",
     "GitHub": "",
     "LinkedIn": "",
     "X": "",
@@ -26,15 +27,14 @@
     "Email": "",
     "Search": "steph garrett substack take it personal",
     "Section": "people",
-    "Order": 2,
-    "Sites": [
-      "Personal"
-    ]
+    "Order": 2
   },
   {
     "Name": "Jamie Renell",
-    "Note": "",
-    "Website": "https://www.imdb.com/name/nm1143549/",
+    "Note": "Take It Personal",
+    "Website": "",
+    "Wikipedia": "",
+    "IMDB": "https://www.imdb.com/name/nm1143549/",
     "GitHub": "",
     "LinkedIn": "",
     "X": "",
@@ -42,15 +42,14 @@
     "Email": "",
     "Search": "jamie renell imdb",
     "Section": "people",
-    "Order": 3,
-    "Sites": [
-      "Personal"
-    ]
+    "Order": 3
   },
   {
     "Name": "Ron Swanson",
-    "Note": "(fictional)",
-    "Website": "https://en.wikipedia.org/wiki/Ron_Swanson",
+    "Note": "My spirit animal",
+    "Website": "https://offermanwoodshop.com/",
+    "Wikipedia": "https://en.wikipedia.org/wiki/Ron_Swanson",
+    "IMDB": "https://www.imdb.com/name/nm0644406/",
     "GitHub": "",
     "LinkedIn": "",
     "X": "",
@@ -58,25 +57,36 @@
     "Email": "",
     "Search": "ron swanson parks and recreation pawnee",
     "Section": "people",
-    "Order": 4,
-    "Sites": [
-      "Personal"
-    ]
+    "Order": 4
   },
   {
-    "Name": "Ted Lasso",
-    "Note": "(fictional)",
-    "Website": "https://en.wikipedia.org/wiki/Ted_Lasso",
+    "Name": "Leslie Knope",
+    "Note": "President?",
+    "Website": "",
+    "Wikipedia": "https://en.wikipedia.org/wiki/Leslie_Knope",
+    "IMDB": "https://www.imdb.com/name/nm0688132/",
     "GitHub": "",
     "LinkedIn": "",
     "X": "",
     "Instagram": "",
     "Email": "",
-    "Search": "ted lasso richmond believe",
+    "Search": "leslie knope parks and rec",
     "Section": "people",
-    "Order": 5,
-    "Sites": [
-      "Personal"
-    ]
+    "Order": 5
+  },
+  {
+    "Name": "Tom Loftis",
+    "Note": "Mayor, Widow's Bay",
+    "Website": "",
+    "Wikipedia": "https://en.wikipedia.org/wiki/Matthew_Rhys",
+    "IMDB": "https://www.imdb.com/name/nm0722629/",
+    "GitHub": "",
+    "LinkedIn": "",
+    "X": "",
+    "Instagram": "",
+    "Email": "",
+    "Search": "tom loftis widows bay",
+    "Section": "people",
+    "Order": 6
   }
 ]
