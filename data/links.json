@@ -30,13 +30,13 @@
         },
         {
           "type": "website",
-          "label": "Personal GitHub (Bearnax)",
+          "label": "GitHub (Bearnax)",
           "url": "https://github.com/bearnax",
           "search": "github repos code bearnax"
         },
         {
           "type": "website",
-          "label": "Work Github (Will-Brodnax)",
+          "label": "Github (Will-Brodnax)",
           "url": "https://github.com/will-brodnax",
           "search": "github repos code will-brodnax"
         }
@@ -138,25 +138,25 @@
       "items": [
         {
           "type": "website",
-          "label": "Elden Ring, Google Sheets",
+          "label": "Personal Elden Ring (google sheets)",
           "url": "https://docs.google.com/spreadsheets/d/1RYeJTBAWSoCjFOFpsF0qLeKUQNjtJN_BdOQy7ijERbY/edit?usp=sharing",
           "search": "elden ring google sheets weapons"
         },
         {
           "type": "website",
-          "label": "Weapon AR Calculator Basic",
+          "label": "AR Calculator (tclark)",
           "url": "https://eldenring.tclark.io/",
           "search": "elden ring weapon ar calculator basic"
         },
         {
           "type": "website",
-          "label": "Weapon AR Calculator Pro",
+          "label": "AR Calculator (Pro)",
           "url": "https://www.tarnished.dev/weapon-calculator",
           "search": "elden ring weapon ar calculator pro tarnished"
         },
         {
           "type": "website",
-          "label": "Fextralife, Elden Ring Wiki",
+          "label": "Elden Ring Wiki (Fextralife)",
           "url": "https://eldenring.wiki.fextralife.com/Elden+Ring+Wiki",
           "search": "elden ring wiki fextralife"
         }
@@ -169,15 +169,15 @@
       "items": [
         {
           "type": "project",
-          "name": "Pitch Mill",
-          "emoji": "🪵",
-          "status": "wip",
-          "statusLabel": "In use",
-          "search": "pitch mill storylines",
+          "name": "Take It Personal Podcast",
+          "emoji": "🎙️",
+          "status": "live",
+          "statusLabel": "Live",
+          "search": "take it personal podcast pod",
           "links": [
             {
-              "label": "Repo",
-              "url": "https://github.com/bearnax/tip-pitch-mill"
+              "label": "Substack",
+              "url": "www.takeitpersonalpodcast.com"
             }
           ]
         },
@@ -221,6 +221,20 @@
             {
               "label": "Repo",
               "url": "https://github.com/bearnax/hq"
+            }
+          ]
+        },
+        {
+          "type": "project",
+          "name": "Pitch Mill",
+          "emoji": "🪵",
+          "status": "wip",
+          "statusLabel": "In use",
+          "search": "pitch mill storylines",
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/bearnax/tip-pitch-mill"
             }
           ]
         }
@@ -277,7 +291,7 @@
       "items": [
         {
           "type": "website",
-          "label": "CNN Homepage",
+          "label": "Homepage",
           "url": "https://www.cnn.com",
           "search": "cnn homepage cnn.com"
         },
@@ -295,13 +309,13 @@
         },
         {
           "type": "website",
-          "label": "CNN Headlines",
+          "label": "Headlines (FAST)",
           "url": "https://www.cnn.com/videos/fast/cnn-headlines",
           "search": "cnn headlines"
         },
         {
           "type": "website",
-          "label": "CNN Shorts",
+          "label": "Shorts",
           "url": "https://www.cnn.com/shorts/cnn-shorts",
           "search": "cnn shorts"
         }
