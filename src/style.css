@@ -14,17 +14,17 @@
 
     --cream: oklch(96% 0.015 90);
     --bg: oklch(33% 0.16 265);
-    --ink-deep: oklch(24% 0.13 265);
+    /* The second ink is a near-black rather than a darker cut of the
+       background: the same shadow row under all three flats. */
+    --ink-deep: oklch(14% 0.012 60);
 }
 
 html[data-palette="green"] {
     --bg: oklch(36% 0.09 140);
-    --ink-deep: oklch(25% 0.08 140);
 }
 
 html[data-palette="rust"] {
     --bg: oklch(40% 0.14 35);
-    --ink-deep: oklch(28% 0.12 33);
 }
 
 html[data-palette="velvet"] {
@@ -163,25 +163,22 @@ a { color: inherit; text-decoration: none; }
     font-size: clamp(1.9rem, 7vw, 2.9rem);
     font-weight: 900;
     line-height: 1.02;
-    letter-spacing: -.02em;
+    /* Letters pulled tight inside each word, the gaps between words opened
+       back up so the words still read as separate blocks. */
+    letter-spacing: -.045em;
+    word-spacing: .28em;
     text-transform: lowercase;
 }
 
 .link-list { flex-direction: column; }
 
-/* Alternating cream / deep-shadow rows give the stack its rhythm. */
+/* Alternating cream / near-black rows give the stack its rhythm. A row's
+   sub-links take the same ink as its title, so a card reads as one block. */
 .favorites-row > a:nth-child(even),
 .link-list > a:nth-child(even) .row-label,
-.project-list > div:nth-child(even) .project-name { color: var(--ink-deep); }
-
-.favorite-link:hover,
-.row-link:hover .row-label,
-.project:hover .project-name,
-.person:hover .project-name { color: var(--ink-deep); }
-
-.favorites-row > a:nth-child(even):hover,
-.link-list > a:nth-child(even):hover .row-label,
-.project-list > div:nth-child(even):hover .project-name { color: var(--cream); }
+.project-list > div:nth-child(even) .project-name,
+.project-list > div:nth-child(even) .project-note,
+.project-list > div:nth-child(even) .pl { color: var(--ink-deep); }
 
 /* Projects and people */
 
@@ -204,7 +201,6 @@ a { color: inherit; text-decoration: none; }
 }
 
 .pl { text-decoration: underline; text-underline-offset: 3px; }
-.pl:hover { color: var(--ink-deep); }
 
 /* Velvet: three near-black hues drifting over one another. Two stacked
    layers on fixed pseudo-elements — the colour wash and a fine grain — so
