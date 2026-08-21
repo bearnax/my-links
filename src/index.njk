@@ -1,10 +1,10 @@
 {% import "cards.njk" as cards -%}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ site.lang }}">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Will's Links</title>
+    <title>{{ site.title }}</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/x-icon" href="static/icons/favicon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,7 +21,7 @@
         var random = ["blue", "green", "rust"];
         var all = random.concat(["velvet"]);
         var saved = null;
-        try { saved = localStorage.getItem("wl-palette"); } catch (e) {}
+        try { saved = localStorage.getItem("{{ site.storagePrefix }}-palette"); } catch (e) {}
         document.documentElement.setAttribute(
           "data-palette",
           all.indexOf(saved) !== -1
@@ -31,15 +31,15 @@
     </script>
   </head>
 
-  <body>
+  <body data-storage-prefix="{{ site.storagePrefix }}">
     <a href="#main-content" class="skip-link">Skip to content</a>
 
     <div class="wrap">
       <main id="main-content">
 
         <header class="page-header">
-          <h1 class="brand">Will's<br>Links</h1>
-          <p class="brand-label">Personal link<br>hub</p>
+          <h1 class="brand">{{ site.brand | join("<br>") | safe }}</h1>
+          <p class="brand-label">{{ site.tagline | join("<br>") | safe }}</p>
         </header>
 
         <section class="favorites-section" data-section aria-labelledby="favorites-heading">
