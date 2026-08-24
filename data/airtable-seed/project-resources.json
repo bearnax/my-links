@@ -14,8 +14,8 @@
   {
     "Label": "Repo",
     "URL": "https://github.com/bearnax/hq",
-    "Project": "MML",
-    "Order": 2
+    "Project": "MML Simulator",
+    "Order": 1
   },
   {
     "Label": "Live",
@@ -32,49 +32,61 @@
   {
     "Label": "Live",
     "URL": "https://bearnax.github.io/my-links/",
-    "Project": "My Links (this site)",
+    "Project": "My-Links (this site)",
     "Order": 1
   },
   {
     "Label": "Repo",
     "URL": "https://github.com/bearnax/my-links",
-    "Project": "My Links (this site)",
+    "Project": "My-Links (this site)",
     "Order": 2
   },
   {
     "Label": "Repo",
     "URL": "https://github.com/bearnax/miniature-succotash",
     "Project": "Customer Feedback Loop",
-    "Order": 2
+    "Order": 1
   },
   {
-    "Label": "Repo",
-    "URL": "https://github.com/bearnax/tip-pitch-mill",
-    "Project": "Pitch Mill",
-    "Order": 2
+    "Label": "Substack",
+    "URL": "www.takeitpersonalpodcast.com",
+    "Project": "Take It Personal Podcast",
+    "Order": 1
   },
   {
     "Label": "Repo",
     "URL": "https://github.com/bearnax/tip-newsroom",
     "Project": "The Newsroom",
-    "Order": 2
+    "Order": 1
   },
   {
     "Label": "Repo",
     "URL": "https://github.com/bearnax/tip-scout",
     "Project": "A.W. Sterling",
-    "Order": 2
+    "Order": 1
   },
   {
     "Label": "Repo",
     "URL": "https://github.com/bearnax/hq",
-    "Project": "Feist — Daily GM",
-    "Order": 2
+    "Project": "Feist",
+    "Order": 1
+  },
+  {
+    "Label": "Repo",
+    "URL": "https://github.com/bearnax/tip-pitch-mill",
+    "Project": "Pitch Mill",
+    "Order": 1
+  },
+  {
+    "Label": "Live",
+    "URL": "https://by-will.net",
+    "Project": "By-Will",
+    "Order": 1
   },
   {
     "Label": "Repo",
     "URL": "https://github.com/bearnax/hq",
     "Project": "Fibbly",
-    "Order": 2
+    "Order": 1
   }
 ]
