@@ -71,13 +71,11 @@ def field_payload(field, spec, table_ids):
         out["options"] = {"choices": [{"name": c} for c in choices]}
     elif field["type"] == "link":
         out["type"] = "multipleRecordLinks"
-        out["options"] = {
-            "linkedTableId": table_ids[field["linkTo"]],
-            # One section per item, one project per resource. The sync reads
-            # only the first linked ID, so allowing many would silently drop
-            # every link but one.
-            "prefersSingleRecordLink": True,
-        }
+        out["options"] = {"linkedTableId": table_ids[field["linkTo"]]}
+        # prefersSingleRecordLink is a display hint the API applies from the
+        # field's *edit* endpoint, not accepted at create time (422s). One
+        # section per item, one project per resource is still enforced by
+        # the sync, which reads only the first linked ID.
     return out
 
 
