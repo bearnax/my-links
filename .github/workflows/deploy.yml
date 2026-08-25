@@ -46,8 +46,13 @@ jobs:
         with:
           path: _site
 
+  # Only the sites hosted on GitHub Pages deploy from here. Sibling sites on
+  # Cloudflare (which builds and deploys from its own git integration) leave
+  # DEPLOY_TARGET unset, so this job skips instead of failing on every push.
+  # Set the repo variable to 'github-pages' under Settings -> Secrets and
+  # variables -> Actions -> Variables to turn it on.
   deploy:
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    if: vars.DEPLOY_TARGET == 'github-pages' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     environment:

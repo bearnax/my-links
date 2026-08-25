@@ -14,7 +14,8 @@ and then writes the schema file from what Airtable actually returned.
 
 Requires AIRTABLE_TOKEN with scopes:
   schema.bases:write   create the base, tables, and fields
-  schema.bases:read    read back the IDs (implied by write, requested anyway)
+  schema.bases:read    read back the IDs — a separate scope, not implied by
+                       write; GET /meta/bases/{id}/tables fails without it
 
 Creating a base needs a workspace ID: open the workspace in Airtable and copy
 the wsp... segment out of the URL.

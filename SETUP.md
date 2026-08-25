@@ -97,16 +97,29 @@ python3 scripts/sync-links.py  # pull the base into data/links.json
 
 ## 6. Wire up GitHub
 
-- **Pages**: _Settings → Pages → Build and deployment → Source →_ **GitHub Actions**.
-  The site is built, not served from the repo, so a branch source renders nothing.
+- **Hosting**. Two supported paths:
+  - **GitHub Pages**: _Settings → Pages → Build and deployment → Source →_
+    **GitHub Actions**, and add a repo variable `DEPLOY_TARGET=github-pages`
+    (_Settings → Secrets and variables → Actions → Variables_). Without the
+    variable the deploy job skips. Pages needs a paid plan on a private repo.
+  - **Cloudflare Workers**: connect the repo in the Cloudflare dashboard with
+    build command `npm run build` and deploy command `npx wrangler deploy`, and
+    commit a `wrangler.jsonc` pointing `assets.directory` at `./_site`. Leave
+    `DEPLOY_TARGET` unset so GitHub Actions builds as CI only. Works on private
+    repos at no cost. Note the deploy command is `wrangler deploy`, not
+    `wrangler pages deploy` — the Workers Builds token has Workers Scripts
+    Write but not Cloudflare Pages Edit.
 - **Secret**: `AIRTABLE_TOKEN`, scoped to this site's base. `data.records:read`
   is enough for the sync — the write scope is only needed for `init-base.py`.
 - **PR permissions** for the scheduled sync: turn on _Settings → Actions →
   General → Workflow permissions →_ **Allow GitHub Actions to create and approve
   pull requests**, or set a `SYNC_PR_TOKEN` secret to a PAT with `repo` scope.
   With neither, the sync still pushes its branch and prints a compare link.
-- **Private repos** cannot use Pages on a free plan. Build and sync work; only
-  the deploy step fails until the repo is public.
+- **Token scopes**: `init-base.py` needs a one-time token with
+  `schema.bases:write` **and** `schema.bases:read`, scoped to the workspace
+  (creating a base cannot be scoped to a base that does not exist yet). Delete
+  that token once the base exists — the ongoing sync only needs
+  `data.records:read` scoped to the one base.
 
 ## Sharing upgrades
 
