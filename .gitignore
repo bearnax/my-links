@@ -162,8 +162,10 @@ cython_debug/
 #.idea/
 
 # Mac Stuff
-.DS_store
-.DS_Store
+*.DS_store
+*/.DS_store
+*.DS_Store
+*/.DS_Store
 
 # Node / Eleventy
 node_modules/
