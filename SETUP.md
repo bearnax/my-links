@@ -54,7 +54,7 @@ export AIRTABLE_TOKEN=pat...
 python3 scripts/init-base.py --workspace wspXXXXXXXXXXXX --name "By Will CMS"
 ```
 
-This creates the five tables from `data/airtable-spec.json` and writes
+This creates the two tables (`Sections` and `Items`) from `data/airtable-spec.json` and writes
 `data/airtable-schema.json` with the IDs Airtable generated. Those IDs cannot
 be guessed or copied from another site — this is the only supported way to
 produce that file, and it should never be hand-edited.
@@ -71,8 +71,8 @@ python3 scripts/build-airtable-seed.py data/links.json data/airtable-seed
 ```
 
 Then import each CSV in `data/airtable-seed/` into the matching table. Link
-columns (`Section`, `Project`) match on the primary field, so import
-**Sections and Projects first**, then the tables that point at them.
+columns (`Section`) match on the primary field, so import
+**Sections first**, then Items.
 
 Starting empty is also fine — create a couple of sections in Airtable by hand
 and skip to step 5.

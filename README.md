@@ -50,17 +50,14 @@ The committed JSON is deliberately the seam between Airtable and the site: the
 build never calls Airtable, so it works offline and every data change arrives
 as a reviewable diff rather than appearing silently on the live page.
 
-### Card types
+### Schema
 
-| type | table | renders as |
-|---|---|---|
-| `website` | Websites | a link row; flag `Favorite` to also pin it to the top strip |
-| `person` | People | name, optional note, and whichever profile links are filled in |
-| `project` | Projects | emoji, name, status dot, and its Project Resources links |
+| table | holds |
+|---|---|
+| `Sections` | Title, Sub Title (optional), slug, Accent Color (`<name> #<hex>`), Order, Open |
+| `Items` | Title, Section, Order, Search, Primary URL & Label, Link1-3 URLs & Labels |
 
-Sections don't declare a type — each item carries its own, so a section can mix
-them. `Status` must be one of `live` / `done` / `wip` / `idea`; those map to the
-dot's colour. The label beside the dot is free text.
+Sections are collapsible and can specify an accent color (verified against `src/style.css` on sync). A section titled or slugged `favorites` is pinned to the top favorites strip.
 
 ### Checking the setup
 

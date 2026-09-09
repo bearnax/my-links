@@ -25,27 +25,21 @@ driving; use the Action when the sync just needs to happen.
 
 ## Schema
 
-Five tables, defined in `data/airtable-spec.json` and instantiated per site by
+Two tables, defined in `data/airtable-spec.json` and instantiated per site by
 `scripts/init-base.py`. `data/airtable-schema.json` holds every table and field ID —
 **address the base by ID, never by display name**, so fields can be renamed in
 Airtable without breaking the build.
 
 | table | holds |
 |---|---|
-| `Sections` | slug, title, order, open-by-default, sites |
-| `Websites` | simple link rows; `Favorite` also puts one in the top strip |
-| `People` | name, note, and profile URLs (Website, Wikipedia, IMDB, GitHub, LinkedIn, X, Instagram, Email) |
-| `Projects` | emoji, status, status label, note |
-| `Project Resources` | child of Projects — arbitrary Label + URL rows |
+| `Sections` | slug, title, sub-title, accent color, order, open-by-default |
+| `Items` | title, section, order, search, primary URL & label, link1-3 URLs & labels |
 
-Two things worth knowing about the model:
-
-- **Sections do not declare a type.** Each item carries its own `type`
-  (`website` / `person` / `project`) and the renderer dispatches per item, so a
-  section can mix them.
-- **`Status` must be one of `live` / `done` / `wip` / `idea`.** These map to
-  CSS classes for the status dot's colour, so a new option renders a grey dot.
-  `Status Label` beside it is free text and can say anything.
+Key rules:
+- An item without a Section is skipped.
+- A section without items is skipped.
+- A section titled or slugged `favorites` is pinned to the top strip.
+- Accent colors formatted as `<name> #<hex>` are verified against `src/style.css`.
 
 ## Process
 

@@ -42,12 +42,14 @@
           <p class="brand-label">{{ site.tagline | join("<br>") | safe }}</p>
         </header>
 
+        {% if links.favorites and links.favorites.length %}
         <section class="favorites-section" data-section aria-labelledby="favorites-heading">
           <h2 class="eyebrow" id="favorites-heading">Favorites</h2>
           <div class="favorites-row" id="favorites-row">
             {%- for fav in links.favorites %}{{ cards.favorite(fav) }}{% endfor -%}
           </div>
         </section>
+        {% endif %}
 
         <div id="sections-container">
           {%- for sec in links.sections %}{{ cards.section(sec, loop.index) }}{% endfor -%}

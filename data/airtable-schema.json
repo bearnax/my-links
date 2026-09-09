@@ -12,76 +12,36 @@
       "id": "tblTYI5mad4aiFcPe",
       "fields": {
         "title": "fldUETYg2W93KfY1e",
+        "subtitle": "fldSubTitle000001",
         "slug": "fld9cXmhmGZUdh8O6",
+        "accentColor": "fldAccentColor001",
         "order": "fldIwYaZH3Kho7eT1",
-        "open": "fldQdgXgOW1G9TmqW",
-        "sites": "fldzQFMO1nQZOjBk2"
+        "open": "fldQdgXgOW1G9TmqW"
       }
     },
-    "websites": {
-      "id": "tblrcM5Gwd4yuVupP",
+    "items": {
+      "id": "tblItems000000001",
       "fields": {
-        "name": "fldBJeSAj8ZC9tDTW",
-        "url": "fldR8LRkE17rkmnhP",
-        "search": "fld5ZH3CbVRePGxvB",
-        "order": "fldt1mIIRQroUTmdN",
-        "favorite": "fld8wohVy6Q7CK7Y4",
-        "favoriteOrder": "fldKRhKdAirfExYts",
-        "sites": "fldajNwxASPefRHgc",
-        "section": "fldhYNXfGcIc2IKOM"
-      }
-    },
-    "people": {
-      "id": "tblWurCFNQlvAoQMu",
-      "fields": {
-        "name": "fldbh5hW47WO1Ypy2",
-        "note": "fldam4YL6tQkl4DgB",
-        "website": "fldAcNnJFw32lbFKL",
-        "wikipedia": "fldfBmBt8Me3F1a85",
-        "imdb": "fldDIQX3cn6xmATbd",
-        "github": "fldRzf4PTyWn5TZYv",
-        "linkedin": "fldX3znMe3q0pSlf5",
-        "x": "fld9LpAjpS0dSQ8UU",
-        "instagram": "fldukkeZeqLYqlRAz",
-        "email": "fldNqoLteHB4HtPTc",
-        "search": "fldxPabwcJ0nDeUws",
-        "order": "fldO48CqI6BnorkGe",
-        "sites": "fldULGbCz3bZic6jX",
-        "section": "fldMzRyG4wcQj5bon"
-      }
-    },
-    "projects": {
-      "id": "tbl12ir7PnpadFKxp",
-      "fields": {
-        "name": "fldrnkg0usROpmNY9",
-        "emoji": "fldVWuASZRZX3AHLe",
-        "status": "fldQwF94hn8H80ktb",
-        "statusLabel": "fldLUgj9PWQmMQaDN",
-        "note": "fldPWqnXkN6Vf0c4I",
-        "search": "fld5gvBykKI6kjgg7",
-        "order": "fldLKrLXE7AIzzCIx",
-        "sites": "fldzD07GVoX4pi5oU",
-        "section": "fldW2LvNZvCvOZo5X"
-      }
-    },
-    "projectResources": {
-      "id": "tblEfdTrrZ1V1qC3j",
-      "fields": {
-        "label": "fldgUkJ3LehwfkYSJ",
-        "url": "fld1x5yYkhSh2mfJ0",
-        "order": "fldoMcmXIPIgUNdpn",
-        "project": "fldlnZPRDZfv1ghB3"
+        "title": "fldItemTitle00001",
+        "section": "fldItemSection001",
+        "order": "fldItemOrder00001",
+        "search": "fldItemSearch0001",
+        "primaryUrl": "fldPrimUrl0000001",
+        "primaryUrlLabel": "fldPrimUrlLbl0001",
+        "link1Url": "fldLink1Url0000001",
+        "link1Label": "fldLink1Label0001",
+        "link2Url": "fldLink2Url0000001",
+        "link2Label": "fldLink2Label0001",
+        "link3Url": "fldLink3Url0000001",
+        "link3Label": "fldLink3Label0001"
       }
     }
   },
-  "statuses": [
-    "live",
-    "done",
-    "wip",
-    "idea"
-  ],
-  "sites": [
-    "Personal",
-    "Work"
+  "accentColors": [
+    "blue #2b5c8f",
+    "green #2e7d32",
+    "rust #b33927",
+    "velvet #5a2181",
+    "amber #d97706"
   ]
 }

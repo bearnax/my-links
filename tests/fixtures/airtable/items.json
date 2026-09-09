@@ -1,0 +1,400 @@
+{
+  "records": [
+    {
+      "id": "recItemFav000001",
+      "fields": {
+        "fldItemTitle00001": "Twitch",
+        "fldItemSection001": [
+          "recFav00000000001"
+        ],
+        "fldItemOrder00001": 1,
+        "fldItemSearch0001": "twitch twitch.tv streaming",
+        "fldPrimUrl0000001": "https://www.twitch.tv",
+        "fldPrimUrlLbl0001": "Twitch"
+      }
+    },
+    {
+      "id": "recItemFav000002",
+      "fields": {
+        "fldItemTitle00001": "Gmail",
+        "fldItemSection001": [
+          "recFav00000000001"
+        ],
+        "fldItemOrder00001": 2,
+        "fldItemSearch0001": "gmail email google",
+        "fldPrimUrl0000001": "https://www.gmail.com",
+        "fldPrimUrlLbl0001": "Gmail"
+      }
+    },
+    {
+      "id": "recItemFav000003",
+      "fields": {
+        "fldItemTitle00001": "Youtube",
+        "fldItemSection001": [
+          "recFav00000000001"
+        ],
+        "fldItemOrder00001": 3,
+        "fldItemSearch0001": "youtube video",
+        "fldPrimUrl0000001": "https://www.youtube.com",
+        "fldPrimUrlLbl0001": "Youtube"
+      }
+    },
+    {
+      "id": "recItemProj000001",
+      "fields": {
+        "fldItemTitle00001": "Lil Sebastian",
+        "fldItemSection001": [
+          "recSecPersonal001"
+        ],
+        "fldItemOrder00001": 1,
+        "fldItemSearch0001": "lil sebastian scavenger hunt horse",
+        "fldPrimUrl0000001": "https://bearnax.github.io/limited-grammar/",
+        "fldPrimUrlLbl0001": "Live",
+        "fldLink1Url0000001": "https://github.com/bearnax/limited-grammar",
+        "fldLink1Label0001": "Repo"
+      }
+    },
+    {
+      "id": "recItemProj000002",
+      "fields": {
+        "fldItemTitle00001": "MML Simulator",
+        "fldItemSection001": [
+          "recSecPersonal001"
+        ],
+        "fldItemOrder00001": 2,
+        "fldItemSearch0001": "mml march madness basketball simulator",
+        "fldPrimUrl0000001": "https://github.com/bearnax/hq",
+        "fldPrimUrlLbl0001": "Repo"
+      }
+    },
+    {
+      "id": "recItemProj000003",
+      "fields": {
+        "fldItemTitle00001": "Elden Ring Build Selector",
+        "fldItemSection001": [
+          "recSecPersonal001"
+        ],
+        "fldItemOrder00001": 3,
+        "fldItemSearch0001": "elden ring build selector",
+        "fldPrimUrl0000001": "https://bearnax.github.io/potential-chainsaw/",
+        "fldPrimUrlLbl0001": "Live",
+        "fldLink1Url0000001": "https://github.com/bearnax/potential-chainsaw",
+        "fldLink1Label0001": "Repo"
+      }
+    },
+    {
+      "id": "recItemProj000004",
+      "fields": {
+        "fldItemTitle00001": "My-Links (this site)",
+        "fldItemSection001": [
+          "recSecPersonal001"
+        ],
+        "fldItemOrder00001": 4,
+        "fldItemSearch0001": "my links personal bookmarks",
+        "fldPrimUrl0000001": "https://bearnax.github.io/my-links/",
+        "fldPrimUrlLbl0001": "Live",
+        "fldLink1Url0000001": "https://github.com/bearnax/my-links",
+        "fldLink1Label0001": "Repo"
+      }
+    },
+    {
+      "id": "recItemProj000005",
+      "fields": {
+        "fldItemTitle00001": "Customer Feedback Loop",
+        "fldItemSection001": [
+          "recSecPersonal001"
+        ],
+        "fldItemOrder00001": 5,
+        "fldItemSearch0001": "customer feedback loop llm",
+        "fldPrimUrl0000001": "https://github.com/bearnax/miniature-succotash",
+        "fldPrimUrlLbl0001": "Repo"
+      }
+    },
+    {
+      "id": "recItemNerd000001",
+      "fields": {
+        "fldItemTitle00001": "Personal Elden Ring (google sheets)",
+        "fldItemSection001": [
+          "recSecNerdAlert1"
+        ],
+        "fldItemOrder00001": 1,
+        "fldItemSearch0001": "elden ring google sheets weapons",
+        "fldPrimUrl0000001": "https://docs.google.com/spreadsheets/d/1RYeJTBAWSoCjFOFpsF0qLeKUQNjtJN_BdOQy7ijERbY/edit?usp=sharing"
+      }
+    },
+    {
+      "id": "recItemNerd000002",
+      "fields": {
+        "fldItemTitle00001": "AR Calculator (tclark)",
+        "fldItemSection001": [
+          "recSecNerdAlert1"
+        ],
+        "fldItemOrder00001": 2,
+        "fldItemSearch0001": "elden ring weapon ar calculator basic",
+        "fldPrimUrl0000001": "https://eldenring.tclark.io/"
+      }
+    },
+    {
+      "id": "recItemNerd000003",
+      "fields": {
+        "fldItemTitle00001": "AR Calculator (Pro)",
+        "fldItemSection001": [
+          "recSecNerdAlert1"
+        ],
+        "fldItemOrder00001": 3,
+        "fldItemSearch0001": "elden ring weapon ar calculator pro tarnished",
+        "fldPrimUrl0000001": "https://www.tarnished.dev/weapon-calculator"
+      }
+    },
+    {
+      "id": "recItemNerd000004",
+      "fields": {
+        "fldItemTitle00001": "Elden Ring Wiki (Fextralife)",
+        "fldItemSection001": [
+          "recSecNerdAlert1"
+        ],
+        "fldItemOrder00001": 4,
+        "fldItemSearch0001": "elden ring wiki fextralife",
+        "fldPrimUrl0000001": "https://eldenring.wiki.fextralife.com/Elden+Ring+Wiki"
+      }
+    },
+    {
+      "id": "recItemTIP0000001",
+      "fields": {
+        "fldItemTitle00001": "Take It Personal Podcast",
+        "fldItemSection001": [
+          "recSecTIP00000001"
+        ],
+        "fldItemOrder00001": 1,
+        "fldItemSearch0001": "take it personal podcast pod",
+        "fldPrimUrl0000001": "https://www.takeitpersonalpodcast.com",
+        "fldPrimUrlLbl0001": "Substack"
+      }
+    },
+    {
+      "id": "recItemTIP0000002",
+      "fields": {
+        "fldItemTitle00001": "The Newsroom",
+        "fldItemSection001": [
+          "recSecTIP00000001"
+        ],
+        "fldItemOrder00001": 2,
+        "fldItemSearch0001": "newsroom editorial content",
+        "fldPrimUrl0000001": "https://github.com/bearnax/tip-newsroom",
+        "fldPrimUrlLbl0001": "Repo"
+      }
+    },
+    {
+      "id": "recItemTIP0000003",
+      "fields": {
+        "fldItemTitle00001": "A.W. Sterling",
+        "fldItemSection001": [
+          "recSecTIP00000001"
+        ],
+        "fldItemOrder00001": 3,
+        "fldItemSearch0001": "aw sterling tip scout archive",
+        "fldPrimUrl0000001": "https://github.com/bearnax/tip-scout",
+        "fldPrimUrlLbl0001": "Repo"
+      }
+    },
+    {
+      "id": "recItemTIP0000004",
+      "fields": {
+        "fldItemTitle00001": "Feist",
+        "fldItemSection001": [
+          "recSecTIP00000001"
+        ],
+        "fldItemOrder00001": 4,
+        "fldItemSearch0001": "feist daily gm agent loop",
+        "fldPrimUrl0000001": "https://github.com/bearnax/hq",
+        "fldPrimUrlLbl0001": "Repo"
+      }
+    },
+    {
+      "id": "recItemTIP0000005",
+      "fields": {
+        "fldItemTitle00001": "Pitch Mill",
+        "fldItemSection001": [
+          "recSecTIP00000001"
+        ],
+        "fldItemOrder00001": 5,
+        "fldItemSearch0001": "pitch mill storylines",
+        "fldPrimUrl0000001": "https://github.com/bearnax/tip-pitch-mill",
+        "fldPrimUrlLbl0001": "Repo"
+      }
+    },
+    {
+      "id": "recItemWork000001",
+      "fields": {
+        "fldItemTitle00001": "by-will.net",
+        "fldItemSection001": [
+          "recSecWork0000001"
+        ],
+        "fldItemOrder00001": 1,
+        "fldItemSearch0001": "by-will personal site parked",
+        "fldPrimUrl0000001": "https://by-will.net"
+      }
+    },
+    {
+      "id": "recItemWork000002",
+      "fields": {
+        "fldItemTitle00001": "Fibbly",
+        "fldItemSection001": [
+          "recSecWork0000001"
+        ],
+        "fldItemOrder00001": 2,
+        "fldItemSearch0001": "fibbly planning poker",
+        "fldPrimUrl0000001": "https://github.com/bearnax/hq",
+        "fldPrimUrlLbl0001": "Repo"
+      }
+    },
+    {
+      "id": "recItemCNN0000001",
+      "fields": {
+        "fldItemTitle00001": "Homepage",
+        "fldItemSection001": [
+          "recSecCNN00000001"
+        ],
+        "fldItemOrder00001": 1,
+        "fldItemSearch0001": "cnn homepage cnn.com",
+        "fldPrimUrl0000001": "https://www.cnn.com"
+      }
+    },
+    {
+      "id": "recItemCNN0000002",
+      "fields": {
+        "fldItemTitle00001": "Live Page",
+        "fldItemSection001": [
+          "recSecCNN00000001"
+        ],
+        "fldItemOrder00001": 2,
+        "fldItemSearch0001": "cnn live",
+        "fldPrimUrl0000001": "https://www.cnn.com/videos/live"
+      }
+    },
+    {
+      "id": "recItemCNN0000003",
+      "fields": {
+        "fldItemTitle00001": "Watch Page",
+        "fldItemSection001": [
+          "recSecCNN00000001"
+        ],
+        "fldItemOrder00001": 3,
+        "fldItemSearch0001": "cnn watch videos",
+        "fldPrimUrl0000001": "https://www.cnn.com/videos"
+      }
+    },
+    {
+      "id": "recItemCNN0000004",
+      "fields": {
+        "fldItemTitle00001": "Headlines (FAST)",
+        "fldItemSection001": [
+          "recSecCNN00000001"
+        ],
+        "fldItemOrder00001": 4,
+        "fldItemSearch0001": "cnn headlines",
+        "fldPrimUrl0000001": "https://www.cnn.com/videos/fast/cnn-headlines"
+      }
+    },
+    {
+      "id": "recItemCNN0000005",
+      "fields": {
+        "fldItemTitle00001": "Shorts",
+        "fldItemSection001": [
+          "recSecCNN00000001"
+        ],
+        "fldItemOrder00001": 5,
+        "fldItemSearch0001": "cnn shorts",
+        "fldPrimUrl0000001": "https://www.cnn.com/shorts/cnn-shorts"
+      }
+    },
+    {
+      "id": "recItemPeople0001",
+      "fields": {
+        "fldItemTitle00001": "Will Brodnax",
+        "fldItemSection001": [
+          "recSecPeople00001"
+        ],
+        "fldItemOrder00001": 1,
+        "fldItemSearch0001": "will brodnax me personal site github",
+        "fldPrimUrl0000001": "https://www.willbrodnax.com",
+        "fldPrimUrlLbl0001": "Website",
+        "fldLink1Url0000001": "https://github.com/bearnax",
+        "fldLink1Label0001": "GitHub"
+      }
+    },
+    {
+      "id": "recItemPeople0002",
+      "fields": {
+        "fldItemTitle00001": "Steph Garrett",
+        "fldItemSection001": [
+          "recSecPeople00001"
+        ],
+        "fldItemOrder00001": 2,
+        "fldItemSearch0001": "steph garrett substack take it personal",
+        "fldPrimUrl0000001": "https://substack.com/@steph4sum",
+        "fldPrimUrlLbl0001": "Substack"
+      }
+    },
+    {
+      "id": "recItemPeople0003",
+      "fields": {
+        "fldItemTitle00001": "Jamie Renell",
+        "fldItemSection001": [
+          "recSecPeople00001"
+        ],
+        "fldItemOrder00001": 3,
+        "fldItemSearch0001": "jamie renell imdb",
+        "fldPrimUrl0000001": "https://www.imdb.com/name/nm1143549/",
+        "fldPrimUrlLbl0001": "IMDB"
+      }
+    },
+    {
+      "id": "recItemPeople0004",
+      "fields": {
+        "fldItemTitle00001": "Ron Swanson",
+        "fldItemSection001": [
+          "recSecPeople00001"
+        ],
+        "fldItemOrder00001": 4,
+        "fldItemSearch0001": "ron swanson parks and recreation pawnee",
+        "fldPrimUrl0000001": "https://offermanwoodshop.com/",
+        "fldPrimUrlLbl0001": "Website",
+        "fldLink1Url0000001": "https://en.wikipedia.org/wiki/Ron_Swanson",
+        "fldLink1Label0001": "Wikipedia",
+        "fldLink2Url0000001": "https://www.imdb.com/name/nm0644406/",
+        "fldLink2Label0001": "IMDB"
+      }
+    },
+    {
+      "id": "recItemPeople0005",
+      "fields": {
+        "fldItemTitle00001": "Leslie Knope",
+        "fldItemSection001": [
+          "recSecPeople00001"
+        ],
+        "fldItemOrder00001": 5,
+        "fldItemSearch0001": "leslie knope parks and rec",
+        "fldPrimUrl0000001": "https://en.wikipedia.org/wiki/Leslie_Knope",
+        "fldPrimUrlLbl0001": "Wikipedia",
+        "fldLink1Url0000001": "https://www.imdb.com/name/nm0688132/",
+        "fldLink1Label0001": "IMDB"
+      }
+    },
+    {
+      "id": "recItemPeople0006",
+      "fields": {
+        "fldItemTitle00001": "Tom Loftis",
+        "fldItemSection001": [
+          "recSecPeople00001"
+        ],
+        "fldItemOrder00001": 6,
+        "fldItemSearch0001": "tom loftis widows bay",
+        "fldPrimUrl0000001": "https://en.wikipedia.org/wiki/Matthew_Rhys",
+        "fldPrimUrlLbl0001": "Wikipedia",
+        "fldLink1Url0000001": "https://www.imdb.com/name/nm0722629/",
+        "fldLink1Label0001": "IMDB"
+      }
+    }
+  ]
+}

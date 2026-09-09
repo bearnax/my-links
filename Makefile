@@ -4,7 +4,7 @@ install:
 	npm install
 
 check:
-	@echo "No linter configured"
+	npm run lint
 
 test:
 	npm run test
