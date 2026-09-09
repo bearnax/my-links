@@ -3,6 +3,11 @@ A public facing website with my most used links (i.e. my universal bookmarks)
 
 Live on [Github Pages](https://bearnax.github.io/my-links/)
 
+This repo is also the **template** the sibling link sites are forked from — the
+engine (`src/`, `scripts/`, `.github/`) is shared, while `data/site.json` and
+`data/airtable-schema.json` make each deployment its own. To stand up a new
+site, see **[SETUP.md](SETUP.md)**.
+
 ## Building
 
 The site is generated with [Eleventy](https://www.11ty.dev/) from
@@ -19,6 +24,9 @@ npm run serve   # local dev server with live reload
 | path | what it is |
 |---|---|
 | `data/links.json` | generated data, the input to the build |
+| `data/site.json` | this site's name, brand lines, and storage prefix |
+| `data/airtable-spec.json` | the schema every site's base must have (template) |
+| `data/airtable-schema.json` | this site's table and field IDs (generated) |
 | `src/index.njk` | the page shell |
 | `src/_includes/cards.njk` | one macro per card type (favorite, link, project) |
 | `src/_data/links.js` | reads `data/links.json` into the templates |
@@ -32,8 +40,9 @@ Pages must be set to _Settings → Pages → Build and deployment → Source →
 ## Editing links
 
 The site is built from `data/links.json`, which is generated — don't hand-edit
-it. The source of truth is the **Links CMS** Airtable base (`app1bBKfPU7TpXAgm`,
-in the Production DBs workspace). Edit records there, then run the
+it. The source of truth is this site's Airtable base, whose ID lives in
+`data/airtable-schema.json` (for this deployment: **Links CMS**,
+`app1bBKfPU7TpXAgm`, in the Production DBs workspace). Edit records there, then run the
 `handle-the-data` Claude Code skill (`.claude/skills/handle-the-data/`) to pull
 the base, regenerate `data/links.json`, and open a PR with the diff.
 
@@ -52,6 +61,16 @@ as a reviewable diff rather than appearing silently on the live page.
 Sections don't declare a type — each item carries its own, so a section can mix
 them. `Status` must be one of `live` / `done` / `wip` / `idea`; those map to the
 dot's colour. The label beside the dot is free text.
+
+### Checking the setup
+
+```sh
+python3 scripts/doctor.py --online
+```
+
+Verifies `site.json`, that every field in `data/airtable-spec.json` is present
+in the schema, and that the base actually answers. Run it first whenever a sync
+fails in a way that doesn't obviously point at the data.
 
 ### Running a sync by hand
 
@@ -83,3 +102,10 @@ For it to open the PR itself, turn on _Settings → Actions → General → Work
 permissions →_ **Allow GitHub Actions to create and approve pull requests**, or
 set a `SYNC_PR_TOKEN` secret to a PAT with `repo` scope. With neither, the job
 still pushes the synced branch and prints a compare link in the run summary.
+
+## Forking this for another site
+
+`scripts/init-base.py` creates a matching Airtable base and writes the schema
+file for it; `scripts/doctor.py` checks the result. The full walkthrough,
+including how upgrades travel between sibling sites, is in
+**[SETUP.md](SETUP.md)**.

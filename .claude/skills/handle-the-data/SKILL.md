@@ -8,7 +8,11 @@ description: Sync the links/projects/people data on the site from the Airtable s
 `data/links.json` drives everything rendered on the page. It is a **generated
 file** — the source of truth is the **Links CMS** Airtable base:
 
-**Base**: `app1bBKfPU7TpXAgm` (workspace: Production DBs)
+**Base**: read the `baseId` out of `data/airtable-schema.json` — do not rely on
+an ID memorised from another checkout. This repo is the template for sibling
+link sites, each with its own base, so a hardcoded ID here would sync the wrong
+site's data. (`python3 scripts/doctor.py` fails loudly if the schema still
+points at the base a fork was copied from.)
 
 `data/links.json` is deliberately kept as the seam between Airtable and the
 site. The Eleventy build reads the committed file, never Airtable directly, so
@@ -21,7 +25,8 @@ driving; use the Action when the sync just needs to happen.
 
 ## Schema
 
-Five tables. `data/airtable-schema.json` holds every table and field ID —
+Five tables, defined in `data/airtable-spec.json` and instantiated per site by
+`scripts/init-base.py`. `data/airtable-schema.json` holds every table and field ID —
 **address the base by ID, never by display name**, so fields can be renamed in
 Airtable without breaking the build.
 

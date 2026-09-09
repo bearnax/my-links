@@ -6,82 +6,70 @@
     "Section": "quick-access",
     "Order": 1,
     "Favorite": false,
-    "Favorite Order": null,
-    "Sites": [
-      "Personal"
-    ]
+    "Favorite Order": null
   },
   {
-    "Name": "My GitHub",
+    "Name": "GitHub (Bearnax)",
     "URL": "https://github.com/bearnax",
     "Search": "github repos code bearnax",
     "Section": "quick-access",
     "Order": 2,
     "Favorite": false,
-    "Favorite Order": null,
-    "Sites": [
-      "Personal"
-    ]
+    "Favorite Order": null
   },
   {
-    "Name": "Elden Ring, Google Sheets",
+    "Name": "Github (Will-Brodnax)",
+    "URL": "https://github.com/will-brodnax",
+    "Search": "github repos code will-brodnax",
+    "Section": "quick-access",
+    "Order": 3,
+    "Favorite": false,
+    "Favorite Order": null
+  },
+  {
+    "Name": "Personal Elden Ring (google sheets)",
     "URL": "https://docs.google.com/spreadsheets/d/1RYeJTBAWSoCjFOFpsF0qLeKUQNjtJN_BdOQy7ijERbY/edit?usp=sharing",
     "Search": "elden ring google sheets weapons",
     "Section": "nerd-alert",
     "Order": 1,
     "Favorite": false,
-    "Favorite Order": null,
-    "Sites": [
-      "Personal"
-    ]
+    "Favorite Order": null
   },
   {
-    "Name": "Weapon AR Calculator Basic",
+    "Name": "AR Calculator (tclark)",
     "URL": "https://eldenring.tclark.io/",
     "Search": "elden ring weapon ar calculator basic",
     "Section": "nerd-alert",
     "Order": 2,
     "Favorite": false,
-    "Favorite Order": null,
-    "Sites": [
-      "Personal"
-    ]
+    "Favorite Order": null
   },
   {
-    "Name": "Weapon AR Calculator Pro",
+    "Name": "AR Calculator (Pro)",
     "URL": "https://www.tarnished.dev/weapon-calculator",
     "Search": "elden ring weapon ar calculator pro tarnished",
     "Section": "nerd-alert",
     "Order": 3,
     "Favorite": false,
-    "Favorite Order": null,
-    "Sites": [
-      "Personal"
-    ]
+    "Favorite Order": null
   },
   {
-    "Name": "Fextralife, Elden Ring Wiki",
+    "Name": "Elden Ring Wiki (Fextralife)",
     "URL": "https://eldenring.wiki.fextralife.com/Elden+Ring+Wiki",
     "Search": "elden ring wiki fextralife",
     "Section": "nerd-alert",
     "Order": 4,
     "Favorite": false,
-    "Favorite Order": null,
-    "Sites": [
-      "Personal"
-    ]
+    "Favorite Order": null
   },
   {
-    "Name": "CNN Homepage",
+    "Name": "Homepage",
     "URL": "https://www.cnn.com",
     "Search": "cnn homepage cnn.com",
     "Section": "cnn",
     "Order": 1,
     "Favorite": false,
-    "Favorite Order": null,
-    "Sites": [
-      "Personal"
-    ]
+    "Favorite Order": null
   },
   {
     "Name": "Live Page",
@@ -90,10 +78,7 @@
     "Section": "cnn",
     "Order": 2,
     "Favorite": false,
-    "Favorite Order": null,
-    "Sites": [
-      "Personal"
-    ]
+    "Favorite Order": null
   },
   {
     "Name": "Watch Page",
@@ -102,34 +87,25 @@
     "Section": "cnn",
     "Order": 3,
     "Favorite": false,
-    "Favorite Order": null,
-    "Sites": [
-      "Personal"
-    ]
+    "Favorite Order": null
   },
   {
-    "Name": "CNN Headlines",
+    "Name": "Headlines (FAST)",
     "URL": "https://www.cnn.com/videos/fast/cnn-headlines",
     "Search": "cnn headlines",
     "Section": "cnn",
     "Order": 4,
     "Favorite": false,
-    "Favorite Order": null,
-    "Sites": [
-      "Personal"
-    ]
+    "Favorite Order": null
   },
   {
-    "Name": "CNN Shorts",
+    "Name": "Shorts",
     "URL": "https://www.cnn.com/shorts/cnn-shorts",
     "Search": "cnn shorts",
     "Section": "cnn",
     "Order": 5,
     "Favorite": false,
-    "Favorite Order": null,
-    "Sites": [
-      "Personal"
-    ]
+    "Favorite Order": null
   },
   {
     "Name": "Twitch",
@@ -138,10 +114,7 @@
     "Section": "",
     "Order": null,
     "Favorite": true,
-    "Favorite Order": 1,
-    "Sites": [
-      "Personal"
-    ]
+    "Favorite Order": 1
   },
   {
     "Name": "Gmail",
@@ -150,10 +123,7 @@
     "Section": "",
     "Order": null,
     "Favorite": true,
-    "Favorite Order": 2,
-    "Sites": [
-      "Personal"
-    ]
+    "Favorite Order": 2
   },
   {
     "Name": "Youtube",
@@ -162,9 +132,6 @@
     "Section": "",
     "Order": null,
     "Favorite": true,
-    "Favorite Order": 3,
-    "Sites": [
-      "Personal"
-    ]
+    "Favorite Order": 3
   }
 ]
