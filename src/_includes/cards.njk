@@ -9,7 +9,7 @@
 {%- endmacro %}
 
 {% macro item(it) -%}
-<div class="item-row" data-search="{{ it | searchTerms }}"><div class="item-main">{% if it.primaryUrl %}<a class="item-title-link" href="{{ it.primaryUrl }}"><span class="item-title">{{ it.title }}</span></a>{% else %}<span class="item-title">{{ it.title }}</span>{% endif %}</div>{% if (it.primaryUrl and it.primaryUrlLabel and it.primaryUrlLabel != it.title) or (it.links and it.links.length > 0) %}<div class="item-links">{% if it.primaryUrl and it.primaryUrlLabel and it.primaryUrlLabel != it.title %}<a class="link-btn" href="{{ it.primaryUrl }}">{{ it.primaryUrlLabel }}</a>{% endif %}{% for link in it.links %}<a class="link-btn" href="{{ link.url }}">{{ link.label }}</a>{% endfor %}</div>{% endif %}</div>
+<div class="item-row" data-search="{{ it | searchTerms }}"><div class="item-main">{% if it.primaryUrl %}<a class="item-title-link" href="{{ it.primaryUrl }}"><span class="item-title">{{ it.title }}</span><span class="item-title-arrow">↗</span></a>{% else %}<span class="item-title">{{ it.title }}</span>{% endif %}</div>{% if (it.primaryUrl and it.primaryUrlLabel and it.primaryUrlLabel != it.title) or (it.links and it.links.length > 0) %}<div class="item-links">{% if it.primaryUrl and it.primaryUrlLabel and it.primaryUrlLabel != it.title %}<a class="link-btn" href="{{ it.primaryUrl }}">{{ it.primaryUrlLabel }}</a>{% endif %}{% for link in it.links %}<a class="link-btn" href="{{ link.url }}">{{ link.label }}</a>{% endfor %}</div>{% endif %}</div>
 {%- endmacro %}
 
 {% macro section(sec, index) -%}

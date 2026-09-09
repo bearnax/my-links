@@ -1,9 +1,14 @@
 {
   "favorites": [
     {
-      "label": "Twitch",
-      "url": "https://www.twitch.tv",
-      "search": "twitch twitch.tv streaming"
+      "label": "Github (Bearnax)",
+      "url": "https://github.com/bearnax",
+      "search": "github repos code bearnax"
+    },
+    {
+      "label": "Youtube",
+      "url": "https://www.youtube.com",
+      "search": "youtube video"
     },
     {
       "label": "Gmail",
@@ -11,165 +16,136 @@
       "search": "gmail email google"
     },
     {
-      "label": "Youtube",
-      "url": "https://www.youtube.com",
-      "search": "youtube video"
+      "label": "Twitch",
+      "url": "https://www.twitch.tv",
+      "search": "twitch twitch.tv streaming"
     }
   ],
   "sections": [
-    {
-      "id": "projects-personal",
-      "title": "Personal Projects",
-      "open": false,
-      "items": [
-        {
-          "title": "Lil Sebastian",
-          "search": "lil sebastian scavenger hunt horse",
-          "primaryUrl": "https://bearnax.github.io/limited-grammar/",
-          "primaryUrlLabel": "Live",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/bearnax/limited-grammar"
-            }
-          ]
-        },
-        {
-          "title": "MML Simulator",
-          "search": "mml march madness basketball simulator",
-          "primaryUrl": "https://github.com/bearnax/hq",
-          "primaryUrlLabel": "Repo"
-        },
-        {
-          "title": "Elden Ring Build Selector",
-          "search": "elden ring build selector",
-          "primaryUrl": "https://bearnax.github.io/potential-chainsaw/",
-          "primaryUrlLabel": "Live",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/bearnax/potential-chainsaw"
-            }
-          ]
-        },
-        {
-          "title": "My-Links (this site)",
-          "search": "my links personal bookmarks",
-          "primaryUrl": "https://bearnax.github.io/my-links/",
-          "primaryUrlLabel": "Live",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/bearnax/my-links"
-            }
-          ]
-        },
-        {
-          "title": "Customer Feedback Loop",
-          "search": "customer feedback loop llm",
-          "primaryUrl": "https://github.com/bearnax/miniature-succotash",
-          "primaryUrlLabel": "Repo"
-        }
-      ],
-      "accentColor": "green #2e7d32",
-      "accentName": "green",
-      "accentHex": "#2e7d32"
-    },
     {
       "id": "nerd-alert",
       "title": "Nerd Alert",
       "open": false,
       "items": [
         {
-          "title": "Personal Elden Ring (google sheets)",
-          "search": "elden ring google sheets weapons",
-          "primaryUrl": "https://docs.google.com/spreadsheets/d/1RYeJTBAWSoCjFOFpsF0qLeKUQNjtJN_BdOQy7ijERbY/edit?usp=sharing",
-          "primaryUrlLabel": "Personal Elden Ring (google sheets)"
-        },
-        {
-          "title": "AR Calculator (tclark)",
-          "search": "elden ring weapon ar calculator basic",
-          "primaryUrl": "https://eldenring.tclark.io/",
-          "primaryUrlLabel": "AR Calculator (tclark)"
-        },
-        {
-          "title": "AR Calculator (Pro)",
-          "search": "elden ring weapon ar calculator pro tarnished",
-          "primaryUrl": "https://www.tarnished.dev/weapon-calculator",
-          "primaryUrlLabel": "AR Calculator (Pro)"
-        },
-        {
-          "title": "Elden Ring Wiki (Fextralife)",
-          "search": "elden ring wiki fextralife",
+          "title": "Elden Ring",
+          "search": "elden ring fextralife tclark weapon ar",
           "primaryUrl": "https://eldenring.wiki.fextralife.com/Elden+Ring+Wiki",
-          "primaryUrlLabel": "Elden Ring Wiki (Fextralife)"
+          "primaryUrlLabel": "Wiki (Fextralife)",
+          "links": [
+            {
+              "label": "Weapon AR Calculator (Tclark)",
+              "url": "https://eldenring.tclark.io/"
+            },
+            {
+              "label": "Weapon AR Calculator (Pro)",
+              "url": "https://www.tarnished.dev/weapon-calculator"
+            },
+            {
+              "label": "My spreadsheets (Google)",
+              "url": "https://docs.google.com/spreadsheets/d/1RYeJTBAWSoCjFOFpsF0qLeKUQNjtJN_BdOQy7ijERbY/edit?usp=sharing"
+            }
+          ]
+        },
+        {
+          "title": "Stardew Valley",
+          "search": "stardew valley concerned ape",
+          "primaryUrl": "https://www.stardewvalleywiki.com/Stardew_Valley_Wiki",
+          "primaryUrlLabel": "Wiki"
+        },
+        {
+          "title": "Graveyard Keeper",
+          "search": "graveyard keeper",
+          "primaryUrl": "https://graveyardkeeper.fandom.com/wiki/Graveyard_Keeper_Wiki",
+          "primaryUrlLabel": "Wiki"
+        },
+        {
+          "title": "Terraria",
+          "search": "terraria",
+          "primaryUrl": "https://terraria.wiki.gg/",
+          "primaryUrlLabel": "Wiki"
         }
-      ],
-      "accentColor": "rust #b33927",
-      "accentName": "rust",
-      "accentHex": "#b33927"
+      ]
     },
     {
-      "id": "projects-tip",
-      "title": "Take It Personal",
+      "id": "experiments",
+      "title": "Experiments",
       "open": false,
       "items": [
         {
-          "title": "Take It Personal Podcast",
-          "search": "take it personal podcast pod",
-          "primaryUrl": "https://www.takeitpersonalpodcast.com",
-          "primaryUrlLabel": "Substack"
+          "title": "Personal Selectors",
+          "search": "personal selectors select choose",
+          "primaryUrl": "https://bearnax.github.io/personal-selectors/",
+          "primaryUrlLabel": "Live Site",
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/bearnax/personal-selectors"
+            }
+          ]
         },
         {
-          "title": "The Newsroom",
-          "search": "newsroom editorial content",
-          "primaryUrl": "https://github.com/bearnax/tip-newsroom",
+          "title": "Sports Simulators",
+          "search": "ncaa mm march madness lord roberts cup LRC college football CFB CFP",
+          "primaryUrl": "https://github.com/bearnax/ncaa-mm",
           "primaryUrlLabel": "Repo"
         },
         {
-          "title": "A.W. Sterling",
-          "search": "aw sterling tip scout archive",
-          "primaryUrl": "https://github.com/bearnax/tip-scout",
-          "primaryUrlLabel": "Repo"
-        },
-        {
-          "title": "Feist",
-          "search": "feist daily gm agent loop",
-          "primaryUrl": "https://github.com/bearnax/hq",
-          "primaryUrlLabel": "Repo"
-        },
-        {
-          "title": "Pitch Mill",
-          "search": "pitch mill storylines",
-          "primaryUrl": "https://github.com/bearnax/tip-pitch-mill",
-          "primaryUrlLabel": "Repo"
+          "title": "Lil Sebastian",
+          "search": "lil sebastian scavenger hunt",
+          "primaryUrl": "https://bearnax.github.io/limited-grammar/",
+          "primaryUrlLabel": "Summary Page",
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/bearnax/limited-grammar"
+            }
+          ]
         }
-      ],
-      "accentColor": "velvet #5a2181",
-      "accentName": "velvet",
-      "accentHex": "#5a2181"
+      ]
     },
     {
-      "id": "projects-work",
-      "title": "Work Related",
+      "id": "personal-tools",
+      "title": "Tools & Projects",
       "open": false,
       "items": [
-        {
-          "title": "by-will.net",
-          "search": "by-will personal site parked",
-          "primaryUrl": "https://by-will.net",
-          "primaryUrlLabel": "by-will.net"
-        },
         {
           "title": "Fibbly",
-          "search": "fibbly planning poker",
-          "primaryUrl": "https://github.com/bearnax/hq",
-          "primaryUrlLabel": "Repo"
+          "search": "fibbly",
+          "primaryUrl": "https://fibbly.wbrodnax.workers.dev/",
+          "primaryUrlLabel": "Live Site",
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/will-brodnax/fibbly"
+            }
+          ]
+        },
+        {
+          "title": "Retrograde",
+          "search": "retrograde",
+          "primaryUrl": "https://retrograde.wbrodnax.workers.dev/",
+          "primaryUrlLabel": "Live Site",
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/will-brodnax/retrograde"
+            }
+          ]
+        },
+        {
+          "title": "Take It Personal",
+          "search": "take it personal podcast",
+          "primaryUrl": "https://www.takeitpersonalpodcast.com",
+          "primaryUrlLabel": "Home",
+          "links": [
+            {
+              "label": "Repo",
+              "url": "https://github.com/bearnax/tip-scout"
+            }
+          ]
         }
-      ],
-      "accentColor": "amber #d97706",
-      "accentName": "amber",
-      "accentHex": "#d97706"
+      ]
     },
     {
       "id": "cnn",
@@ -183,16 +159,28 @@
           "primaryUrlLabel": "Homepage"
         },
         {
-          "title": "Live Page",
+          "title": "AI Projects",
+          "search": "AI projects cnn",
+          "primaryUrl": "https://github.com/will-brodnax/cnn-editorial-engine",
+          "primaryUrlLabel": "AI Editorial Engine"
+        },
+        {
+          "title": "Live Video Page",
           "search": "cnn live",
           "primaryUrl": "https://www.cnn.com/videos/live",
-          "primaryUrlLabel": "Live Page"
+          "primaryUrlLabel": "Live Video Page"
         },
         {
           "title": "Watch Page",
+          "search": "cnn watch live video",
+          "primaryUrl": "https://www.cnn.com/watch",
+          "primaryUrlLabel": "Watch Page"
+        },
+        {
+          "title": "VOD Videos",
           "search": "cnn watch videos",
           "primaryUrl": "https://www.cnn.com/videos",
-          "primaryUrlLabel": "Watch Page"
+          "primaryUrlLabel": "VOD Videos"
         },
         {
           "title": "Headlines (FAST)",
@@ -205,77 +193,6 @@
           "search": "cnn shorts",
           "primaryUrl": "https://www.cnn.com/shorts/cnn-shorts",
           "primaryUrlLabel": "Shorts"
-        }
-      ]
-    },
-    {
-      "id": "people",
-      "title": "People",
-      "open": false,
-      "items": [
-        {
-          "title": "Will Brodnax",
-          "search": "will brodnax me personal site github",
-          "primaryUrl": "https://www.willbrodnax.com",
-          "primaryUrlLabel": "Website",
-          "links": [
-            {
-              "label": "GitHub",
-              "url": "https://github.com/bearnax"
-            }
-          ]
-        },
-        {
-          "title": "Steph Garrett",
-          "search": "steph garrett substack take it personal",
-          "primaryUrl": "https://substack.com/@steph4sum",
-          "primaryUrlLabel": "Substack"
-        },
-        {
-          "title": "Jamie Renell",
-          "search": "jamie renell imdb",
-          "primaryUrl": "https://www.imdb.com/name/nm1143549/",
-          "primaryUrlLabel": "IMDB"
-        },
-        {
-          "title": "Ron Swanson",
-          "search": "ron swanson parks and recreation pawnee",
-          "primaryUrl": "https://offermanwoodshop.com/",
-          "primaryUrlLabel": "Website",
-          "links": [
-            {
-              "label": "Wikipedia",
-              "url": "https://en.wikipedia.org/wiki/Ron_Swanson"
-            },
-            {
-              "label": "IMDB",
-              "url": "https://www.imdb.com/name/nm0644406/"
-            }
-          ]
-        },
-        {
-          "title": "Leslie Knope",
-          "search": "leslie knope parks and rec",
-          "primaryUrl": "https://en.wikipedia.org/wiki/Leslie_Knope",
-          "primaryUrlLabel": "Wikipedia",
-          "links": [
-            {
-              "label": "IMDB",
-              "url": "https://www.imdb.com/name/nm0688132/"
-            }
-          ]
-        },
-        {
-          "title": "Tom Loftis",
-          "search": "tom loftis widows bay",
-          "primaryUrl": "https://en.wikipedia.org/wiki/Matthew_Rhys",
-          "primaryUrlLabel": "Wikipedia",
-          "links": [
-            {
-              "label": "IMDB",
-              "url": "https://www.imdb.com/name/nm0722629/"
-            }
-          ]
         }
       ]
     }

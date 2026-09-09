@@ -67,7 +67,8 @@ def load_tables(schema, from_dir, token):
         if from_dir:
             path = os.path.join(from_dir, filename + ".json")
             with open(path, encoding="utf-8") as f:
-                tables[key] = json.load(f)["records"]
+                data = json.load(f)
+                tables[key] = data if isinstance(data, list) else data.get("records", [])
         else:
             tables[key] = fetch_table(schema["baseId"], schema["tables"][key]["id"], token)
     return tables
@@ -268,6 +269,15 @@ def main():
     out_path = args[0] if args else "data/links.json"
 
     token = os.environ.get("AIRTABLE_TOKEN")
+    if not token:
+        env_path = os.path.join(HERE, "..", ".env")
+        if os.path.exists(env_path):
+            with open(env_path, encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line.startswith("AIRTABLE_TOKEN="):
+                        token = line.split("=", 1)[1].strip().strip('"').strip("'")
+                        break
     if not from_dir and not token:
         raise SystemExit("AIRTABLE_TOKEN is not set (or pass --from-dir for a local build)")
 

@@ -127,6 +127,15 @@ def check_data():
 
 def check_online(schema):
     token = os.environ.get("AIRTABLE_TOKEN")
+    if not token:
+        env_path = os.path.join(ROOT, ".env")
+        if os.path.exists(env_path):
+            with open(env_path, encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line.startswith("AIRTABLE_TOKEN="):
+                        token = line.split("=", 1)[1].strip().strip('"').strip("'")
+                        break
     if not check("AIRTABLE_TOKEN is set", bool(token),
                  "export a token with data.records:read"):
         return
