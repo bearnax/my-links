@@ -9,12 +9,18 @@
     "",
     "Link fields are declared only on the child side. Airtable auto-creates the",
     "symmetric field on the parent, which is why Sections has no link fields",
-    "listed but ends up with Websites/People/Projects on it.",
+    "listed but ends up with Items on it.",
     "",
     "`key` is the stable name the sync uses (schema.tables.X.fields.key); `name`",
     "is the Airtable display name and may be renamed freely afterwards."
   ],
-  "statuses": ["live", "done", "wip", "idea"],
+  "accentColors": [
+    "blue #2b5c8f",
+    "green #2e7d32",
+    "rust #b33927",
+    "velvet #5a2181",
+    "amber #d97706"
+  ],
   "tables": [
     {
       "key": "sections",
@@ -22,69 +28,30 @@
       "description": "Collapsible sections on the links site. Order and Open drive how the page renders.",
       "fields": [
         {"key": "title", "name": "Title", "type": "singleLineText", "description": "Section heading shown on the page.", "primary": true},
-        {"key": "slug", "name": "Slug", "type": "singleLineText", "description": "URL fragment / DOM id. Lowercase, hyphenated, unique."},
-        {"key": "order", "name": "Order", "type": "number", "description": "Sort order of sections on the page."},
+        {"key": "subtitle", "name": "Sub Title", "type": "singleLineText", "description": "Optional sub title."},
+        {"key": "slug", "name": "slug", "type": "singleLineText", "description": "URL fragment / DOM id. Lowercase, hyphenated, unique."},
+        {"key": "accentColor", "name": "Accent Color", "type": "singleSelect", "choicesFrom": "accentColors", "description": "Formatted as '<string-name> #<color-hex>'."},
+        {"key": "order", "name": "Order", "type": "number", "description": "Section ordering below favorite (favorites is always top)."},
         {"key": "open", "name": "Open", "type": "checkbox", "description": "Whether the section starts expanded."}
       ]
     },
     {
-      "key": "websites",
-      "name": "Websites",
-      "description": "Simple link cards. Rows flagged Favorite also appear in the favorites strip at the top of the page.",
+      "key": "items",
+      "name": "Items",
+      "description": "Bookmarks and links within sections.",
       "fields": [
-        {"key": "name", "name": "Name", "type": "singleLineText", "description": "Link label shown on the card.", "primary": true},
-        {"key": "url", "name": "URL", "type": "url"},
-        {"key": "search", "name": "Search", "type": "singleLineText", "description": "Extra keywords for the on-page search. Falls back to the lowercased name if blank."},
+        {"key": "title", "name": "Title", "type": "singleLineText", "description": "Item title.", "primary": true},
+        {"key": "section", "name": "Section", "type": "link", "linkTo": "sections", "description": "The section this item appears under."},
         {"key": "order", "name": "Order", "type": "number", "description": "Sort order within the section."},
-        {"key": "favorite", "name": "Favorite", "type": "checkbox", "description": "Show in the favorites strip at the top of the page."},
-        {"key": "favoriteOrder", "name": "Favorite Order", "type": "number", "description": "Sort order within the favorites strip."},
-        {"key": "section", "name": "Section", "type": "link", "linkTo": "sections", "description": "The section this link appears under. Leave blank for a favorites-only link."}
-      ]
-    },
-    {
-      "key": "people",
-      "name": "People",
-      "description": "Person cards. Every profile field is optional — blanks are skipped when the card renders.",
-      "fields": [
-        {"key": "name", "name": "Name", "type": "singleLineText", "primary": true},
-        {"key": "note", "name": "Note", "type": "singleLineText", "description": "Short qualifier shown after the name, e.g. a role or (fictional)."},
-        {"key": "website", "name": "Website", "type": "url"},
-        {"key": "wikipedia", "name": "Wikipedia", "type": "url"},
-        {"key": "imdb", "name": "IMDB", "type": "url"},
-        {"key": "github", "name": "GitHub", "type": "url"},
-        {"key": "linkedin", "name": "LinkedIn", "type": "url"},
-        {"key": "x", "name": "X", "type": "url"},
-        {"key": "instagram", "name": "Instagram", "type": "url"},
-        {"key": "email", "name": "Email", "type": "email"},
-        {"key": "search", "name": "Search", "type": "singleLineText"},
-        {"key": "order", "name": "Order", "type": "number"},
-        {"key": "section", "name": "Section", "type": "link", "linkTo": "sections", "description": "The section this person appears under."}
-      ]
-    },
-    {
-      "key": "projects",
-      "name": "Projects",
-      "description": "Project cards. Live and repo links live in Project Resources so a project can carry any number of links.",
-      "fields": [
-        {"key": "name", "name": "Name", "type": "singleLineText", "primary": true},
-        {"key": "emoji", "name": "Emoji", "type": "singleLineText", "description": "Optional emoji prefix shown before the name."},
-        {"key": "status", "name": "Status", "type": "singleSelect", "choicesFrom": "statuses", "description": "Drives the colour of the status dot."},
-        {"key": "statusLabel", "name": "Status Label", "type": "singleLineText", "description": "Free text shown next to the dot, e.g. Server side only."},
-        {"key": "note", "name": "Note", "type": "singleLineText", "description": "Optional parenthetical after the name."},
-        {"key": "search", "name": "Search", "type": "singleLineText"},
-        {"key": "order", "name": "Order", "type": "number"},
-        {"key": "section", "name": "Section", "type": "link", "linkTo": "sections", "description": "The section this project appears under."}
-      ]
-    },
-    {
-      "key": "projectResources",
-      "name": "Project Resources",
-      "description": "Links belonging to a project — Live, Repo, and anything else such as a sheet or a doc.",
-      "fields": [
-        {"key": "label", "name": "Label", "type": "singleLineText", "description": "Short link label, e.g. Live, Repo, Sheet.", "primary": true},
-        {"key": "url", "name": "URL", "type": "url"},
-        {"key": "order", "name": "Order", "type": "number"},
-        {"key": "project", "name": "Project", "type": "link", "linkTo": "projects", "description": "The project this resource belongs to."}
+        {"key": "search", "name": "Search", "type": "singleLineText", "description": "Extra keywords for the on-page search."},
+        {"key": "primaryUrl", "name": "Primary URL", "type": "url", "description": "Primary URL for this item."},
+        {"key": "primaryUrlLabel", "name": "Primary URL Label", "type": "singleLineText", "description": "Label for primary URL. Defaults to Title if omitted."},
+        {"key": "link1Url", "name": "Link1 URL", "type": "url", "description": "Optional additional URL 1."},
+        {"key": "link1Label", "name": "Link1 URL Label", "type": "singleLineText", "description": "Label for Link1 URL. Required if Link1 URL is present."},
+        {"key": "link2Url", "name": "Link2 URL", "type": "url", "description": "Optional additional URL 2."},
+        {"key": "link2Label", "name": "Link2 URL Label", "type": "singleLineText", "description": "Label for Link2 URL. Required if Link2 URL is present."},
+        {"key": "link3Url", "name": "Link3 URL", "type": "url", "description": "Optional additional URL 3."},
+        {"key": "link3Label", "name": "Link3 URL Label", "type": "singleLineText", "description": "Label for Link3 URL. Required if Link3 URL is present."}
       ]
     }
   ]

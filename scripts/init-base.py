@@ -95,8 +95,11 @@ def build_schema(spec, base_id, base_name, tables_response):
         "baseId": base_id,
         "baseName": base_name,
         "tables": {},
-        "statuses": spec["statuses"],
     }
+    if "accentColors" in spec:
+        schema["accentColors"] = spec["accentColors"]
+    if "statuses" in spec:
+        schema["statuses"] = spec["statuses"]
 
     for table in spec["tables"]:
         live = by_name.get(table["name"])

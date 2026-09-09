@@ -19,18 +19,22 @@ def load(path):
 def key_for(item):
     """Identity for diffing. Websites are identified by URL because a rename
     is an edit; people and projects by name because their links move around."""
+    if "title" in item:
+        return item["title"]
     if item.get("type") in ("person", "project"):
         return item["name"]
     return item.get("url") or item.get("label")
 
 
 def label_for(item):
-    return item.get("name") or item.get("label")
+    return item.get("title") or item.get("name") or item.get("label")
 
 
 def kind_of(item, default):
     """Items carry a type since the Airtable cutover. Older data does not, so
     fall back to shape: only projects ever had a status."""
+    if "title" in item:
+        return "item"
     if "type" in item:
         return item["type"]
     if "status" in item:

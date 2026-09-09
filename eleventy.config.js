@@ -32,9 +32,9 @@ export default function (eleventyConfig) {
     return (items || []).every(function (item) { return item.type === "website"; });
   });
 
-  // `search` is optional in the data; fall back to the lowercased label.
+  // `search` is optional in the data; fall back to the lowercased label or title.
   eleventyConfig.addFilter("searchTerms", function (item) {
-    return item.search || (item.label || item.name || "").toLowerCase();
+    return item.search || (item.title || item.label || item.name || "").toLowerCase();
   });
 
   return {

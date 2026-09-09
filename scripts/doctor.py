@@ -98,8 +98,12 @@ def check_schema(site):
     check("schema covers every field in the spec", not missing,
           f"missing: {', '.join(missing)}" if missing else "")
 
-    check("statuses match the spec", schema.get("statuses") == spec["statuses"],
-          f"{schema.get('statuses')} vs {spec['statuses']}")
+    if "accentColors" in spec:
+        check("accentColors match the spec", schema.get("accentColors") == spec["accentColors"],
+              f"{schema.get('accentColors')} vs {spec['accentColors']}")
+    elif "statuses" in spec:
+        check("statuses match the spec", schema.get("statuses") == spec["statuses"],
+              f"{schema.get('statuses')} vs {spec['statuses']}")
     return schema
 
 

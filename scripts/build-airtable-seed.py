@@ -22,112 +22,87 @@ import sys
 
 
 def build(data):
-    """Fan data/links.json back out into one list of rows per table.
+    """Fan data/links.json back out into Sections and Items tables."""
+    sections = []
+    items = []
 
-    Sections carry a mixed `items` list where each item declares its own
-    `type`; this is the inverse of the join scripts/sync-links.py performs.
-    """
-    sections, websites, projects, resources, people = [], [], [], [], []
+    # If there are favorites, add them as a Favorites section (order 0)
+    fav_list = data.get("favorites", [])
+    if fav_list:
+        sections.append({
+            "Slug": "favorites",
+            "Title": "Favorites",
+            "Sub Title": "",
+            "Accent Color": "blue #2b5c8f",
+            "Order": 0,
+            "Open": True,
+        })
+        for i, fav in enumerate(fav_list, start=1):
+            items.append({
+                "Title": fav.get("label", ""),
+                "Section": "favorites",
+                "Order": i,
+                "Search": fav.get("search", ""),
+                "Primary URL": fav.get("url", ""),
+                "Primary URL Label": fav.get("label", ""),
+                "Link1 URL": "",
+                "Link1 URL Label": "",
+                "Link2 URL": "",
+                "Link2 URL Label": "",
+                "Link3 URL": "",
+                "Link3 URL Label": "",
+            })
 
     for order, sec in enumerate(data.get("sections", []), start=1):
+        # Skip quick-access if present
+        if sec["id"] == "quick-access":
+            continue
+
         sections.append({
             "Slug": sec["id"],
             "Title": sec["title"],
-            "Order": order,
+            "Sub Title": sec.get("subtitle", ""),
+            "Accent Color": sec.get("accentColor", ""),
+            "Order": sec.get("order", order),
             "Open": bool(sec.get("open")),
         })
 
-        for i, item in enumerate(sec.get("items", []), start=1):
-            kind = item.get("type")
+        for i, it in enumerate(sec.get("items", []), start=1):
+            title = it.get("title") or it.get("name") or it.get("label", "")
+            primary_url = it.get("primaryUrl") or it.get("url", "")
+            primary_label = it.get("primaryUrlLabel", "")
 
-            if kind == "website":
-                websites.append({
-                    "Name": item["label"],
-                    "URL": item["url"],
-                    "Search": item.get("search", ""),
-                    "Section": sec["id"],
-                    "Order": i,
-                    "Favorite": False,
-                    "Favorite Order": None,
-                })
+            # If older format had links list:
+            extra_links = list(it.get("links", []))
+            if not primary_url and extra_links:
+                first = extra_links.pop(0)
+                primary_url = first["url"]
+                primary_label = first.get("label", "")
 
-            elif kind == "person":
-                row = {
-                    "Name": item["name"],
-                    "Note": item.get("note", ""),
-                    "Search": item.get("search", ""),
-                    "Section": sec["id"],
-                    "Order": i,
-                }
-                # Profile links are stored as a list of {label, url}; the base
-                # keeps one column per service. Email arrives as a mailto:.
-                for link in item.get("links", []):
-                    label, url = link["label"], link["url"]
-                    if label == "Email":
-                        row["Email"] = url[len("mailto:"):] if url.startswith("mailto:") else url
-                    else:
-                        row[label] = url
-                people.append(row)
-
-            elif kind == "project":
-                projects.append({
-                    "Name": item["name"],
-                    "Emoji": item.get("emoji", ""),
-                    "Status": item["status"],
-                    "Status Label": item.get("statusLabel", item["status"]),
-                    "Note": item.get("note", ""),
-                    "Search": item.get("search", ""),
-                    "Section": sec["id"],
-                    "Order": i,
-                })
-                for j, link in enumerate(item.get("links", []), start=1):
-                    resources.append({
-                        "Label": link["label"],
-                        "URL": link["url"],
-                        "Project": item["name"],
-                        "Order": j,
-                    })
-
-            else:
-                print(f"warning: item {i} in section '{sec['id']}' has unknown "
-                      f"type {kind!r}; skipped", file=sys.stderr)
-
-    # Favorites are websites flagged for the top row. They are their own list
-    # in the JSON, so match them back onto the website rows by URL.
-    by_url = {w["URL"]: w for w in websites}
-    for i, fav in enumerate(data.get("favorites", []), start=1):
-        row = by_url.get(fav["url"])
-        if row is None:
-            # A favorite that is not also a section link still needs a home.
             row = {
-                "Name": fav["label"],
-                "URL": fav["url"],
-                "Search": fav.get("search", ""),
-                "Section": "",
-                "Order": None,
-                "Favorite": True,
-                "Favorite Order": i,
+                "Title": title,
+                "Section": sec["id"],
+                "Order": it.get("order", i),
+                "Search": it.get("search", ""),
+                "Primary URL": primary_url,
+                "Primary URL Label": primary_label,
+                "Link1 URL": "",
+                "Link1 URL Label": "",
+                "Link2 URL": "",
+                "Link2 URL Label": "",
+                "Link3 URL": "",
+                "Link3 URL Label": "",
             }
-            websites.append(row)
-        else:
-            row["Favorite"] = True
-            row["Favorite Order"] = i
 
-    # People rows are ragged — each person fills in a different subset of the
-    # profile columns — but the CSV writer needs one stable header, so pad
-    # every row to the same shape.
-    if people:
-        columns = ["Name", "Note", "Website", "Wikipedia", "IMDB", "GitHub",
-                   "LinkedIn", "X", "Instagram", "Email", "Search",
-                   "Section", "Order"]
-        people = [{c: p.get(c, "") for c in columns} for p in people]
+            for num, link in enumerate(extra_links[:3], start=1):
+                row[f"Link{num} URL"] = link["url"]
+                row[f"Link{num} URL Label"] = link.get("label", "")
+
+            items.append(row)
 
     return {
         "Sections": sections,
-        "Websites": websites,
-        "Projects": projects,
-        "Project Resources": resources,
-        "People": people,
+        "Items": items,
     }
 
 

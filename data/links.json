@@ -18,47 +18,16 @@
   ],
   "sections": [
     {
-      "id": "quick-access",
-      "title": "Quick Access",
-      "open": true,
-      "items": [
-        {
-          "type": "website",
-          "label": "My Personal Site",
-          "url": "https://www.willbrodnax.com",
-          "search": "personal site willbrodnax"
-        },
-        {
-          "type": "website",
-          "label": "GitHub (Bearnax)",
-          "url": "https://github.com/bearnax",
-          "search": "github repos code bearnax"
-        },
-        {
-          "type": "website",
-          "label": "Github (Will-Brodnax)",
-          "url": "https://github.com/will-brodnax",
-          "search": "github repos code will-brodnax"
-        }
-      ]
-    },
-    {
       "id": "projects-personal",
       "title": "Personal Projects",
       "open": false,
       "items": [
         {
-          "type": "project",
-          "name": "Lil Sebastian",
-          "emoji": "🐴",
-          "status": "done",
-          "statusLabel": "Complete",
-          "search": "lil sebastian scavenger hunt paige horse complete",
+          "title": "Lil Sebastian",
+          "search": "lil sebastian scavenger hunt horse",
+          "primaryUrl": "https://bearnax.github.io/limited-grammar/",
+          "primaryUrlLabel": "Live",
           "links": [
-            {
-              "label": "Live",
-              "url": "https://bearnax.github.io/limited-grammar/"
-            },
             {
               "label": "Repo",
               "url": "https://github.com/bearnax/limited-grammar"
@@ -66,31 +35,17 @@
           ]
         },
         {
-          "type": "project",
-          "name": "MML Simulator",
-          "emoji": "🏀",
-          "status": "wip",
-          "statusLabel": "Server side only",
+          "title": "MML Simulator",
           "search": "mml march madness basketball simulator",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/bearnax/hq"
-            }
-          ]
+          "primaryUrl": "https://github.com/bearnax/hq",
+          "primaryUrlLabel": "Repo"
         },
         {
-          "type": "project",
-          "name": "Elden Ring Build Selector",
-          "emoji": "💍",
-          "status": "live",
-          "statusLabel": "Live",
+          "title": "Elden Ring Build Selector",
           "search": "elden ring build selector",
+          "primaryUrl": "https://bearnax.github.io/potential-chainsaw/",
+          "primaryUrlLabel": "Live",
           "links": [
-            {
-              "label": "Live",
-              "url": "https://bearnax.github.io/potential-chainsaw/"
-            },
             {
               "label": "Repo",
               "url": "https://github.com/bearnax/potential-chainsaw"
@@ -98,17 +53,11 @@
           ]
         },
         {
-          "type": "project",
-          "name": "My-Links (this site)",
-          "emoji": "🔗",
-          "status": "live",
-          "statusLabel": "Live",
+          "title": "My-Links (this site)",
           "search": "my links personal bookmarks",
+          "primaryUrl": "https://bearnax.github.io/my-links/",
+          "primaryUrlLabel": "Live",
           "links": [
-            {
-              "label": "Live",
-              "url": "https://bearnax.github.io/my-links/"
-            },
             {
               "label": "Repo",
               "url": "https://github.com/bearnax/my-links"
@@ -116,20 +65,15 @@
           ]
         },
         {
-          "type": "project",
-          "name": "Customer Feedback Loop",
-          "emoji": "🎙️",
-          "status": "wip",
-          "statusLabel": "Not deployed",
-          "search": "customer feedback loop llm cloudflare worker",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/bearnax/miniature-succotash"
-            }
-          ]
+          "title": "Customer Feedback Loop",
+          "search": "customer feedback loop llm",
+          "primaryUrl": "https://github.com/bearnax/miniature-succotash",
+          "primaryUrlLabel": "Repo"
         }
-      ]
+      ],
+      "accentColor": "green #2e7d32",
+      "accentName": "green",
+      "accentHex": "#2e7d32"
     },
     {
       "id": "nerd-alert",
@@ -137,30 +81,33 @@
       "open": false,
       "items": [
         {
-          "type": "website",
-          "label": "Personal Elden Ring (google sheets)",
-          "url": "https://docs.google.com/spreadsheets/d/1RYeJTBAWSoCjFOFpsF0qLeKUQNjtJN_BdOQy7ijERbY/edit?usp=sharing",
-          "search": "elden ring google sheets weapons"
+          "title": "Personal Elden Ring (google sheets)",
+          "search": "elden ring google sheets weapons",
+          "primaryUrl": "https://docs.google.com/spreadsheets/d/1RYeJTBAWSoCjFOFpsF0qLeKUQNjtJN_BdOQy7ijERbY/edit?usp=sharing",
+          "primaryUrlLabel": "Personal Elden Ring (google sheets)"
         },
         {
-          "type": "website",
-          "label": "AR Calculator (tclark)",
-          "url": "https://eldenring.tclark.io/",
-          "search": "elden ring weapon ar calculator basic"
+          "title": "AR Calculator (tclark)",
+          "search": "elden ring weapon ar calculator basic",
+          "primaryUrl": "https://eldenring.tclark.io/",
+          "primaryUrlLabel": "AR Calculator (tclark)"
         },
         {
-          "type": "website",
-          "label": "AR Calculator (Pro)",
-          "url": "https://www.tarnished.dev/weapon-calculator",
-          "search": "elden ring weapon ar calculator pro tarnished"
+          "title": "AR Calculator (Pro)",
+          "search": "elden ring weapon ar calculator pro tarnished",
+          "primaryUrl": "https://www.tarnished.dev/weapon-calculator",
+          "primaryUrlLabel": "AR Calculator (Pro)"
         },
         {
-          "type": "website",
-          "label": "Elden Ring Wiki (Fextralife)",
-          "url": "https://eldenring.wiki.fextralife.com/Elden+Ring+Wiki",
-          "search": "elden ring wiki fextralife"
+          "title": "Elden Ring Wiki (Fextralife)",
+          "search": "elden ring wiki fextralife",
+          "primaryUrl": "https://eldenring.wiki.fextralife.com/Elden+Ring+Wiki",
+          "primaryUrlLabel": "Elden Ring Wiki (Fextralife)"
         }
-      ]
+      ],
+      "accentColor": "rust #b33927",
+      "accentName": "rust",
+      "accentHex": "#b33927"
     },
     {
       "id": "projects-tip",
@@ -168,77 +115,39 @@
       "open": false,
       "items": [
         {
-          "type": "project",
-          "name": "Take It Personal Podcast",
-          "emoji": "🎙️",
-          "status": "live",
-          "statusLabel": "Live",
+          "title": "Take It Personal Podcast",
           "search": "take it personal podcast pod",
-          "links": [
-            {
-              "label": "Substack",
-              "url": "www.takeitpersonalpodcast.com"
-            }
-          ]
+          "primaryUrl": "https://www.takeitpersonalpodcast.com",
+          "primaryUrlLabel": "Substack"
         },
         {
-          "type": "project",
-          "name": "The Newsroom",
-          "emoji": "📰",
-          "status": "wip",
-          "statusLabel": "In progress",
+          "title": "The Newsroom",
           "search": "newsroom editorial content",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/bearnax/tip-newsroom"
-            }
-          ]
+          "primaryUrl": "https://github.com/bearnax/tip-newsroom",
+          "primaryUrlLabel": "Repo"
         },
         {
-          "type": "project",
-          "name": "A.W. Sterling",
-          "emoji": "👨🏻‍🦱",
-          "status": "idea",
-          "statusLabel": "Archive",
+          "title": "A.W. Sterling",
           "search": "aw sterling tip scout archive",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/bearnax/tip-scout"
-            }
-          ],
-          "note": "(formerly TIP Scout)"
+          "primaryUrl": "https://github.com/bearnax/tip-scout",
+          "primaryUrlLabel": "Repo"
         },
         {
-          "type": "project",
-          "name": "Feist",
-          "emoji": "🐕",
-          "status": "wip",
-          "statusLabel": "Needs a loop",
+          "title": "Feist",
           "search": "feist daily gm agent loop",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/bearnax/hq"
-            }
-          ]
+          "primaryUrl": "https://github.com/bearnax/hq",
+          "primaryUrlLabel": "Repo"
         },
         {
-          "type": "project",
-          "name": "Pitch Mill",
-          "emoji": "🪵",
-          "status": "wip",
-          "statusLabel": "In use",
+          "title": "Pitch Mill",
           "search": "pitch mill storylines",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/bearnax/tip-pitch-mill"
-            }
-          ]
+          "primaryUrl": "https://github.com/bearnax/tip-pitch-mill",
+          "primaryUrlLabel": "Repo"
         }
-      ]
+      ],
+      "accentColor": "velvet #5a2181",
+      "accentName": "velvet",
+      "accentHex": "#5a2181"
     },
     {
       "id": "projects-work",
@@ -246,43 +155,21 @@
       "open": false,
       "items": [
         {
-          "type": "project",
-          "name": "By-Will",
-          "emoji": "🪡",
-          "status": "wip",
-          "statusLabel": "In progress",
-          "search": "will by will work",
-          "links": [
-            {
-              "label": "Live",
-              "url": "https://by-will.net"
-            }
-          ]
+          "title": "by-will.net",
+          "search": "by-will personal site parked",
+          "primaryUrl": "https://by-will.net",
+          "primaryUrlLabel": "by-will.net"
         },
         {
-          "type": "project",
-          "name": "Fibbly",
-          "emoji": "🃏",
-          "status": "idea",
-          "statusLabel": "Ad hoc",
+          "title": "Fibbly",
           "search": "fibbly planning poker",
-          "links": [
-            {
-              "label": "Repo",
-              "url": "https://github.com/bearnax/hq"
-            }
-          ]
-        },
-        {
-          "type": "project",
-          "name": "Retrograde",
-          "emoji": "🎫",
-          "status": "idea",
-          "statusLabel": "Ad hoc",
-          "search": "ticket writing refinement tool",
-          "links": []
+          "primaryUrl": "https://github.com/bearnax/hq",
+          "primaryUrlLabel": "Repo"
         }
-      ]
+      ],
+      "accentColor": "amber #d97706",
+      "accentName": "amber",
+      "accentHex": "#d97706"
     },
     {
       "id": "cnn",
@@ -290,34 +177,34 @@
       "open": false,
       "items": [
         {
-          "type": "website",
-          "label": "Homepage",
-          "url": "https://www.cnn.com",
-          "search": "cnn homepage cnn.com"
+          "title": "Homepage",
+          "search": "cnn homepage cnn.com",
+          "primaryUrl": "https://www.cnn.com",
+          "primaryUrlLabel": "Homepage"
         },
         {
-          "type": "website",
-          "label": "Live Page",
-          "url": "https://www.cnn.com/videos/live",
-          "search": "cnn live"
+          "title": "Live Page",
+          "search": "cnn live",
+          "primaryUrl": "https://www.cnn.com/videos/live",
+          "primaryUrlLabel": "Live Page"
         },
         {
-          "type": "website",
-          "label": "Watch Page",
-          "url": "https://www.cnn.com/videos",
-          "search": "cnn watch videos"
+          "title": "Watch Page",
+          "search": "cnn watch videos",
+          "primaryUrl": "https://www.cnn.com/videos",
+          "primaryUrlLabel": "Watch Page"
         },
         {
-          "type": "website",
-          "label": "Headlines (FAST)",
-          "url": "https://www.cnn.com/videos/fast/cnn-headlines",
-          "search": "cnn headlines"
+          "title": "Headlines (FAST)",
+          "search": "cnn headlines",
+          "primaryUrl": "https://www.cnn.com/videos/fast/cnn-headlines",
+          "primaryUrlLabel": "Headlines (FAST)"
         },
         {
-          "type": "website",
-          "label": "Shorts",
-          "url": "https://www.cnn.com/shorts/cnn-shorts",
-          "search": "cnn shorts"
+          "title": "Shorts",
+          "search": "cnn shorts",
+          "primaryUrl": "https://www.cnn.com/shorts/cnn-shorts",
+          "primaryUrlLabel": "Shorts"
         }
       ]
     },
@@ -327,14 +214,11 @@
       "open": false,
       "items": [
         {
-          "type": "person",
-          "name": "Will Brodnax",
+          "title": "Will Brodnax",
           "search": "will brodnax me personal site github",
+          "primaryUrl": "https://www.willbrodnax.com",
+          "primaryUrlLabel": "Website",
           "links": [
-            {
-              "label": "Website",
-              "url": "https://www.willbrodnax.com"
-            },
             {
               "label": "GitHub",
               "url": "https://github.com/bearnax"
@@ -342,38 +226,23 @@
           ]
         },
         {
-          "type": "person",
-          "name": "Steph Garrett",
+          "title": "Steph Garrett",
           "search": "steph garrett substack take it personal",
-          "links": [
-            {
-              "label": "Website",
-              "url": "https://substack.com/@steph4sum"
-            }
-          ],
-          "note": "Take It Personal"
+          "primaryUrl": "https://substack.com/@steph4sum",
+          "primaryUrlLabel": "Substack"
         },
         {
-          "type": "person",
-          "name": "Jamie Renell",
+          "title": "Jamie Renell",
           "search": "jamie renell imdb",
-          "links": [
-            {
-              "label": "IMDB",
-              "url": "https://www.imdb.com/name/nm1143549/"
-            }
-          ],
-          "note": "Take It Personal"
+          "primaryUrl": "https://www.imdb.com/name/nm1143549/",
+          "primaryUrlLabel": "IMDB"
         },
         {
-          "type": "person",
-          "name": "Ron Swanson",
+          "title": "Ron Swanson",
           "search": "ron swanson parks and recreation pawnee",
+          "primaryUrl": "https://offermanwoodshop.com/",
+          "primaryUrlLabel": "Website",
           "links": [
-            {
-              "label": "Website",
-              "url": "https://offermanwoodshop.com/"
-            },
             {
               "label": "Wikipedia",
               "url": "https://en.wikipedia.org/wiki/Ron_Swanson"
@@ -382,40 +251,31 @@
               "label": "IMDB",
               "url": "https://www.imdb.com/name/nm0644406/"
             }
-          ],
-          "note": "My spirit animal"
+          ]
         },
         {
-          "type": "person",
-          "name": "Leslie Knope",
+          "title": "Leslie Knope",
           "search": "leslie knope parks and rec",
+          "primaryUrl": "https://en.wikipedia.org/wiki/Leslie_Knope",
+          "primaryUrlLabel": "Wikipedia",
           "links": [
-            {
-              "label": "Wikipedia",
-              "url": "https://en.wikipedia.org/wiki/Leslie_Knope"
-            },
             {
               "label": "IMDB",
               "url": "https://www.imdb.com/name/nm0688132/"
             }
-          ],
-          "note": "President?"
+          ]
         },
         {
-          "type": "person",
-          "name": "Tom Loftis",
+          "title": "Tom Loftis",
           "search": "tom loftis widows bay",
+          "primaryUrl": "https://en.wikipedia.org/wiki/Matthew_Rhys",
+          "primaryUrlLabel": "Wikipedia",
           "links": [
-            {
-              "label": "Wikipedia",
-              "url": "https://en.wikipedia.org/wiki/Matthew_Rhys"
-            },
             {
               "label": "IMDB",
               "url": "https://www.imdb.com/name/nm0722629/"
             }
-          ],
-          "note": "Mayor, Widow's Bay"
+          ]
         }
       ]
     }

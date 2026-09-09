@@ -11,33 +11,19 @@ fields and tables can be renamed in Airtable without breaking the build.
 Requires AIRTABLE_TOKEN when fetching. --from-dir reads one <table>.json per
 table in the same shape the API returns, which is how this is tested without
 network access.
-
-Records that cannot be placed are skipped with a warning rather than failing
-the run: a person or project with no section has nowhere to render, and one
-half-finished row should not take the whole site down. Malformed rows — a bad
-status, a missing URL — still raise, because those are wrong rather than
-incomplete.
 """
 import json
 import os
+import re
 import sys
 import urllib.error
 import urllib.parse
 import urllib.request
 
 API_ROOT = "https://api.airtable.com/v0"
-SCHEMA_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "airtable-schema.json")
-
-# Person profile fields, in the order their links should render on the card.
-PERSON_LINKS = [
-    ("website", "Website"),
-    ("wikipedia", "Wikipedia"),
-    ("imdb", "IMDB"),
-    ("github", "GitHub"),
-    ("linkedin", "LinkedIn"),
-    ("x", "X"),
-    ("instagram", "Instagram"),
-]
+HERE = os.path.dirname(__file__)
+SCHEMA_PATH = os.path.join(HERE, "..", "data", "airtable-schema.json")
+CSS_PATH = os.path.join(HERE, "..", "src", "style.css")
 
 warnings = []
 
@@ -75,17 +61,12 @@ def fetch_table(base_id, table_id, token):
 
 
 def load_tables(schema, from_dir, token):
-    names = {
-        "sections": "sections",
-        "websites": "websites",
-        "people": "people",
-        "projects": "projects",
-        "projectResources": "project-resources",
-    }
     tables = {}
+    names = {"sections": "sections", "items": "items"}
     for key, filename in names.items():
         if from_dir:
-            with open(os.path.join(from_dir, filename + ".json"), encoding="utf-8") as f:
+            path = os.path.join(from_dir, filename + ".json")
+            with open(path, encoding="utf-8") as f:
                 tables[key] = json.load(f)["records"]
         else:
             tables[key] = fetch_table(schema["baseId"], schema["tables"][key]["id"], token)
@@ -110,189 +91,168 @@ def search_terms(record, field_id, fallback):
     return text(record, field_id) or fallback.lower()
 
 
+def parse_accent_color(raw):
+    """Parse '<string-name> #<color-hex>' into (name, hex)."""
+    if not raw:
+        return None, None
+    m = re.match(r"^([a-zA-Z0-9_-]+)\s+(#[0-9a-fA-F]{3,6})$", raw.strip())
+    if not m:
+        warn(f"Accent color '{raw}' is not formatted as '<string-name> #<color-hex>'")
+        return None, None
+    return m.group(1).lower(), m.group(2).lower()
+
+
+def verify_accent_colors(accent_map, css_path=CSS_PATH):
+    """Verify that the accent colors in the css match those parsed from the color hex."""
+    if not os.path.exists(css_path):
+        warn(f"CSS file not found for accent color verification: {css_path}")
+        return
+    with open(css_path, encoding="utf-8") as f:
+        css = f.read().lower()
+
+    for name, hex_code in accent_map.items():
+        pattern = rf"--accent-{re.escape(name)}\s*:\s*(#[0-9a-f]{{3,6}})"
+        match = re.search(pattern, css)
+        if match:
+            found_hex = match.group(1)
+            if found_hex != hex_code:
+                raise ValueError(
+                    f"Accent color '{name}' hex '{hex_code}' does not match CSS value '{found_hex}'"
+                )
+        elif hex_code not in css:
+            raise ValueError(
+                f"Accent color '{name}' ({hex_code}) not found in {css_path}"
+            )
+
+
 def build_sections(records, fields):
     sections = {}
+    accent_map = {}
     for record in records:
         slug = text(record, fields["slug"])
         title = text(record, fields["title"])
         if not slug or not title:
             warn(f"section {record['id']} is missing a slug or title; skipped")
             continue
+
+        sec_data = {
+            "id": slug,
+            "title": title,
+            "open": bool(value(record, fields["open"], False)),
+            "items": [],
+        }
+
+        subtitle = text(record, fields.get("subtitle", ""))
+        if subtitle:
+            sec_data["subtitle"] = subtitle
+
+        raw_accent = text(record, fields.get("accentColor", ""))
+        accent_name, accent_hex = parse_accent_color(raw_accent)
+        if accent_name and accent_hex:
+            sec_data["accentColor"] = raw_accent
+            sec_data["accentName"] = accent_name
+            sec_data["accentHex"] = accent_hex
+            accent_map[accent_name] = accent_hex
+
         sections[record["id"]] = {
             "order": value(record, fields["order"], 0) or 0,
-            "section": {
-                "id": slug,
-                "title": title,
-                "open": bool(value(record, fields["open"], False)),
-                "items": [],
-            },
+            "section": sec_data,
         }
-    return sections
+
+    return sections, accent_map
 
 
-def build_websites(records, fields):
-    """Returns (favorites, sectioned items). A website can be both."""
-    favorites, items = [], []
-    for record in records:
-        label = text(record, fields["name"])
-        url = text(record, fields["url"])
-        if not label:
-            warn(f"website {record['id']} has no name; skipped")
-            continue
-        if not url:
-            raise ValueError(f"website '{label}' has no URL")
-
-        search = search_terms(record, fields["search"], label)
-
-        if value(record, fields["favorite"], False):
-            favorites.append({
-                "order": value(record, fields["favoriteOrder"], 0) or 0,
-                "data": {"label": label, "url": url, "search": search},
-            })
-
-        section_id = link_target(record, fields["section"])
-        if section_id:
-            items.append({
-                "section": section_id,
-                "order": value(record, fields["order"], 0) or 0,
-                "data": {"type": "website", "label": label, "url": url, "search": search},
-            })
-        elif not value(record, fields["favorite"], False):
-            warn(f"website '{label}' is in no section and is not a favorite; skipped")
-
-    favorites.sort(key=lambda f: f["order"])
-    return [f["data"] for f in favorites], items
-
-
-def build_people(records, fields):
+def build_items(records, fields):
     items = []
     for record in records:
-        name = text(record, fields["name"])
-        if not name:
-            warn(f"person {record['id']} has no name; skipped")
+        title = text(record, fields["title"])
+        if not title:
+            warn(f"item {record['id']} has no title; skipped")
             continue
 
         section_id = link_target(record, fields["section"])
         if not section_id:
-            warn(f"person '{name}' is in no section; skipped")
+            warn(f"item '{title}' has no section; skipped")
             continue
 
-        links = []
-        for key, label in PERSON_LINKS:
-            url = text(record, fields[key])
-            if url:
-                links.append({"label": label, "url": url})
-        email = text(record, fields["email"])
-        if email:
-            links.append({"label": "Email", "url": "mailto:" + email})
+        search = search_terms(record, fields["search"], title)
+        primary_url = text(record, fields["primaryUrl"])
+        primary_label = text(record, fields["primaryUrlLabel"])
+        if primary_url and not primary_label:
+            primary_label = title
 
-        if not links:
-            warn(f"person '{name}' has no profile links; the card will be a bare name")
+        extra_links = []
+        for num in (1, 2, 3):
+            url_val = text(record, fields[f"link{num}Url"])
+            label_val = text(record, fields[f"link{num}Label"])
+            if url_val and not label_val:
+                raise ValueError(
+                    f"item '{title}' has Link{num} URL '{url_val}' but is missing Link{num} URL Label"
+                )
+            if url_val:
+                extra_links.append({"label": label_val, "url": url_val})
 
-        person = {
-            "type": "person",
-            "name": name,
-            "search": search_terms(record, fields["search"], name),
-            "links": links,
+        item_data = {
+            "title": title,
+            "search": search,
         }
-        note = text(record, fields["note"])
-        if note:
-            person["note"] = note
+        if primary_url:
+            item_data["primaryUrl"] = primary_url
+            item_data["primaryUrlLabel"] = primary_label
+        if extra_links:
+            item_data["links"] = extra_links
 
         items.append({
             "section": section_id,
             "order": value(record, fields["order"], 0) or 0,
-            "data": person,
-        })
-    return items
-
-
-def build_projects(records, resources, fields, resource_fields, statuses):
-    by_project = {}
-    for record in resources:
-        project_id = link_target(record, resource_fields["project"])
-        label = text(record, resource_fields["label"])
-        url = text(record, resource_fields["url"])
-        if not project_id:
-            warn(f"project resource '{label or record['id']}' belongs to no project; skipped")
-            continue
-        if not label or not url:
-            raise ValueError(f"project resource {record['id']} needs both a label and a URL")
-        by_project.setdefault(project_id, []).append({
-            "order": value(record, resource_fields["order"], 0) or 0,
-            "data": {"label": label, "url": url},
-        })
-
-    items = []
-    for record in records:
-        name = text(record, fields["name"])
-        if not name:
-            warn(f"project {record['id']} has no name; skipped")
-            continue
-
-        section_id = link_target(record, fields["section"])
-        if not section_id:
-            warn(f"project '{name}' is in no section; skipped")
-            continue
-
-        status = text(record, fields["status"])
-        if status not in statuses:
-            raise ValueError(
-                f"project '{name}' has status '{status}', expected one of {sorted(statuses)}"
-            )
-
-        links = sorted(by_project.get(record["id"], []), key=lambda r: r["order"])
-
-        project = {
-            "type": "project",
-            "name": name,
-            "emoji": text(record, fields["emoji"]),
-            "status": status,
-            "statusLabel": text(record, fields["statusLabel"]) or status,
-            "search": search_terms(record, fields["search"], name),
-            "links": [link["data"] for link in links],
-        }
-        note = text(record, fields["note"])
-        if note:
-            project["note"] = note
-
-        items.append({
-            "section": section_id,
-            "order": value(record, fields["order"], 0) or 0,
-            "data": project,
+            "data": item_data,
         })
     return items
 
 
 def build(tables, schema):
     t = schema["tables"]
-    sections = build_sections(tables["sections"], t["sections"]["fields"])
-    favorites, website_items = build_websites(tables["websites"], t["websites"]["fields"])
-    people_items = build_people(tables["people"], t["people"]["fields"])
-    project_items = build_projects(
-        tables["projects"],
-        tables["projectResources"],
-        t["projects"]["fields"],
-        t["projectResources"]["fields"],
-        set(schema["statuses"]),
-    )
+    sections, accent_map = build_sections(tables["sections"], t["sections"]["fields"])
 
-    for item in website_items + people_items + project_items:
+    # Verify accent colors against CSS
+    verify_accent_colors(accent_map)
+
+    items = build_items(tables["items"], t["items"]["fields"])
+
+    for item in items:
         entry = sections.get(item["section"])
         if entry is None:
-            warn(f"item '{item['data'].get('name') or item['data'].get('label')}' "
-                 "points at a section that no longer exists; skipped")
+            warn(f"item '{item['data']['title']}' points at a section that no longer exists; skipped")
             continue
         entry["section"]["items"].append(item)
 
+    # Detect Favorites section: section ordering below favorite (favorites is always top)
+    favorites = []
     ordered = []
+
     for entry in sorted(sections.values(), key=lambda s: s["order"]):
-        section = entry["section"]
-        section["items"] = [i["data"] for i in sorted(section["items"], key=lambda i: i["order"])]
-        if not section["items"]:
-            warn(f"section '{section['title']}' has no items; it will not render")
+        sec = entry["section"]
+        sorted_items = [i["data"] for i in sorted(sec["items"], key=lambda i: i["order"])]
+
+        # If items contains no items, is empty, then do not ingest that section. Ignore it.
+        if not sorted_items:
+            warn(f"section '{sec['title']}' has no items; ignored")
             continue
-        ordered.append(section)
+
+        sec["items"] = sorted_items
+
+        if sec["id"].lower() in ("favorites", "favorite") or sec["title"].lower() in ("favorites", "favorite"):
+            # Extract to top favorites strip
+            for it in sorted_items:
+                fav_url = it.get("primaryUrl") or (it["links"][0]["url"] if it.get("links") else "")
+                fav_label = it.get("primaryUrlLabel") or it["title"]
+                favorites.append({
+                    "label": fav_label,
+                    "url": fav_url,
+                    "search": it.get("search", ""),
+                })
+        else:
+            ordered.append(sec)
 
     return {"favorites": favorites, "sections": ordered}
 
@@ -327,3 +287,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

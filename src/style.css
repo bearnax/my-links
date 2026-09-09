@@ -17,6 +17,13 @@
     /* The second ink is a near-black rather than a darker cut of the
        background: the same shadow row under all three flats. */
     --ink-deep: oklch(14% 0.012 60);
+
+    /* Section Accent Colors matching Airtable spec */
+    --accent-blue: #2b5c8f;
+    --accent-green: #2e7d32;
+    --accent-rust: #b33927;
+    --accent-velvet: #5a2181;
+    --accent-amber: #d97706;
 }
 
 html[data-palette="green"] {
@@ -146,61 +153,160 @@ a { color: inherit; text-decoration: none; }
 
 .sec-num { opacity: .75; }
 
-/* Headline rows */
+/* Section accent colors */
+.section-panel[data-accent="blue"] { --section-accent: var(--accent-blue); }
+.section-panel[data-accent="green"] { --section-accent: var(--accent-green); }
+.section-panel[data-accent="rust"] { --section-accent: var(--accent-rust); }
+.section-panel[data-accent="velvet"] { --section-accent: var(--accent-velvet); }
+.section-panel[data-accent="amber"] { --section-accent: var(--accent-amber); }
 
-.favorites-row,
-.link-list,
-.project-list { display: flex; flex-wrap: wrap; }
+.section-panel[data-accent] {
+    border-top-color: var(--section-accent);
+}
+.section-panel[data-accent] > summary .sec-glyph,
+.section-panel[data-accent] > summary .sec-num {
+    color: var(--section-accent);
+}
 
-.favorites-row,
-.link-list { gap: 0 .35em; }
+/* Favorites strip */
+.favorites-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 14px;
+    padding-top: 6px;
+    padding-bottom: 4px;
+}
 
-.project-list { flex-direction: column; gap: 14px; padding-top: 4px; }
+.favorite-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 22px;
+    border-radius: 6px;
+    background: var(--cream);
+    color: var(--ink-deep);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.15);
+    transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
 
-.favorite-link,
-.row-label,
-.project-name {
+.favorite-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2);
+    color: var(--ink-deep);
+}
+
+.favorite-link:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Items list */
+.items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-top: 4px;
+    padding-bottom: 8px;
+}
+
+.item-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+}
+
+.item-main {
+    min-width: 0;
+}
+
+.item-title,
+.item-title-link {
     font-size: clamp(1.9rem, 7vw, 2.9rem);
     font-weight: 900;
     line-height: 1.02;
-    /* Letters pulled tight inside each word, the gaps between words opened
-       back up so the words still read as separate blocks. */
     letter-spacing: -.045em;
     word-spacing: .18em;
     text-transform: lowercase;
+    color: var(--cream);
+    text-decoration: none;
 }
 
-.link-list { flex-direction: column; }
+.item-title-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
 
-/* Alternating cream / near-black rows give the stack its rhythm. A row's
-   sub-links take the same ink as its title, so a card reads as one block. */
-.favorites-row > a:nth-child(even),
-.link-list > a:nth-child(even) .row-label,
-.project-list > div:nth-child(even) .project-name,
-.project-list > div:nth-child(even) .project-note,
-.project-list > div:nth-child(even) .pl { color: var(--ink-deep); }
+.item-links {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+}
 
-/* Projects and people */
-
-.project-info { display: flex; align-items: baseline; flex-wrap: wrap; gap: .5em; }
-
-.project-note,
-.pl {
+/* Link buttons with drop shadows */
+.link-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 14px;
+    border-radius: 4px;
+    background: var(--cream);
+    color: var(--ink-deep);
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: .14em;
+    letter-spacing: .12em;
     text-transform: uppercase;
+    text-decoration: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.15);
+    transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
 }
 
-.project-links {
-    display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 4px 14px;
-    margin-top: 5px;
+.link-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2);
+    color: var(--ink-deep);
 }
 
-.pl { text-decoration: underline; text-underline-offset: 3px; }
+.link-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Alternating item rows */
+.items-list > .item-row:nth-child(even) .item-title,
+.items-list > .item-row:nth-child(even) .item-title-link {
+    color: var(--ink-deep);
+}
+
+.items-list > .item-row:nth-child(even) .link-btn {
+    background: var(--ink-deep);
+    color: var(--cream);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.items-list > .item-row:nth-child(even) .link-btn:hover {
+    color: var(--cream);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Velvet palette: all light text and buttons */
+html[data-palette="velvet"] .items-list > .item-row:nth-child(even) .item-title,
+html[data-palette="velvet"] .items-list > .item-row:nth-child(even) .item-title-link {
+    color: var(--cream);
+}
+
+html[data-palette="velvet"] .items-list > .item-row:nth-child(even) .link-btn {
+    background: var(--cream);
+    color: oklch(13% 0.02 280);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
 
 /* Velvet: three near-black hues drifting over one another. Two stacked
    layers on fixed pseudo-elements — the colour wash and a fine grain — so

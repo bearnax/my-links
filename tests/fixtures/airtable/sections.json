@@ -1,9 +1,72 @@
-{"records": [
-{"id":"recLMT30f6Tq9Sx0c","fields":{"fldUETYg2W93KfY1e":"Quick Access","fld9cXmhmGZUdh8O6":"quick-access","fldIwYaZH3Kho7eT1":1,"fldQdgXgOW1G9TmqW":true,"fldzQFMO1nQZOjBk2":["Personal"]}},
-{"id":"recBq1Hw3uAWxQRHa","fields":{"fldUETYg2W93KfY1e":"Projects — Personal","fld9cXmhmGZUdh8O6":"projects-personal","fldIwYaZH3Kho7eT1":2,"fldzQFMO1nQZOjBk2":["Personal"]}},
-{"id":"recg8BaSwSMUgG2Is","fields":{"fldUETYg2W93KfY1e":"Nerd Alert","fld9cXmhmGZUdh8O6":"nerd-alert","fldIwYaZH3Kho7eT1":3,"fldzQFMO1nQZOjBk2":["Personal"]}},
-{"id":"rec5vWWgAQRCWGJcW","fields":{"fldUETYg2W93KfY1e":"Projects — Take It Personal","fld9cXmhmGZUdh8O6":"projects-tip","fldIwYaZH3Kho7eT1":4,"fldzQFMO1nQZOjBk2":["Personal"]}},
-{"id":"rec6JmwKWe5yj3Adx","fields":{"fldUETYg2W93KfY1e":"Projects — Work","fld9cXmhmGZUdh8O6":"projects-work","fldIwYaZH3Kho7eT1":5,"fldzQFMO1nQZOjBk2":["Personal"]}},
-{"id":"recg41YXtkXEDZADi","fields":{"fldUETYg2W93KfY1e":"CNN","fld9cXmhmGZUdh8O6":"cnn","fldIwYaZH3Kho7eT1":6,"fldzQFMO1nQZOjBk2":["Personal"]}},
-{"id":"reciJ2pMGPUk89bm2","fields":{"fldUETYg2W93KfY1e":"People","fld9cXmhmGZUdh8O6":"people","fldIwYaZH3Kho7eT1":7,"fldzQFMO1nQZOjBk2":["Personal"]}}
-]}
+{
+  "records": [
+    {
+      "id": "recFav00000000001",
+      "fields": {
+        "fldUETYg2W93KfY1e": "Favorites",
+        "fld9cXmhmGZUdh8O6": "favorites",
+        "fldAccentColor001": "blue #2b5c8f",
+        "fldIwYaZH3Kho7eT1": 0,
+        "fldQdgXgOW1G9TmqW": true
+      }
+    },
+    {
+      "id": "recSecPersonal001",
+      "fields": {
+        "fldUETYg2W93KfY1e": "Personal Projects",
+        "fld9cXmhmGZUdh8O6": "projects-personal",
+        "fldAccentColor001": "green #2e7d32",
+        "fldIwYaZH3Kho7eT1": 1,
+        "fldQdgXgOW1G9TmqW": false
+      }
+    },
+    {
+      "id": "recSecNerdAlert1",
+      "fields": {
+        "fldUETYg2W93KfY1e": "Nerd Alert",
+        "fld9cXmhmGZUdh8O6": "nerd-alert",
+        "fldAccentColor001": "rust #b33927",
+        "fldIwYaZH3Kho7eT1": 2,
+        "fldQdgXgOW1G9TmqW": false
+      }
+    },
+    {
+      "id": "recSecTIP00000001",
+      "fields": {
+        "fldUETYg2W93KfY1e": "Take It Personal",
+        "fld9cXmhmGZUdh8O6": "projects-tip",
+        "fldAccentColor001": "velvet #5a2181",
+        "fldIwYaZH3Kho7eT1": 3,
+        "fldQdgXgOW1G9TmqW": false
+      }
+    },
+    {
+      "id": "recSecWork0000001",
+      "fields": {
+        "fldUETYg2W93KfY1e": "Work Related",
+        "fld9cXmhmGZUdh8O6": "projects-work",
+        "fldAccentColor001": "amber #d97706",
+        "fldIwYaZH3Kho7eT1": 4,
+        "fldQdgXgOW1G9TmqW": false
+      }
+    },
+    {
+      "id": "recSecCNN00000001",
+      "fields": {
+        "fldUETYg2W93KfY1e": "CNN Quick Links",
+        "fld9cXmhmGZUdh8O6": "cnn",
+        "fldIwYaZH3Kho7eT1": 5,
+        "fldQdgXgOW1G9TmqW": false
+      }
+    },
+    {
+      "id": "recSecPeople00001",
+      "fields": {
+        "fldUETYg2W93KfY1e": "People",
+        "fld9cXmhmGZUdh8O6": "people",
+        "fldIwYaZH3Kho7eT1": 6,
+        "fldQdgXgOW1G9TmqW": false
+      }
+    }
+  ]
+}

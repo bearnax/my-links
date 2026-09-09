@@ -1,8 +1,8 @@
-Slug,Title,Order,Open
-quick-access,Quick Access,1,True
-projects-personal,Personal Projects,2,False
-nerd-alert,Nerd Alert,3,False
-projects-tip,Take It Personal,4,False
-projects-work,Work Related,5,False
-cnn,CNN Quick Links,6,False
-people,People,7,False
+Slug,Title,Sub Title,Accent Color,Order,Open
+favorites,Favorites,,blue #2b5c8f,0,True
+projects-personal,Personal Projects,,green #2e7d32,1,False
+nerd-alert,Nerd Alert,,rust #b33927,2,False
+projects-tip,Take It Personal,,velvet #5a2181,3,False
+projects-work,Work Related,,amber #d97706,4,False
+cnn,CNN Quick Links,,,5,False
+people,People,,,6,False
