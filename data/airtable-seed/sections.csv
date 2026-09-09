@@ -1,8 +1,6 @@
 Slug,Title,Sub Title,Accent Color,Order,Open
 favorites,Favorites,,blue #2b5c8f,0,True
-projects-personal,Personal Projects,,green #2e7d32,1,False
-nerd-alert,Nerd Alert,,rust #b33927,2,False
-projects-tip,Take It Personal,,velvet #5a2181,3,False
-projects-work,Work Related,,amber #d97706,4,False
-cnn,CNN Quick Links,,,5,False
-people,People,,,6,False
+nerd-alert,Nerd Alert,,Ruby #9B111E,1,False
+experiments,Experiments,,Topaz #D4A017,2,False
+personal-tools,Tools & Projects,,Sapphire #0F52BA,3,False
+cnn,CNN Quick Links,,Ruby #9B111E,4,False

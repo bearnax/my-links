@@ -1,0 +1,12 @@
+# Cursor Rules for my-links
+
+Please read and adhere strictly to [AGENTS.md](./AGENTS.md) for all changes:
+- **Source of Truth**: Airtable base configured in `data/airtable-schema.json`. Never hand-edit `data/links.json`.
+- **Airtable IDs**: NEVER invent or use mock IDs (like `tblItems000000001` or `fldItemTitle00001`). Use real IDs from Airtable Meta API.
+- **Neumorphic Design**: Follow "The Molded Sheet" principles:
+  - Single material base color (`--bg`).
+  - Top-left directional lighting.
+  - Item row containers and titles do NOT have hover states.
+  - Link pills are compact, borderless, and filled with `var(--section-accent)`.
+  - Floating dock centered at bottom with Search and Light/Dark toggle.
+- **Verification**: Always run `npm run test` and `npm run sync`.

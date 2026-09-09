@@ -31,18 +31,14 @@
           "title": "Elden Ring",
           "search": "elden ring fextralife tclark weapon ar",
           "primaryUrl": "https://eldenring.wiki.fextralife.com/Elden+Ring+Wiki",
-          "primaryUrlLabel": "Wiki (Fextralife)",
+          "primaryUrlLabel": "Wiki",
           "links": [
             {
-              "label": "Weapon AR Calculator (Tclark)",
+              "label": "Weapon AR",
               "url": "https://eldenring.tclark.io/"
             },
             {
-              "label": "Weapon AR Calculator (Pro)",
-              "url": "https://www.tarnished.dev/weapon-calculator"
-            },
-            {
-              "label": "My spreadsheets (Google)",
+              "label": "My sheets",
               "url": "https://docs.google.com/spreadsheets/d/1RYeJTBAWSoCjFOFpsF0qLeKUQNjtJN_BdOQy7ijERbY/edit?usp=sharing"
             }
           ]
@@ -65,7 +61,10 @@
           "primaryUrl": "https://terraria.wiki.gg/",
           "primaryUrlLabel": "Wiki"
         }
-      ]
+      ],
+      "accentColor": "Ruby #9B111E",
+      "accentName": "ruby",
+      "accentHex": "#9b111e"
     },
     {
       "id": "experiments",
@@ -102,7 +101,10 @@
             }
           ]
         }
-      ]
+      ],
+      "accentColor": "Topaz #D4A017",
+      "accentName": "topaz",
+      "accentHex": "#d4a017"
     },
     {
       "id": "personal-tools",
@@ -145,7 +147,10 @@
             }
           ]
         }
-      ]
+      ],
+      "accentColor": "Sapphire #0F52BA",
+      "accentName": "sapphire",
+      "accentHex": "#0f52ba"
     },
     {
       "id": "cnn",
@@ -194,7 +199,10 @@
           "primaryUrl": "https://www.cnn.com/shorts/cnn-shorts",
           "primaryUrlLabel": "Shorts"
         }
-      ]
+      ],
+      "accentColor": "Ruby #9B111E",
+      "accentName": "ruby",
+      "accentHex": "#9b111e"
     }
   ]
 }

@@ -8,51 +8,35 @@
     "Open": true
   },
   {
-    "Slug": "projects-personal",
-    "Title": "Personal Projects",
+    "Slug": "nerd-alert",
+    "Title": "Nerd Alert",
     "Sub Title": "",
-    "Accent Color": "green #2e7d32",
+    "Accent Color": "Ruby #9B111E",
     "Order": 1,
     "Open": false
   },
   {
-    "Slug": "nerd-alert",
-    "Title": "Nerd Alert",
+    "Slug": "experiments",
+    "Title": "Experiments",
     "Sub Title": "",
-    "Accent Color": "rust #b33927",
+    "Accent Color": "Topaz #D4A017",
     "Order": 2,
     "Open": false
   },
   {
-    "Slug": "projects-tip",
-    "Title": "Take It Personal",
+    "Slug": "personal-tools",
+    "Title": "Tools & Projects",
     "Sub Title": "",
-    "Accent Color": "velvet #5a2181",
+    "Accent Color": "Sapphire #0F52BA",
     "Order": 3,
-    "Open": false
-  },
-  {
-    "Slug": "projects-work",
-    "Title": "Work Related",
-    "Sub Title": "",
-    "Accent Color": "amber #d97706",
-    "Order": 4,
     "Open": false
   },
   {
     "Slug": "cnn",
     "Title": "CNN Quick Links",
     "Sub Title": "",
-    "Accent Color": "",
-    "Order": 5,
-    "Open": false
-  },
-  {
-    "Slug": "people",
-    "Title": "People",
-    "Sub Title": "",
-    "Accent Color": "",
-    "Order": 6,
+    "Accent Color": "Ruby #9B111E",
+    "Order": 4,
     "Open": false
   }
 ]

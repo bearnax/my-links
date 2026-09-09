@@ -1,6 +1,6 @@
 ---
 name: handle-the-data
-description: Sync the links/projects/people data on the site from the Airtable source of truth. Use when asked to sync, update, pull, or refresh the site's links, or when the human says they've edited the Links CMS Airtable base and want it reflected on the site.
+description: Sync the links and items data on the site from the Airtable source of truth. Use when asked to sync, update, pull, or refresh the site's links, or when the human says they've edited the Links CMS Airtable base and want it reflected on the site.
 ---
 
 # Handle the Data
@@ -39,7 +39,7 @@ Key rules:
 - An item without a Section is skipped.
 - A section without items is skipped.
 - A section titled or slugged `favorites` is pinned to the top strip.
-- Accent colors formatted as `<name> #<hex>` are verified against `src/style.css`.
+- Accent colors from Airtable (`<name> #<hex>` or `#<hex>`) flow dynamically into the section styles.
 
 ## Process
 
@@ -52,15 +52,15 @@ Key rules:
      via the GitHub MCP tools. If one is open, update it or say it's pending
      rather than opening a second.
 
-2. **Pull the base.** `python3 scripts/sync-links.py /tmp/links-sync-out.json`
-   with `AIRTABLE_TOKEN` set to a token scoped to the base (read is enough).
+2. **Pull the base.** `python3 scripts/sync-links.py /tmp/links-sync-out.json` (or `npm run sync`)
+   with `AIRTABLE_TOKEN` set (via environment or `.env`). Read access is enough.
    Without a token, or without network access to `api.airtable.com`, use
    `--from-dir tests/fixtures/airtable` to build from the committed fixtures —
    useful for testing the transform, but it is **not** a real sync and must
    never be committed as one.
 
 3. **Read the warnings.** The sync skips records it cannot place rather than
-   failing: a person or project with no `Section` has nowhere to render.
+   failing: an item with no `Section` has nowhere to render.
    Every skip prints `warning:` on stderr. Relay these to the human — a
    skipped record is almost always an oversight in the base, not a decision.
    Malformed rows (bad status, missing URL) raise instead; report the exact

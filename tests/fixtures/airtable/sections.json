@@ -5,7 +5,7 @@
       "fields": {
         "fldUETYg2W93KfY1e": "Favorites",
         "fld9cXmhmGZUdh8O6": "favorites",
-        "fldAccentColor001": "blue #2b5c8f",
+        "fld2ety1uiG4UT0BT": "blue #2b5c8f",
         "fldIwYaZH3Kho7eT1": 0,
         "fldQdgXgOW1G9TmqW": true
       }
@@ -15,7 +15,7 @@
       "fields": {
         "fldUETYg2W93KfY1e": "Personal Projects",
         "fld9cXmhmGZUdh8O6": "projects-personal",
-        "fldAccentColor001": "green #2e7d32",
+        "fld2ety1uiG4UT0BT": "green #2e7d32",
         "fldIwYaZH3Kho7eT1": 1,
         "fldQdgXgOW1G9TmqW": false
       }
@@ -25,7 +25,7 @@
       "fields": {
         "fldUETYg2W93KfY1e": "Nerd Alert",
         "fld9cXmhmGZUdh8O6": "nerd-alert",
-        "fldAccentColor001": "rust #b33927",
+        "fld2ety1uiG4UT0BT": "rust #b33927",
         "fldIwYaZH3Kho7eT1": 2,
         "fldQdgXgOW1G9TmqW": false
       }
@@ -35,7 +35,7 @@
       "fields": {
         "fldUETYg2W93KfY1e": "Take It Personal",
         "fld9cXmhmGZUdh8O6": "projects-tip",
-        "fldAccentColor001": "velvet #5a2181",
+        "fld2ety1uiG4UT0BT": "velvet #5a2181",
         "fldIwYaZH3Kho7eT1": 3,
         "fldQdgXgOW1G9TmqW": false
       }
@@ -45,7 +45,7 @@
       "fields": {
         "fldUETYg2W93KfY1e": "Work Related",
         "fld9cXmhmGZUdh8O6": "projects-work",
-        "fldAccentColor001": "amber #d97706",
+        "fld2ety1uiG4UT0BT": "amber #d97706",
         "fldIwYaZH3Kho7eT1": 4,
         "fldQdgXgOW1G9TmqW": false
       }

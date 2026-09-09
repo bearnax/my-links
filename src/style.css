@@ -1,24 +1,30 @@
 /*
-  One flat, high-contrast poster of a page. The palette is stamped on <html>
-  as `data-palette` by the inline script in index.njk, before first paint —
-  either a saved override from the footer picker or, by default, one of the
-  three flats at random. Everything below reads from the tokens it switches.
-
-  `velvet` is the fourth option and the odd one out: the same three hues
-  deepened to near-black and swirled together behind the page, with every
-  row in the light ink rather than the alternating deep shade.
+  ==============================================================================
+  NEUMORPHIC UI: INLINE PILLS, FLOATING DOCK, & AIRTABLE ACCENTS
+  ==============================================================================
+  - Single material continuous sheet (--bg)
+  - Fixed top-left directional lighting
+  - Inline link pills (compact, dot indicator, sitting next to titles)
+  - Floating bottom bar with Search modal & Light/Dark mode switch
+  - Dynamic section accent inheritance from Airtable
 */
 
 :root {
-    --font-display: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --font-display: 'Archivo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 
-    --cream: oklch(96% 0.015 90);
-    --bg: oklch(33% 0.16 265);
-    /* The second ink is a near-black rather than a darker cut of the
-       background: the same shadow row under all three flats. */
-    --ink-deep: oklch(14% 0.012 60);
+    /* Light Theme (Default): Soft Matte Slate Plastic */
+    --bg: #e2e8f0;
+    --shadow-light: rgba(255, 255, 255, 0.88);
+    --shadow-dark: rgba(160, 175, 195, 0.65);
+    --shadow-light-hover: rgba(255, 255, 255, 0.98);
+    --shadow-dark-hover: rgba(144, 161, 184, 0.82);
 
-    /* Section Accent Colors matching Airtable spec */
+    /* Text & Focus Contrast (WCAG AA Compliant) */
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --focus-ring: #2563eb;
+
+    /* Section Accent Fallbacks (matching Airtable spec) */
     --accent-blue: #2b5c8f;
     --accent-green: #2e7d32;
     --accent-rust: #b33927;
@@ -26,407 +32,628 @@
     --accent-amber: #d97706;
 }
 
-html[data-palette="green"] {
-    --bg: oklch(36% 0.09 140);
+/* Dark Theme: Soft Matte Obsidian / Charcoal Plastic */
+html[data-theme="dark"] {
+    --bg: #181b20;
+    --shadow-light: rgba(42, 48, 58, 0.90);
+    --shadow-dark: rgba(8, 10, 13, 0.96);
+    --shadow-light-hover: rgba(54, 62, 75, 1.0);
+    --shadow-dark-hover: rgba(4, 5, 7, 1.0);
+
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --focus-ring: #60a5fa;
 }
 
-html[data-palette="rust"] {
-    --bg: oklch(40% 0.14 35);
-}
+/* ==========================================================================
+   Reset & Base
+   ========================================================================== */
 
-html[data-palette="velvet"] {
-    --bg: oklch(13% 0.02 280);
-    /* Every row reads light here — there is no second ink. */
-    --ink-deep: var(--cream);
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
-
-* { box-sizing: border-box; }
 
 body {
-    margin: 0;
     min-height: 100vh;
     background: var(--bg);
-    color: var(--cream);
+    color: var(--text-primary);
     font-family: var(--font-display);
     font-size: 16px;
-    font-stretch: 88%;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background 0.25s ease, color 0.25s ease;
 }
 
-a { color: inherit; text-decoration: none; }
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 3px;
+    border-radius: 8px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
 
 .skip-link {
     position: absolute;
     left: -9999px;
     top: 0;
-    background: var(--cream);
+    background: var(--text-primary);
     color: var(--bg);
-    padding: 10px 16px;
+    padding: 10px 18px;
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 800;
     text-transform: uppercase;
     letter-spacing: .1em;
-    z-index: 100;
+    border-radius: 999px;
+    z-index: 200;
 }
 
-.skip-link:focus { left: 16px; top: 16px; }
-
-:focus-visible { outline: 2px solid var(--cream); outline-offset: 3px; }
+.skip-link:focus {
+    left: 20px;
+    top: 20px;
+}
 
 .wrap {
-    max-width: 900px;
+    max-width: 960px;
     margin: 0 auto;
-    padding: 40px 28px 120px;
+    padding: 48px 24px 120px;
 }
 
-/* Header */
+/* ==========================================================================
+   Header
+   ========================================================================== */
 
 .page-header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 24px;
-    margin-bottom: 56px;
+    margin-bottom: 40px;
 }
 
 .brand {
-    margin: 0;
-    font-size: clamp(3.2rem, 11vw, 5.6rem);
+    font-size: clamp(2.4rem, 7vw, 4rem);
     font-weight: 900;
-    line-height: .82;
-    letter-spacing: -.02em;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
     text-transform: uppercase;
+    color: var(--text-primary);
 }
 
 .brand-label {
-    margin: .6em 0 0;
     text-align: right;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: .16em;
     text-transform: uppercase;
-    line-height: 1.5;
+    line-height: 1.6;
+    color: var(--text-secondary);
 }
 
-/* Section frames: every band is ruled off at the top */
+/* ==========================================================================
+   Neumorphic Button Mechanics (.neumo-btn)
+   ========================================================================== */
 
-.favorites-section,
-.section-panel {
-    border-top: 2px solid var(--cream);
-    padding-top: 10px;
-    margin-bottom: 26px;
+.neumo-btn {
+    background: var(--bg);
+    color: var(--text-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: inherit;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+    box-shadow: -4px -4px 10px var(--shadow-light), 4px 4px 10px var(--shadow-dark);
+    transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+                color 0.15s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.neumo-btn:hover {
+    box-shadow: -6px -6px 14px var(--shadow-light-hover), 6px 6px 14px var(--shadow-dark-hover);
+    transform: translateY(-2px);
+    color: var(--text-primary);
+}
+
+.neumo-btn:active {
+    box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+    transform: translateY(1px);
+}
+
+/* ==========================================================================
+   Favorites Strip
+   ========================================================================== */
+
+.favorites-section {
+    margin-bottom: 36px;
 }
 
 .eyebrow {
-    margin: 0 0 6px;
     font-size: 11px;
-    font-weight: 700;
-    letter-spacing: .16em;
+    font-weight: 800;
+    letter-spacing: .18em;
     text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 14px;
+    display: block;
 }
 
-.section-panel > summary {
+.favorites-row {
     display: flex;
-    align-items: baseline;
-    gap: 8px;
-    cursor: pointer;
-    list-style: none;
-    font-size: 11px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.favorite-btn {
+    border-radius: 999px;
+    padding: 8px 18px;
+    min-height: 40px;
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: .16em;
+    letter-spacing: .06em;
     text-transform: uppercase;
-    padding-bottom: 6px;
 }
 
-.section-panel > summary::-webkit-details-marker { display: none; }
-
-/* The +/- reads straight off the panel's open state, so keyboard toggling
-   of the <summary> keeps it in sync with no script involved. */
-.sec-glyph::before { content: "+"; }
-.section-panel[open] > summary .sec-glyph::before { content: "\2212"; }
-
-.sec-glyph {
-    font-size: 13px;
-    line-height: 1;
-    width: 1ch;
+.fav-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--focus-ring);
+    box-shadow: 0 0 6px var(--focus-ring);
 }
 
-.sec-num { opacity: .75; }
+.btn-arrow {
+    font-size: 10px;
+    opacity: 0.65;
+    transition: transform 0.15s ease;
+}
 
-/* Section accent colors */
+.favorite-btn:hover .btn-arrow {
+    transform: translate(2px, -2px);
+    opacity: 1;
+}
+
+/* ==========================================================================
+   Section Panel (Molded Sheet Container)
+   ========================================================================== */
+
+.section-panel {
+    background: var(--bg);
+    border-radius: 18px;
+    margin-bottom: 26px;
+    box-shadow: -6px -6px 16px var(--shadow-light), 6px 6px 16px var(--shadow-dark);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    transition: box-shadow 0.25s ease;
+}
+
+/* Dynamic Section Accent Assignment */
 .section-panel[data-accent="blue"] { --section-accent: var(--accent-blue); }
 .section-panel[data-accent="green"] { --section-accent: var(--accent-green); }
 .section-panel[data-accent="rust"] { --section-accent: var(--accent-rust); }
 .section-panel[data-accent="velvet"] { --section-accent: var(--accent-velvet); }
 .section-panel[data-accent="amber"] { --section-accent: var(--accent-amber); }
 
-.section-panel[data-accent] {
-    border-top-color: var(--section-accent);
-}
-.section-panel[data-accent] > summary .sec-glyph,
-.section-panel[data-accent] > summary .sec-num {
-    color: var(--section-accent);
-}
-
-/* Favorites strip */
-.favorites-row {
+.section-summary {
     display: flex;
-    flex-wrap: wrap;
-    gap: 12px 14px;
-    padding-top: 6px;
-    padding-bottom: 4px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    min-height: 54px;
 }
 
-.favorite-link {
+.section-summary::-webkit-details-marker { display: none; }
+
+.summary-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Sunken Indicator Well */
+.sec-glyph-well {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: var(--bg);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 22px;
+    box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
+    color: var(--section-accent, var(--text-secondary));
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.sec-glyph::before { content: "+"; }
+.section-panel[open] > summary .sec-glyph::before { content: "\2212"; }
+
+.sec-num {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .16em;
+    color: var(--section-accent, var(--text-secondary));
+    background: var(--bg);
+    padding: 4px 8px;
     border-radius: 6px;
-    background: var(--cream);
-    color: var(--ink-deep);
-    font-size: 13px;
+    box-shadow: inset 1px 1px 3px var(--shadow-dark), inset -1px -1px 3px var(--shadow-light);
+}
+
+.sec-title {
+    font-size: 15px;
     font-weight: 800;
     letter-spacing: .08em;
     text-transform: uppercase;
-    text-decoration: none;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.15);
-    transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+    color: var(--text-primary);
 }
 
-.favorite-link:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2);
-    color: var(--ink-deep);
+/* Saturated Section Accent Dot */
+.sec-accent-pill {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--section-accent, var(--text-secondary));
+    box-shadow: 0 0 6px var(--section-accent, transparent);
 }
 
-.favorite-link:active {
-    transform: translateY(1px);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
+/* ==========================================================================
+   Item Row Cards & Compact Inline Link Pills
+   ========================================================================== */
 
-/* Items list */
 .items-list {
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    padding-top: 4px;
-    padding-bottom: 8px;
+    gap: 12px;
+    padding: 4px 16px 20px;
 }
 
-.item-row {
+.item-card {
+    background: var(--bg);
+    border-radius: 14px;
+    padding: 12px 18px;
+    box-shadow: -4px -4px 10px var(--shadow-light), 4px 4px 10px var(--shadow-dark);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.item-row-content {
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
-    gap: 8px 16px;
-}
-
-.item-main {
-    min-width: 0;
-}
-
-.item-title-link {
-    text-decoration: underline;
-    text-decoration-color: color-mix(in srgb, currentColor 30%, transparent);
-    text-underline-offset: 4px;
-    color: inherit;
+    gap: 10px 14px;
 }
 
 .item-title {
-    font-size: clamp(1.9rem, 7vw, 2.9rem);
-    font-weight: 900;
-    line-height: 1.02;
-    letter-spacing: -.045em;
-    word-spacing: .18em;
-    text-transform: lowercase;
-    color: var(--cream);
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
 }
 
-.item-title-arrow {
-    display: inline-block;
-    margin-left: 0.25em;
-    font-size: 0.6em;
-    vertical-align: top;
-    opacity: 0.6;
-    transition: transform 0.15s ease, opacity 0.15s ease;
+.item-links-inline {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
-.item-title-link:hover .item-title-arrow {
-    transform: translate(2px, -2px);
+/* Compact Filled Neumorphic Link Pills (Accent Filled, No Stroke, White Text) */
+.pill-btn {
+    background: var(--section-accent, #2563eb);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    min-height: 28px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 2px 6px color-mix(in srgb, var(--section-accent, #2563eb) 35%, transparent),
+                -2px -2px 6px var(--shadow-light);
+    cursor: pointer;
+    transition: box-shadow 0.15s ease, transform 0.15s ease, filter 0.15s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.pill-btn:hover {
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px color-mix(in srgb, var(--section-accent, #2563eb) 45%, transparent),
+                -3px -3px 8px var(--shadow-light-hover);
+    filter: brightness(1.06);
+}
+
+.pill-btn:active {
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.35);
+    filter: brightness(0.95);
+}
+
+.pill-arrow {
+    font-size: 9px;
+    opacity: 0.9;
+    transition: transform 0.15s ease;
+}
+
+.pill-btn:hover .pill-arrow {
+    transform: translate(1px, -1px);
     opacity: 1;
 }
 
-.item-title-link:hover {
-    text-decoration-color: currentColor;
-}
+/* ==========================================================================
+   Floating Bottom Bar (Search & Light/Dark Switch)
+   ========================================================================== */
 
-.item-links {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px 10px;
-}
-
-/* Link buttons with drop shadows */
-.link-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 6px 14px;
-    border-radius: 4px;
-    background: var(--cream);
-    color: var(--ink-deep);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    text-decoration: none;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.15);
-    transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
-}
-
-.link-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2);
-    color: var(--ink-deep);
-}
-
-.link-btn:active {
-    transform: translateY(1px);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-/* Alternating item rows */
-.items-list > .item-row:nth-child(even) .item-title,
-.items-list > .item-row:nth-child(even) .item-title-link {
-    color: var(--ink-deep);
-}
-
-.items-list > .item-row:nth-child(even) .link-btn {
-    background: var(--ink-deep);
-    color: var(--cream);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-.items-list > .item-row:nth-child(even) .link-btn:hover {
-    color: var(--cream);
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-/* Velvet palette: all light text and buttons */
-html[data-palette="velvet"] .items-list > .item-row:nth-child(even) .item-title,
-html[data-palette="velvet"] .items-list > .item-row:nth-child(even) .item-title-link {
-    color: var(--cream);
-}
-
-html[data-palette="velvet"] .items-list > .item-row:nth-child(even) .link-btn {
-    background: var(--cream);
-    color: oklch(13% 0.02 280);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-}
-
-/* Velvet: three near-black hues drifting over one another. Two stacked
-   layers on fixed pseudo-elements — the colour wash and a fine grain — so
-   the swirl sits behind the page without the content ever moving. */
-
-html[data-palette="velvet"] body::before,
-html[data-palette="velvet"] body::after {
-    content: "";
+.floating-dock {
     position: fixed;
-    inset: -30%;
-    z-index: -1;
-    pointer-events: none;
-}
-
-html[data-palette="velvet"] body::before {
-    background:
-        radial-gradient(48% 42% at 22% 26%, oklch(22% 0.11 265) 0%, transparent 62%),
-        radial-gradient(52% 46% at 78% 30%, oklch(20% 0.07 145) 0%, transparent 64%),
-        radial-gradient(46% 44% at 60% 76%, oklch(23% 0.10 35) 0%, transparent 62%),
-        radial-gradient(60% 50% at 12% 82%, oklch(18% 0.06 265) 0%, transparent 66%),
-        var(--bg);
-    filter: blur(24px) saturate(1.15);
-    animation: velvet-drift 38s ease-in-out infinite alternate;
-}
-
-/* Fractal noise, inlined so the page stays self-contained. Multiplied over
-   the wash it reads as cloth rather than as a screen gradient. */
-html[data-palette="velvet"] body::after {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-    mix-blend-mode: overlay;
-    opacity: .32;
-}
-
-@keyframes velvet-drift {
-    0%   { transform: translate3d(-3%, -2%, 0) scale(1.06) rotate(-2deg); }
-    50%  { transform: translate3d(3%, 2%, 0) scale(1.14) rotate(2deg); }
-    100% { transform: translate3d(-2%, 3%, 0) scale(1.08) rotate(-1deg); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    html[data-palette="velvet"] body::before { animation: none; }
-}
-
-/* Footer: style overrides */
-
-.page-footer {
-    border-top: 2px solid var(--cream);
-    margin-top: 64px;
-    padding-top: 10px;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 90;
+    background: var(--bg);
+    border-radius: 999px;
+    padding: 6px 8px;
     display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 8px 16px;
+    align-items: center;
+    gap: 8px;
+    box-shadow: -6px -6px 18px var(--shadow-light), 6px 6px 18px var(--shadow-dark);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(8px);
 }
 
-.footer-label,
-.palette-btn {
-    font-family: inherit;
+.dock-btn {
+    border-radius: 999px;
+    min-height: 38px;
+    padding: 6px 14px;
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: .16em;
+    letter-spacing: .08em;
     text-transform: uppercase;
+    color: var(--text-primary);
 }
 
-.palette-picker { display: flex; flex-wrap: wrap; gap: 8px 14px; }
+.dock-icon {
+    font-size: 13px;
+    line-height: 1;
+}
 
-.palette-btn {
+.dock-kbd {
+    background: var(--bg);
+    padding: 2px 6px;
+    font-size: 10px;
+    font-family: inherit;
+    font-weight: 800;
+    border-radius: 6px;
+    box-shadow: inset 1px 1px 2px var(--shadow-dark), inset -1px -1px 2px var(--shadow-light);
+    color: var(--text-secondary);
+}
+
+.theme-icon {
+    font-size: 13px;
+}
+
+/* ==========================================================================
+   Search Modal / Popup Dialog
+   ========================================================================== */
+
+.search-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 80px 20px 40px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.search-modal.is-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.search-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+html[data-theme="dark"] .search-backdrop {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.search-dialog {
+    position: relative;
+    width: 100%;
+    max-width: 620px;
+    background: var(--bg);
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: -8px -8px 24px var(--shadow-light), 8px 8px 24px var(--shadow-dark);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transform: translateY(-12px);
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-modal.is-open .search-dialog {
+    transform: translateY(0);
+}
+
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 10px 16px;
+    box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.search-input-icon {
+    font-size: 16px;
+    color: var(--text-secondary);
+}
+
+.search-input {
+    flex: 1;
     background: none;
-    border: 0;
-    padding: 0;
-    color: inherit;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.search-input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+.search-close-btn {
+    background: none;
+    border: none;
     cursor: pointer;
-    display: inline-flex;
+    padding: 0;
+    color: var(--text-secondary);
+}
+
+.search-close-btn kbd {
+    background: var(--bg);
+    padding: 3px 7px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-family: inherit;
+    border-radius: 6px;
+    box-shadow: -2px -2px 5px var(--shadow-light), 2px 2px 5px var(--shadow-dark);
+    display: inline-block;
+}
+
+.search-results-container {
+    overflow-y: auto;
+    max-height: 55vh;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-right: 4px;
+}
+
+.search-empty-state {
+    text-align: center;
+    padding: 28px 16px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.search-result-item {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 12px 16px;
+    box-shadow: -3px -3px 8px var(--shadow-light), 3px 3px 8px var(--shadow-dark);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.search-result-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-result-title {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.search-result-section {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--text-secondary);
+    background: var(--bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    box-shadow: inset 1px 1px 2px var(--shadow-dark), inset -1px -1px 2px var(--shadow-light);
+}
+
+.search-result-links {
+    display: flex;
     align-items: center;
     gap: 6px;
-    text-decoration: underline;
-    text-underline-offset: 3px;
 }
 
-.palette-btn[aria-pressed="true"] { text-decoration: none; }
-.palette-btn[aria-pressed="true"] .swatch { box-shadow: 0 0 0 2px var(--cream); }
+/* ==========================================================================
+   Mobile Responsiveness
+   ========================================================================== */
 
-.swatch {
-    width: 11px;
-    height: 11px;
-    border-radius: 50%;
-    background: var(--swatch);
-    box-shadow: 0 0 0 1px var(--cream);
-}
+@media (max-width: 640px) {
+    .wrap {
+        padding: 32px 16px 100px;
+    }
 
-.swatch-blue { --swatch: oklch(33% 0.16 265); }
-.swatch-green { --swatch: oklch(36% 0.09 140); }
-.swatch-rust { --swatch: oklch(40% 0.14 35); }
-/* Drawn a little lighter than the backdrop it stands for: at 11px the true
-   near-blacks read as an empty hole rather than as a swirl. */
-.swatch-velvet {
-    background:
-        conic-gradient(from 210deg, oklch(34% 0.15 265), oklch(32% 0.10 145),
-                       oklch(36% 0.14 35), oklch(34% 0.15 265));
-}
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 28px;
+    }
 
-@media (max-width: 540px) {
-    .page-header { flex-direction: column; gap: 12px; }
-    .brand-label { text-align: left; margin-top: 0; }
+    .brand-label {
+        text-align: left;
+    }
+
+    .search-modal {
+        padding: 40px 12px 20px;
+    }
+
+    .floating-dock {
+        bottom: 16px;
+    }
 }

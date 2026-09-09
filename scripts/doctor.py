@@ -54,7 +54,7 @@ def check_site():
     check("data/site.json parses", True)
     for key in ("title", "brand", "tagline", "storagePrefix"):
         check(f"site.{key} is set", bool(site.get(key)),
-              "" if site.get(key) else "see SETUP.md step 1")
+              "" if site.get(key) else "must be set in data/site.json")
     if isinstance(site.get("brand"), list):
         check("site.brand is 1-2 lines", 1 <= len(site["brand"]) <= 2,
               f"got {len(site['brand'])}; more lines will overflow the header",

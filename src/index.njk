@@ -18,15 +18,12 @@
     #}
     <script>
       (function () {
-        var random = ["blue", "green", "rust"];
-        var all = random.concat(["velvet"]);
         var saved = null;
-        try { saved = localStorage.getItem("{{ site.storagePrefix }}-palette"); } catch (e) {}
-        document.documentElement.setAttribute(
-          "data-palette",
-          all.indexOf(saved) !== -1
-            ? saved
-            : random[Math.floor(Math.random() * random.length)]);
+        try { saved = localStorage.getItem("{{ site.storagePrefix }}-theme"); } catch (e) {}
+        if (!saved) {
+          saved = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute("data-theme", saved);
       })();
     </script>
   </head>
@@ -56,17 +53,37 @@
         </div>
 
       </main>
+    </div>
 
-      <footer class="page-footer">
-        <p class="footer-label" id="palette-label">Style</p>
-        <div class="palette-picker" id="palette-picker" role="group" aria-labelledby="palette-label">
-          <button type="button" class="palette-btn" data-palette-choice="blue" aria-pressed="false"><span class="swatch swatch-blue" aria-hidden="true"></span>Blue</button>
-          <button type="button" class="palette-btn" data-palette-choice="green" aria-pressed="false"><span class="swatch swatch-green" aria-hidden="true"></span>Green</button>
-          <button type="button" class="palette-btn" data-palette-choice="rust" aria-pressed="false"><span class="swatch swatch-rust" aria-hidden="true"></span>Rust</button>
-          <button type="button" class="palette-btn" data-palette-choice="velvet" aria-pressed="false"><span class="swatch swatch-velvet" aria-hidden="true"></span>Velvet</button>
-          <button type="button" class="palette-btn" data-palette-choice="" aria-pressed="false">Shuffle each load</button>
+    <!-- Floating Bottom Bar (Search & Light/Dark Switch) -->
+    <nav class="floating-dock" aria-label="Quick Actions">
+      <button type="button" class="dock-btn neumo-btn" id="open-search-btn" aria-label="Search links" title="Search (Press /)">
+        <span class="dock-icon" aria-hidden="true">⌕</span>
+        <span class="dock-text">Search</span>
+        <kbd class="dock-kbd" aria-hidden="true">/</kbd>
+      </button>
+      <button type="button" class="dock-btn neumo-btn" id="theme-toggle-btn" aria-label="Toggle light and dark mode" title="Toggle theme">
+        <span class="theme-icon" aria-hidden="true">☀️</span>
+        <span class="theme-text">Light</span>
+      </button>
+    </nav>
+
+    <!-- Search Modal Popup -->
+    <div id="search-modal" class="search-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="search-modal-title">
+      <div class="search-backdrop" id="search-backdrop"></div>
+      <div class="search-dialog">
+        <h2 id="search-modal-title" class="sr-only">Search Bookmarks</h2>
+        <div class="search-input-wrapper">
+          <span class="search-input-icon" aria-hidden="true">⌕</span>
+          <input type="text" id="search-input" class="search-input" placeholder="Search links, keywords..." autocomplete="off" spellcheck="false">
+          <button type="button" class="search-close-btn" id="close-search-btn" aria-label="Close search">
+            <kbd aria-hidden="true">esc</kbd>
+          </button>
         </div>
-      </footer>
+        <div class="search-results-container" id="search-results" role="listbox">
+          <div class="search-empty-state">Type to search through all bookmarks...</div>
+        </div>
+      </div>
     </div>
 
     <script src="index.js" type="module"></script>

@@ -1,9 +1,7 @@
 {
   "_comment": [
-    "Everything that makes this deployment *this* site rather than the template.",
-    "A fork should need to touch this file and data/airtable-schema.json, and",
-    "nothing else under src/ or scripts/ — that separation is what keeps upgrades",
-    "cherry-pickable between sibling sites. See SETUP.md."
+    "Site configuration and metadata.",
+    "Storage prefix is used to namespace localStorage state."
   ],
   "title": "Will's Links",
   "brand": ["Will's", "Links"],

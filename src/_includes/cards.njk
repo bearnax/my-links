@@ -4,15 +4,75 @@
   Fast, clean, brutally efficient link navigation.
 #}
 
+{#
+  Neumorphic UI components:
+  - Each item is its own molded extruded card row containing the title and multiple links
+  - Tactile extruded buttons with dented active states
+  - Recessed glyph wells and molded section headers
+#}
+
+{#
+  Neumorphic UI components:
+  - Each item is its own row with title and compact link pills inline
+  - Tactile extruded buttons with dented active states
+  - Dynamic section accent inheritance from Airtable
+#}
+
 {% macro favorite(fav) -%}
-<a class="favorite-link" href="{{ fav.url }}" data-search="{{ fav | searchTerms }}">{{ fav.label }}</a>
+<a class="favorite-btn neumo-btn" href="{{ fav.url }}" data-search="{{ fav | searchTerms }}" target="_blank" rel="noopener noreferrer">
+  <span class="fav-dot" aria-hidden="true"></span>
+  <span class="fav-label">{{ fav.label }}</span>
+  <span class="btn-arrow" aria-hidden="true">↗</span>
+</a>
 {%- endmacro %}
 
 {% macro item(it) -%}
-<div class="item-row" data-search="{{ it | searchTerms }}"><div class="item-main">{% if it.primaryUrl %}<a class="item-title-link" href="{{ it.primaryUrl }}"><span class="item-title">{{ it.title }}</span><span class="item-title-arrow">↗</span></a>{% else %}<span class="item-title">{{ it.title }}</span>{% endif %}</div>{% if (it.primaryUrl and it.primaryUrlLabel and it.primaryUrlLabel != it.title) or (it.links and it.links.length > 0) %}<div class="item-links">{% if it.primaryUrl and it.primaryUrlLabel and it.primaryUrlLabel != it.title %}<a class="link-btn" href="{{ it.primaryUrl }}">{{ it.primaryUrlLabel }}</a>{% endif %}{% for link in it.links %}<a class="link-btn" href="{{ link.url }}">{{ link.label }}</a>{% endfor %}</div>{% endif %}</div>
+<div class="item-card" data-search="{{ it | searchTerms }}">
+  <div class="item-row-content">
+    <span class="item-title">{{ it.title }}</span>
+
+    {% if it.primaryUrl or (it.links and it.links.length > 0) %}
+    <div class="item-links-inline">
+      {% if it.primaryUrl and ((it.links and it.links.length > 0) or (it.primaryUrlLabel and it.primaryUrlLabel != it.title)) %}
+        <a class="pill-btn primary-pill" href="{{ it.primaryUrl }}" target="_blank" rel="noopener noreferrer">
+          <span class="pill-label">{{ it.primaryUrlLabel if (it.primaryUrlLabel and it.primaryUrlLabel != it.title) else "Live" }}</span>
+          <span class="pill-arrow" aria-hidden="true">↗</span>
+        </a>
+      {% elif it.primaryUrl and (not it.links or it.links.length == 0) %}
+        <a class="pill-btn primary-pill" href="{{ it.primaryUrl }}" target="_blank" rel="noopener noreferrer">
+          <span class="pill-label">{{ it.primaryUrlLabel if it.primaryUrlLabel else "Live" }}</span>
+          <span class="pill-arrow" aria-hidden="true">↗</span>
+        </a>
+      {% endif %}
+      {% if it.links %}
+        {% for link in it.links %}
+          <a class="pill-btn secondary-pill" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">
+            <span class="pill-label">{{ link.label }}</span>
+            <span class="pill-arrow" aria-hidden="true">↗</span>
+          </a>
+        {% endfor %}
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</div>
 {%- endmacro %}
 
 {% macro section(sec, index) -%}
-<details id="{{ sec.id }}" class="section-panel"{% if sec.accentName %} data-accent="{{ sec.accentName }}"{% endif %}{% if sec.accentHex %} style="--section-accent: {{ sec.accentHex }};"{% endif %} data-section="" data-num="{{ index | sectionNumber }}"{% if sec.open %} open=""{% endif %}><summary><span class="sec-glyph" aria-hidden="true"></span><span class="sec-num">{{ index | sectionNumber }}</span><span class="sec-title">{{ sec.title }}</span></summary><div class="items-list">{% for it in sec.items %}{{ item(it) }}{% endfor %}</div></details>
+<details id="{{ sec.id }}" class="section-panel"{% if sec.accentName %} data-accent="{{ sec.accentName }}"{% endif %}{% if sec.accentHex %} style="--section-accent: {{ sec.accentHex }};"{% endif %} data-section="" data-num="{{ index | sectionNumber }}"{% if sec.open %} open=""{% endif %}>
+  <summary class="section-summary">
+    <div class="summary-left">
+      <span class="sec-glyph-well" aria-hidden="true">
+        <span class="sec-glyph"></span>
+      </span>
+      <span class="sec-num">{{ index | sectionNumber }}</span>
+      <span class="sec-title">{{ sec.title }}</span>
+    </div>
+    <span class="sec-accent-pill" aria-hidden="true"></span>
+  </summary>
+  <div class="items-list">
+    {% for it in sec.items %}{{ item(it) }}{% endfor %}
+  </div>
+</details>
 {%- endmacro %}
 

@@ -3,22 +3,20 @@ A public facing website with my most used links (i.e. my universal bookmarks)
 
 Live on [Github Pages](https://bearnax.github.io/my-links/)
 
-This repo is also the **template** the sibling link sites are forked from — the
-engine (`src/`, `scripts/`, `.github/`) is shared, while `data/site.json` and
-`data/airtable-schema.json` make each deployment its own. To stand up a new
-site, see **[SETUP.md](SETUP.md)**.
-
 ## Building
 
 The site is generated with [Eleventy](https://www.11ty.dev/) from
 `data/links.json`. The cards are rendered at build time, so the page ships as
-real HTML and works with JavaScript disabled; `src/index.js` only handles
-search, the theme toggle, and the section menu.
+real HTML and works with JavaScript disabled; `src/index.js` handles
+the interactive search modal (with `/` shortcut), light/dark mode switching,
+and accordion persistence.
 
 ```sh
 npm install
 npm run build   # writes _site/
 npm run serve   # local dev server with live reload
+npm run sync    # pulls latest data from Airtable into data/links.json
+npm run test    # builds and checks site configuration via doctor.py
 ```
 
 | path | what it is |
@@ -27,8 +25,8 @@ npm run serve   # local dev server with live reload
 | `data/site.json` | this site's name, brand lines, and storage prefix |
 | `data/airtable-spec.json` | the schema every site's base must have (template) |
 | `data/airtable-schema.json` | this site's table and field IDs (generated) |
-| `src/index.njk` | the page shell |
-| `src/_includes/cards.njk` | one macro per card type (favorite, link, project) |
+| `src/index.njk` | the page shell (includes floating search/theme dock) |
+| `src/_includes/cards.njk` | macros for favorite buttons, item row cards, and sections |
 | `src/_data/links.js` | reads `data/links.json` into the templates |
 | `src/style.css`, `src/index.js`, `src/static/` | copied through to `_site/` as-is |
 
@@ -43,8 +41,8 @@ The site is built from `data/links.json`, which is generated — don't hand-edit
 it. The source of truth is this site's Airtable base, whose ID lives in
 `data/airtable-schema.json` (for this deployment: **Links CMS**,
 `app1bBKfPU7TpXAgm`, in the Production DBs workspace). Edit records there, then run the
-`handle-the-data` Claude Code skill (`.claude/skills/handle-the-data/`) to pull
-the base, regenerate `data/links.json`, and open a PR with the diff.
+`handle-the-data` skill (`.agents/skills/handle-the-data/`) or `npm run sync` to pull
+the base, regenerate `data/links.json`, and review the diff.
 
 The committed JSON is deliberately the seam between Airtable and the site: the
 build never calls Airtable, so it works offline and every data change arrives
@@ -57,7 +55,7 @@ as a reviewable diff rather than appearing silently on the live page.
 | `Sections` | Title, Sub Title (optional), slug, Accent Color (`<name> #<hex>`), Order, Open |
 | `Items` | Title, Section, Order, Search, Primary URL & Label, Link1-3 URLs & Labels |
 
-Sections are collapsible and can specify an accent color (verified against `src/style.css` on sync). A section titled or slugged `favorites` is pinned to the top favorites strip.
+Sections are collapsible and specify an accent color that dynamically styles the section and its link pills. A section titled or slugged `favorites` is pinned to the top favorites strip.
 
 ### Checking the setup
 
@@ -72,8 +70,7 @@ fails in a way that doesn't obviously point at the data.
 ### Running a sync by hand
 
 ```sh
-export AIRTABLE_TOKEN=...        # scoped to the base; read access is enough
-python3 scripts/sync-links.py    # writes data/links.json
+npm run sync                     # pulls directly using .env or AIRTABLE_TOKEN
 python3 scripts/diff-links.py <old.json> <new.json>   # markdown change summary
 ```
 
@@ -84,7 +81,7 @@ fixtures, which is how it is tested where `api.airtable.com` is unreachable:
 python3 scripts/sync-links.py --from-dir tests/fixtures/airtable /tmp/out.json
 ```
 
-Records that can't be placed — a person or project with no section — are
+Records that can't be placed — an item with no section — are
 skipped with a `warning:` on stderr rather than failing the run. Malformed
 rows (a bad status, a missing URL) raise instead.
 
@@ -100,9 +97,3 @@ permissions →_ **Allow GitHub Actions to create and approve pull requests**, o
 set a `SYNC_PR_TOKEN` secret to a PAT with `repo` scope. With neither, the job
 still pushes the synced branch and prints a compare link in the run summary.
 
-## Forking this for another site
-
-`scripts/init-base.py` creates a matching Airtable base and writes the schema
-file for it; `scripts/doctor.py` checks the result. The full walkthrough,
-including how upgrades travel between sibling sites, is in
-**[SETUP.md](SETUP.md)**.
