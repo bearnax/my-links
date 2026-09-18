@@ -19,6 +19,16 @@
       "label": "Twitch",
       "url": "https://www.twitch.tv",
       "search": "twitch twitch.tv streaming"
+    },
+    {
+      "label": "HiNotes",
+      "url": "https://hinotes.hidock.com/",
+      "search": "hidock hinotes"
+    },
+    {
+      "label": "Github (will-brodnax)",
+      "url": "https://github.com/will-brodnax",
+      "search": "github repos code willbrodnax"
     }
   ],
   "sections": [
@@ -203,6 +213,22 @@
       "accentColor": "Ruby #9B111E",
       "accentName": "ruby",
       "accentHex": "#9b111e"
+    },
+    {
+      "id": "resources",
+      "title": "Resources",
+      "open": false,
+      "items": [
+        {
+          "title": "Laws of UX",
+          "search": "laws of ux user experience",
+          "primaryUrl": "https://lawsofux.com/",
+          "primaryUrlLabel": "Site"
+        }
+      ],
+      "accentColor": "Sapphire #0F52BA",
+      "accentName": "sapphire",
+      "accentHex": "#0f52ba"
     }
   ]
 }
