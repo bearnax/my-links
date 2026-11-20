@@ -5,10 +5,17 @@
  * the two flows, so a build works offline and every data change lands as a
  * reviewable diff.
  */
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
+
 export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/style.css");
   eleventyConfig.addPassthroughCopy("src/index.js");
   eleventyConfig.addPassthroughCopy("src/static");
+
+  eleventyConfig.addFilter("assetVersion", (path) =>
+    createHash("sha256").update(readFileSync(`src/${path}`)).digest("hex").slice(0, 12)
+  );
 
   eleventyConfig.setNunjucksEnvironmentOptions({ autoescape: true });
   eleventyConfig.addFilter("searchTerms", (item) => [
