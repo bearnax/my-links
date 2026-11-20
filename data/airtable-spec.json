@@ -14,6 +14,7 @@
     "`key` is the stable name the sync uses (schema.tables.X.fields.key); `name`",
     "is the Airtable display name and may be renamed freely afterwards."
   ],
+  "presentations": ["Standard", "Featured"],
   "accentColors": [
     "blue #2b5c8f",
     "green #2e7d32",
@@ -51,7 +52,12 @@
         {"key": "link2Url", "name": "Link2 URL", "type": "url", "description": "Optional additional URL 2."},
         {"key": "link2Label", "name": "Link2 URL Label", "type": "singleLineText", "description": "Label for Link2 URL. Required if Link2 URL is present."},
         {"key": "link3Url", "name": "Link3 URL", "type": "url", "description": "Optional additional URL 3."},
-        {"key": "link3Label", "name": "Link3 URL Label", "type": "singleLineText", "description": "Label for Link3 URL. Required if Link3 URL is present."}
+        {"key": "link3Label", "name": "Link3 URL Label", "type": "singleLineText", "description": "Label for Link3 URL. Required if Link3 URL is present."},
+        {"key": "description", "name": "Description", "type": "multilineText", "description": "Optional summary for the page and search."},
+        {"key": "presentation", "name": "Presentation", "type": "singleSelect", "choicesFrom": "presentations", "description": "Blank behaves as Standard."},
+        {"key": "imageUrl", "name": "Image URL", "type": "url", "description": "Optional public HTTPS image URL."},
+        {"key": "isProject", "name": "Is Project", "type": "checkbox", "description": "Include this item in the Projects count."},
+        {"key": "favorite", "name": "Favorite", "type": "checkbox", "description": "Also display this item in Favorites."}
       ]
     }
   ]

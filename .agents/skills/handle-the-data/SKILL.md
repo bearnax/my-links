@@ -20,7 +20,7 @@ a build works offline and every data change lands as a reviewable diff.
 
 There's also a code-only path: the `.github/workflows/sync-links.yml` GitHub
 Action does the same pull/validate/diff/PR sequence with no LLM involved
-(`workflow_dispatch`, plus a weekday schedule). Use this skill when a human is
+(`workflow_dispatch` on `main`). Use this skill when a human is
 driving; use the Action when the sync just needs to happen.
 
 ## Schema
@@ -33,12 +33,14 @@ Airtable without breaking the build.
 | table | holds |
 |---|---|
 | `Sections` | slug, title, sub-title, accent color, order, open-by-default |
-| `Items` | title, section, order, search, primary URL & label, link1-3 URLs & labels |
+| `Items` | title, section, order, search, primary URL & label, link1-3 URLs & labels, description, presentation, image URL, is project, favorite |
 
 Key rules:
 - An item without a Section is skipped.
 - A section without items is skipped.
-- A section titled or slugged `favorites` is pinned to the top strip.
+- Check Favorite on an item to add it to the top strip while keeping its home section.
+- The legacy Favorites section is supported while its records are moved to their home sections.
+- Use the Meta API or `python3 scripts/init-base.py --refresh` to refresh field IDs with a token scoped to `schema.bases:read`.
 - Accent colors from Airtable (`<name> #<hex>` or `#<hex>`) flow dynamically into the section styles.
 
 ## Process
@@ -48,7 +50,7 @@ Key rules:
      rather than clobbering in-progress work.
    - `git fetch origin main && git log HEAD..origin/main` — branch from the
      latest `main`.
-   - Check for an open PR from a previous run (branch prefix `links-sync-`)
+   - Check for an open PR from a previous run (branch `links-sync` or a legacy `links-sync-*` branch)
      via the GitHub MCP tools. If one is open, update it or say it's pending
      rather than opening a second.
 

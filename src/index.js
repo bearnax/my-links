@@ -89,26 +89,16 @@
   var searchResults = document.getElementById('search-results');
   var openSearchBtn = document.getElementById('open-search-btn');
   var closeSearchBtn = document.getElementById('close-search-btn');
-  var searchBackdrop = document.getElementById('search-backdrop');
+  var lastFocused;
 
   // Index all cards across sections and favorites
   var searchIndex = [];
 
-  // Index favorites
-  var favLinks = document.querySelectorAll('.favorites-row .favorite-btn');
-  favLinks.forEach(function (btn) {
-    var label = btn.querySelector('.fav-label');
-    searchIndex.push({
-      title: label ? label.textContent.trim() : btn.textContent.trim(),
-      search: (btn.dataset.search || '').toLowerCase(),
-      section: 'Favorites',
-      links: [{ label: 'Open', url: btn.getAttribute('href') }]
-    });
-  });
-
   // Index section items
+  var itemIds = new Set();
   var itemCards = document.querySelectorAll('.item-card');
   itemCards.forEach(function (card) {
+    if (card.dataset.itemId) itemIds.add(card.dataset.itemId);
     var titleEl = card.querySelector('.item-title');
     if (!titleEl) return;
     var title = titleEl.textContent.trim();
@@ -116,12 +106,12 @@
     var sectionPanel = card.closest('.section-panel');
     var sectionTitle = sectionPanel ? sectionPanel.querySelector('.sec-title').textContent.trim() : '';
 
-    var linkBtns = card.querySelectorAll('.pill-btn');
+    var linkBtns = card.querySelectorAll('.pill-btn, .bookmark-link');
     var links = [];
     linkBtns.forEach(function (btn) {
       var labelEl = btn.querySelector('.pill-label');
       links.push({
-        label: labelEl ? labelEl.textContent.trim() : 'Link',
+        label: labelEl ? labelEl.textContent.trim() : 'Open',
         url: btn.getAttribute('href')
       });
     });
@@ -134,24 +124,29 @@
     });
   });
 
+  document.querySelectorAll('.favorites-row .favorite-btn').forEach(function (btn) {
+    if (itemIds.has(btn.dataset.itemId)) return;
+    searchIndex.push({
+      title: btn.querySelector('.fav-label').textContent.trim(),
+      search: (btn.dataset.search || '').toLowerCase(),
+      section: 'Favorites',
+      links: [{ label: 'Open', url: btn.getAttribute('href') }]
+    });
+  });
+
   function openSearch() {
-    if (!searchModal) return;
-    searchModal.classList.add('is-open');
-    searchModal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-    if (searchInput) {
-      searchInput.value = '';
-      searchInput.focus();
-    }
+    if (searchModal.open) return;
+    lastFocused = document.activeElement;
+    searchInput.value = '';
     renderSearchResults('');
+    searchModal.showModal();
+    document.body.classList.add('search-open');
   }
 
-  function closeSearch() {
-    if (!searchModal) return;
-    searchModal.classList.remove('is-open');
-    searchModal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
+  searchModal.addEventListener('close', function () {
+    document.body.classList.remove('search-open');
+    if (lastFocused instanceof HTMLElement) lastFocused.focus();
+  });
 
   function renderSearchResults(query) {
     if (!searchResults) return;
@@ -185,7 +180,7 @@
       item.links.forEach(function (link) {
         html += '    <a class="pill-btn" href="' + escapeHtml(link.url) + '" target="_blank" rel="noopener noreferrer">';
         html += '      <span class="pill-label">' + escapeHtml(link.label) + '</span>';
-        html += '      <span class="pill-arrow">↗</span>';
+        html += '      <span class="pill-arrow" aria-hidden="true">↗</span>';
         html += '    </a>';
       });
       html += '  </div>';
@@ -207,11 +202,11 @@
     openSearchBtn.addEventListener('click', openSearch);
   }
   if (closeSearchBtn) {
-    closeSearchBtn.addEventListener('click', closeSearch);
+    closeSearchBtn.addEventListener('click', function () { searchModal.close(); });
   }
-  if (searchBackdrop) {
-    searchBackdrop.addEventListener('click', closeSearch);
-  }
+  searchModal.addEventListener('click', function (event) {
+    if (event.target === searchModal) searchModal.close();
+  });
 
   if (searchInput) {
     searchInput.addEventListener('input', function () {
@@ -219,16 +214,14 @@
     });
   }
 
-  // Global hotkeys: '/' opens search, 'Escape' closes
+  // '/' opens search. The native dialog handles Escape.
   document.addEventListener('keydown', function (e) {
-    if (e.key === '/' && !searchModal.classList.contains('is-open')) {
+    if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey && !searchModal.open) {
       var tag = e.target.tagName.toLowerCase();
       if (tag !== 'input' && tag !== 'textarea' && !e.target.isContentEditable) {
         e.preventDefault();
         openSearch();
       }
-    } else if (e.key === 'Escape' && searchModal && searchModal.classList.contains('is-open')) {
-      closeSearch();
     }
   });
 

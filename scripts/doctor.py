@@ -95,8 +95,13 @@ def check_schema(site):
         for field in table["fields"]:
             if field["key"] not in live.get("fields", {}):
                 missing.append(f"{table['key']}.{field['key']}")
+    unmapped_metadata = {
+        "items.description", "items.presentation", "items.imageUrl",
+        "items.isProject", "items.favorite",
+    }
     check("schema covers every field in the spec", not missing,
-          f"missing: {', '.join(missing)}" if missing else "")
+          f"missing: {', '.join(missing)}; run scripts/init-base.py --refresh" if missing else "",
+          warn=bool(missing) and set(missing) <= unmapped_metadata)
 
     if "accentColors" in spec:
         check("accentColors match the spec", schema.get("accentColors") == spec["accentColors"],

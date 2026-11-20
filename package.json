@@ -9,7 +9,7 @@
     "build": "eleventy",
     "serve": "eleventy --serve",
     "sync": "python3 scripts/sync-links.py",
-    "test": "npm run build && python3 scripts/doctor.py",
+    "test": "npm run build && python3 scripts/doctor.py && python3 -m unittest discover -s tests",
     "lint": "echo 'No linter configured'"
   },
   "devDependencies": {

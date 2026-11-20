@@ -12,6 +12,8 @@ Requires AIRTABLE_TOKEN when fetching. --from-dir reads one <table>.json per
 table in the same shape the API returns, which is how this is tested without
 network access.
 """
+import argparse
+import datetime
 import json
 import os
 import re
@@ -24,6 +26,9 @@ API_ROOT = "https://api.airtable.com/v0"
 HERE = os.path.dirname(__file__)
 SCHEMA_PATH = os.path.join(HERE, "..", "data", "airtable-schema.json")
 CSS_PATH = os.path.join(HERE, "..", "src", "style.css")
+
+SNAPSHOT_PATH = os.path.join(HERE, "..", "data", "links.json")
+ITEM_METADATA_FIELDS = ("description", "presentation", "imageUrl", "isProject", "favorite")
 
 warnings = []
 
@@ -97,13 +102,13 @@ def parse_accent_color(raw):
     if not raw:
         return None, None
     raw = raw.strip()
-    m = re.match(r"^([a-zA-Z0-9_-]+)\s+(#[0-9a-fA-F]{3,8})$", raw)
+    m = re.match(r"^([a-zA-Z0-9_-]+)\s+(#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}))$", raw)
     if m:
         return m.group(1).lower(), m.group(2).lower()
-    m = re.match(r"^(#[0-9a-fA-F]{3,8})$", raw)
+    m = re.match(r"^(#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}))$", raw)
     if m:
         return m.group(1).lower(), m.group(1).lower()
-    return raw.lower(), raw.lower()
+    raise ValueError(f"Invalid section accent: {raw!r}")
 
 
 def verify_accent_colors(accent_map, css_path=CSS_PATH):
@@ -159,6 +164,18 @@ def build_sections(records, fields):
     return sections, accent_map
 
 
+def validate_url(url, title, label, *, https_only=False):
+    if not url:
+        return
+    try:
+        parsed = urllib.parse.urlsplit(url)
+        valid = parsed.hostname and parsed.scheme in (("https",) if https_only else ("http", "https"))
+    except ValueError:
+        valid = False
+    if not valid or any(c.isspace() or ord(c) < 32 for c in url):
+        raise ValueError(f"Item {title!r} has an invalid {label} URL")
+
+
 def build_items(records, fields):
     items = []
     for record in records:
@@ -175,6 +192,7 @@ def build_items(records, fields):
         search = search_terms(record, fields["search"], title)
         primary_url = text(record, fields["primaryUrl"])
         primary_label = text(record, fields["primaryUrlLabel"])
+        validate_url(primary_url, title, "primary")
         if primary_url and not primary_label:
             primary_label = title
 
@@ -187,12 +205,28 @@ def build_items(records, fields):
                     f"item '{title}' has Link{num} URL '{url_val}' but is missing Link{num} URL Label"
                 )
             if url_val:
+                validate_url(url_val, title, f"Link{num}")
                 extra_links.append({"label": label_val, "url": url_val})
 
-        item_data = {
-            "title": title,
-            "search": search,
-        }
+        if not primary_url and not extra_links:
+            raise ValueError(f"Item {title!r} has no destination")
+
+        item_data = {"id": record["id"], "title": title, "search": search}
+        description = text(record, fields.get("description"))
+        if description:
+            item_data["description"] = description
+        presentation = text(record, fields.get("presentation")).casefold()
+        if presentation == "featured":
+            item_data["presentation"] = presentation
+        elif presentation not in ("", "standard"):
+            raise ValueError(f"Item {title!r} has an unknown Presentation: {presentation!r}")
+        image_url = text(record, fields.get("imageUrl"))
+        if image_url:
+            validate_url(image_url, title, "image", https_only=True)
+            item_data["imageUrl"] = image_url
+        for flag in ("isProject", "favorite"):
+            if value(record, fields.get(flag), False):
+                item_data[flag] = True
         if primary_url:
             item_data["primaryUrl"] = primary_url
             item_data["primaryUrlLabel"] = primary_label
@@ -223,46 +257,71 @@ def build(tables, schema):
             continue
         entry["section"]["items"].append(item)
 
-    # Detect Favorites section: section ordering below favorite (favorites is always top)
-    favorites = []
+    favorites = {}
     ordered = []
+    section_ids = set()
 
-    for entry in sorted(sections.values(), key=lambda s: s["order"]):
+    for entry in sorted(sections.values(), key=lambda s: (s["order"], s["section"]["id"])):
         sec = entry["section"]
-        sorted_items = [i["data"] for i in sorted(sec["items"], key=lambda i: i["order"])]
+        if sec["id"] in section_ids:
+            raise ValueError(f"Duplicate section slug: {sec['id']!r}")
+        section_ids.add(sec["id"])
+        sorted_items = [
+            i["data"] for i in sorted(
+                sec["items"], key=lambda i: (i["order"], i["data"]["title"].casefold(), i["data"]["id"])
+            )
+        ]
+        legacy = any(sec[key].lower() in ("favorites", "favorite") for key in ("id", "title"))
 
-        # If items contains no items, is empty, then do not ingest that section. Ignore it.
         if not sorted_items:
-            warn(f"section '{sec['title']}' has no items; ignored")
+            if not legacy:
+                warn(f"section '{sec['title']}' has no items; ignored")
             continue
 
-        sec["items"] = sorted_items
-
-        if sec["id"].lower() in ("favorites", "favorite") or sec["title"].lower() in ("favorites", "favorite"):
-            # Extract to top favorites strip
-            for it in sorted_items:
-                fav_url = it.get("primaryUrl") or (it["links"][0]["url"] if it.get("links") else "")
-                fav_label = it.get("primaryUrlLabel") or it["title"]
-                favorites.append({
-                    "label": fav_label,
-                    "url": fav_url,
-                    "search": it.get("search", ""),
-                })
-        else:
+        if not legacy:
+            sec["items"] = sorted_items
             ordered.append(sec)
 
-    return {"favorites": favorites, "sections": ordered}
+        for item in sorted_items:
+            if not legacy and not item.get("favorite"):
+                continue
+            url = item.get("primaryUrl") or item["links"][0]["url"]
+            label = item.get("primaryUrlLabel") or item["title"]
+            # A checked item in a regular section wins over a legacy duplicate.
+            if url not in favorites or (favorites[url][0] and not legacy):
+                favorites[url] = (legacy, {
+                    "id": item["id"], "label": label, "url": url, "search": item["search"],
+                })
+
+    return {"favorites": [favorite for _, favorite in favorites.values()], "sections": ordered}
+
+
+def load_snapshot(path):
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+
+
+def with_content_date(data, previous, pending, *, set_date):
+    for snapshot in (previous, pending):
+        content = {key: val for key, val in snapshot.items() if key != "contentUpdated"}
+        if data == content:
+            return data | ({"contentUpdated": snapshot["contentUpdated"]} if snapshot.get("contentUpdated") else {})
+    if set_date:
+        return data | {"contentUpdated": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")}
+    return data
 
 
 def main():
-    args = sys.argv[1:]
-    from_dir = None
-    if args and args[0] == "--from-dir":
-        if len(args) < 2:
-            raise SystemExit("--from-dir needs a directory")
-        from_dir = args[1]
-        args = args[2:]
-    out_path = args[0] if args else "data/links.json"
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--from-dir", help="read Airtable responses from fixtures")
+    parser.add_argument("--pending", help="previously proposed snapshot for the open sync PR")
+    parser.add_argument("output", nargs="?", default=SNAPSHOT_PATH)
+    args = parser.parse_args()
+    from_dir = args.from_dir
+    out_path = args.output
 
     token = os.environ.get("AIRTABLE_TOKEN")
     if not token:
@@ -278,7 +337,18 @@ def main():
         raise SystemExit("AIRTABLE_TOKEN is not set (or pass --from-dir for a local build)")
 
     schema = load_schema()
+    if not from_dir:
+        missing = set(ITEM_METADATA_FIELDS) - schema["tables"]["items"]["fields"].keys()
+        if missing:
+            raise SystemExit(
+                f"Missing Airtable mapping for {', '.join(sorted(missing))}. "
+                "Run python3 scripts/init-base.py --refresh."
+            )
     data = build(load_tables(schema, from_dir, token), schema)
+    data = with_content_date(
+        data, load_snapshot(SNAPSHOT_PATH), load_snapshot(args.pending) if args.pending else {},
+        set_date=not from_dir,
+    )
 
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)

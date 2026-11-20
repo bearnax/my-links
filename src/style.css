@@ -1,19 +1,13 @@
-/*
-  ==============================================================================
-  NEUMORPHIC UI: INLINE PILLS, FLOATING DOCK, & AIRTABLE ACCENTS
-  ==============================================================================
-  - Single material continuous sheet (--bg)
-  - Fixed top-left directional lighting
-  - Inline link pills (compact, dot indicator, sitting next to titles)
-  - Floating bottom bar with Search modal & Light/Dark mode switch
-  - Dynamic section accent inheritance from Airtable
-*/
+/* Theme, directory, and controls for Will’s Links. */
 
 :root {
     --font-display: 'Archivo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 
     /* Light Theme (Default): Soft Matte Slate Plastic */
-    --bg: #e2e8f0;
+    --bg: #e7edf5;
+    --surface: #f6f8fc;
+    --line: #cbd5e1;
+    --blue: #244d8a;
     --shadow-light: rgba(255, 255, 255, 0.88);
     --shadow-dark: rgba(160, 175, 195, 0.65);
     --shadow-light-hover: rgba(255, 255, 255, 0.98);
@@ -34,7 +28,10 @@
 
 /* Dark Theme: Soft Matte Obsidian / Charcoal Plastic */
 html[data-theme="dark"] {
-    --bg: #181b20;
+    --bg: #141920;
+    --surface: #1e2632;
+    --line: #354255;
+    --blue: #a9cdfd;
     --shadow-light: rgba(42, 48, 58, 0.90);
     --shadow-dark: rgba(8, 10, 13, 0.96);
     --shadow-light-hover: rgba(54, 62, 75, 1.0);
@@ -110,7 +107,7 @@ a {
 }
 
 .wrap {
-    max-width: 720px;
+    max-width: 840px;
     margin: 0 auto;
     padding: 48px 24px 120px;
 }
@@ -121,30 +118,59 @@ a {
 
 .page-header {
     display: flex;
-    align-items: flex-start;
+    align-items: flex-end;
     justify-content: space-between;
-    gap: 24px;
-    margin-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 28px;
+    padding: 12px 0 26px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 24px;
 }
 
 .brand {
-    font-size: clamp(2.4rem, 7vw, 4rem);
+    font-size: clamp(3rem, 9vw, 5rem);
     font-weight: 900;
-    line-height: 0.9;
-    letter-spacing: -0.03em;
+    line-height: .84;
+    letter-spacing: -.065em;
     text-transform: uppercase;
-    color: var(--text-primary);
 }
 
+.brand > span { display: block; }
+
 .brand-label {
-    text-align: right;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: .16em;
-    text-transform: uppercase;
-    line-height: 1.6;
+    margin-top: 14px;
+    font-size: .95rem;
     color: var(--text-secondary);
 }
+
+.collection-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 22px;
+    align-items: flex-end;
+}
+
+.collection-stats > div {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 5px;
+}
+
+.collection-stats dt {
+    font-size: .75rem;
+    font-weight: 650;
+    color: var(--text-secondary);
+}
+
+.collection-stats dd {
+    color: var(--blue);
+    font-size: 1.75rem;
+    font-weight: 850;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.collection-stats .updated-stat dd { font-size: .99rem; }
 
 /* ==========================================================================
    Neumorphic Button Mechanics (.neumo-btn)
@@ -207,12 +233,15 @@ a {
 .favorite-btn {
     border-radius: 999px;
     padding: 8px 18px;
-    min-height: 40px;
-    font-size: 12px;
+    min-height: 44px;
+    max-width: 100%;
+    font-size: 13px;
     font-weight: 700;
-    letter-spacing: .06em;
-    text-transform: uppercase;
 }
+
+.fav-icon { object-fit: contain; flex: none; }
+
+.fav-label { overflow-wrap: anywhere; }
 
 .fav-dot {
     width: 6px;
@@ -238,176 +267,156 @@ a {
    ========================================================================== */
 
 .section-panel {
-    background: var(--bg);
-    border-radius: 18px;
-    margin-bottom: 26px;
-    box-shadow: -6px -6px 16px var(--shadow-light), 6px 6px 16px var(--shadow-dark);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    overflow: hidden;
-    transition: box-shadow 0.25s ease;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 3px 9px color-mix(in srgb, var(--shadow-dark) 35%, transparent);
 }
-
-/* Dynamic Section Accent Assignment */
-.section-panel[data-accent="blue"] { --section-accent: var(--accent-blue); }
-.section-panel[data-accent="green"] { --section-accent: var(--accent-green); }
-.section-panel[data-accent="rust"] { --section-accent: var(--accent-rust); }
-.section-panel[data-accent="velvet"] { --section-accent: var(--accent-velvet); }
-.section-panel[data-accent="amber"] { --section-accent: var(--accent-amber); }
 
 .section-summary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 20px;
-    cursor: pointer;
-    list-style: none;
-    user-select: none;
-    min-height: 54px;
-}
-
-.section-summary::-webkit-details-marker { display: none; }
-
-.summary-left {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
     gap: 12px;
+    padding: 12px 17px;
+    min-height: 56px;
+    list-style: none;
+    cursor: pointer;
+    border-radius: inherit;
 }
+.section-summary::-webkit-details-marker { display: none; }
+.section-summary:hover { background: color-mix(in srgb, var(--section-accent, var(--blue)) 7%, transparent); }
 
-/* Sunken Indicator Well */
-.sec-glyph-well {
-    width: 26px;
-    height: 26px;
-    border-radius: 8px;
-    background: var(--bg);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
-    color: var(--section-accent, var(--text-secondary));
-    font-size: 14px;
-    font-weight: 800;
-}
+.summary-copy { min-width: 0; }
+.sec-title { display: block; font-weight: 800; overflow-wrap: anywhere; }
+.sec-subtitle { display: block; font-size: .84rem; color: var(--text-secondary); margin-top: 4px; }
 
-.sec-glyph::before { content: "+"; }
-.section-panel[open] > summary .sec-glyph::before { content: "\2212"; }
-
-.sec-num {
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: .16em;
-    color: var(--section-accent, var(--text-secondary));
-    background: var(--bg);
-    padding: 4px 8px;
-    border-radius: 6px;
-    box-shadow: inset 1px 1px 3px var(--shadow-dark), inset -1px -1px 3px var(--shadow-light);
-}
-
-.sec-title {
-    font-size: 15px;
-    font-weight: 800;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: var(--text-primary);
-}
-
-/* Saturated Section Accent Dot */
 .sec-accent-pill {
-    width: 8px;
-    height: 8px;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
-    background: var(--section-accent, var(--text-secondary));
-    box-shadow: 0 0 6px var(--section-accent, transparent);
+    background: var(--section-accent, var(--blue));
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--section-accent, var(--blue)) 16%, var(--surface));
 }
 
-/* ==========================================================================
-   Item Row Cards & Compact Inline Link Pills
-   ========================================================================== */
+.sec-glyph-well {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--bg);
+    color: var(--text-secondary);
+    font-weight: 750;
+}
+.sec-glyph::before { content: "+"; }
+.section-panel[open] > summary .sec-glyph::before { content: "−"; }
 
 .items-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 4px 16px 20px;
+    display: grid;
+    padding: 2px 16px 14px;
 }
 
-.item-card {
-    background: var(--bg);
-    border-radius: 14px;
-    padding: 12px 18px;
-    box-shadow: -4px -4px 10px var(--shadow-light), 4px 4px 10px var(--shadow-dark);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-}
+.item-card { padding: 9px 0; min-width: 0; }
+.item-card + .item-card { border-top: 1px solid var(--line); }
 
 .item-row-content {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px 14px;
+    display: grid;
+    gap: 8px;
+    align-content: center;
+    min-width: 0;
 }
 
 .item-title {
-    font-size: 15px;
-    font-weight: 800;
-    line-height: 1.25;
-    letter-spacing: -0.01em;
-    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 780;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
 }
 
-.item-links-inline {
-    display: inline-flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
+.item-description {
+    font-size: .91rem;
+    line-height: 1.47;
+    color: var(--text-secondary);
+    overflow-wrap: anywhere;
 }
 
-/* Compact Filled Neumorphic Link Pills (Accent Filled, No Stroke, White Text) */
+.bookmark-link,
 .pill-btn {
-    background: var(--section-accent, #2563eb);
-    color: #ffffff;
+    color: var(--text-primary);
+    border: 1px solid var(--line);
+    background: var(--bg);
+    transition: background .16s, transform .16s, box-shadow .16s;
+}
+
+.bookmark-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border-radius: 12px;
+    padding: 9px 12px;
+    min-height: 44px;
+}
+
+.bookmark-label { font-size: .8rem; color: var(--text-secondary); margin-inline-start: .55rem; }
+.bookmark-link .pill-arrow { color: var(--text-secondary); flex: none; }
+
+.item-links-inline,
+.search-result-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.pill-btn {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
+    min-height: 36px;
     padding: 5px 12px;
-    min-height: 28px;
     border-radius: 999px;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    text-decoration: none;
-    border: none;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-    box-shadow: 0 2px 6px color-mix(in srgb, var(--section-accent, #2563eb) 35%, transparent),
-                -2px -2px 6px var(--shadow-light);
-    cursor: pointer;
-    transition: box-shadow 0.15s ease, transform 0.15s ease, filter 0.15s ease;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
+    font-size: .8rem;
+    font-weight: 700;
 }
 
+.pill-label { overflow-wrap: anywhere; }
+.pill-arrow { flex: none; }
+.bookmark-link:hover,
 .pill-btn:hover {
-    color: #ffffff;
+    background: color-mix(in srgb, var(--section-accent, var(--blue)) 12%, var(--bg));
     transform: translateY(-1px);
-    box-shadow: 0 4px 10px color-mix(in srgb, var(--section-accent, #2563eb) 45%, transparent),
-                -3px -3px 8px var(--shadow-light-hover);
-    filter: brightness(1.06);
+    box-shadow: 0 2px 5px color-mix(in srgb, var(--shadow-dark) 50%, transparent);
 }
+.bookmark-link:active,
+.pill-btn:active { transform: translateY(1px); box-shadow: inset 0 2px 4px var(--shadow-dark); }
 
-.pill-btn:active {
-    transform: translateY(1px);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.35);
-    filter: brightness(0.95);
+.featured-card {
+    display: grid;
+    gap: 16px;
+    margin-block: 8px;
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-inline-start: 3px solid var(--section-accent, var(--blue));
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--section-accent, var(--blue)) 8%, var(--surface));
 }
-
-.pill-arrow {
-    font-size: 9px;
-    opacity: 0.9;
-    transition: transform 0.15s ease;
+.featured-card.has-image { grid-template-columns: minmax(130px, 30%) minmax(0, 1fr); }
+.featured-card .item-title { font-size: 1.22rem; }
+.featured-card .primary-pill {
+    background: var(--text-primary);
+    color: var(--surface);
+    border-color: transparent;
 }
-
-.pill-btn:hover .pill-arrow {
-    transform: translate(1px, -1px);
-    opacity: 1;
+.featured-card .primary-pill:hover { opacity: .86; }
+.project-image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    background: var(--bg);
+    border-radius: 9px;
 }
 
 /* ==========================================================================
@@ -466,55 +475,34 @@ a {
    Search Modal / Popup Dialog
    ========================================================================== */
 
+body.search-open { overflow: hidden; }
+
 .search-modal {
     position: fixed;
-    inset: 0;
-    z-index: 1000;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 80px 20px 40px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease;
+    inset: min(12vh, 80px) 0 auto;
+    width: min(620px, calc(100% - 24px));
+    max-width: none;
+    max-height: 82vh;
+    max-height: 82dvh;
+    margin: 0 auto;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+    color: var(--text-primary);
+    box-shadow: 0 16px 60px #0f172a52;
 }
 
-.search-modal.is-open {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.search-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(15, 23, 42, 0.45);
+.search-modal::backdrop {
+    background: #0f172a80;
     backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-}
-
-html[data-theme="dark"] .search-backdrop {
-    background: rgba(0, 0, 0, 0.7);
 }
 
 .search-dialog {
-    position: relative;
-    width: 100%;
-    max-width: 620px;
-    background: var(--bg);
-    border-radius: 18px;
-    padding: 20px;
-    box-shadow: -8px -8px 24px var(--shadow-light), 8px 8px 24px var(--shadow-dark);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    max-height: 80vh;
+    padding: 14px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    transform: translateY(-12px);
-    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.search-modal.is-open .search-dialog {
-    transform: translateY(0);
+    gap: 12px;
 }
 
 .search-input-wrapper {
@@ -537,7 +525,7 @@ html[data-theme="dark"] .search-backdrop {
     flex: 1;
     background: none;
     border: none;
-    outline: none;
+    min-width: 0;
     color: var(--text-primary);
     font-family: inherit;
     font-size: 15px;
@@ -601,6 +589,7 @@ html[data-theme="dark"] .search-backdrop {
 
 .search-result-info {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 8px;
 }
@@ -623,11 +612,6 @@ html[data-theme="dark"] .search-backdrop {
     box-shadow: inset 1px 1px 2px var(--shadow-dark), inset -1px -1px 2px var(--shadow-light);
 }
 
-.search-result-links {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
 
 /* ==========================================================================
    Mobile Responsiveness
@@ -638,22 +622,14 @@ html[data-theme="dark"] .search-backdrop {
         padding: 32px 16px 100px;
     }
 
-    .page-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-        margin-bottom: 28px;
-    }
-
-    .brand-label {
-        text-align: left;
-    }
-
-    .search-modal {
-        padding: 40px 12px 20px;
-    }
+    .page-header { gap: 20px; }
+    .featured-card.has-image { grid-template-columns: minmax(0, 1fr); }
 
     .floating-dock {
         bottom: 16px;
     }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; }
 }

@@ -29,15 +29,9 @@ jobs:
           node-version: "22"
           cache: npm
 
-      # Offline checks only — no token needed. Catches a fork whose schema or
-      # site.json was never filled in, before the build produces a page that
-      # says "undefined" in the title.
-      - name: Check the site config
-        run: python3 scripts/doctor.py
-
       - run: npm ci
 
-      - run: npm run build
+      - run: npm test
 
       - name: Check the build produced a page
         run: test -s _site/index.html && test -s _site/style.css

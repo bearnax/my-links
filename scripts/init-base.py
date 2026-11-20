@@ -4,6 +4,7 @@
 Usage:
   init-base.py --workspace wspXXXXXXXX [--name "Links CMS"]
   init-base.py --base appXXXXXXXX          adopt an existing base instead
+  init-base.py --refresh                   refresh IDs for the configured base
   init-base.py --workspace wsp... --dry-run
 
 This is the missing half of forking the site. `data/airtable-schema.json` is a
@@ -49,7 +50,9 @@ def api(method, path, token, payload=None):
     except urllib.error.HTTPError as e:
         body = e.read().decode("utf-8", "replace")
         hint = ""
-        if e.code == 403:
+        if e.code == 403 and method == "GET":
+            hint = "\nHint: the token needs schema.bases:read for this base."
+        elif e.code == 403:
             hint = ("\nHint: the token needs the schema.bases:write scope AND the "
                     "workspace must be in the token's allowed bases/workspaces list.")
         raise SystemExit(f"Airtable returned {e.code} for {method} {path}: {body}{hint}")
@@ -81,7 +84,7 @@ def field_payload(field, spec, table_ids):
     return out
 
 
-def build_schema(spec, base_id, base_name, tables_response):
+def build_schema(spec, base_id, base_name, tables_response, existing=None):
     """Map the spec's stable keys onto the IDs Airtable handed back."""
     by_name = {t["name"]: t for t in tables_response}
     schema = {
@@ -101,20 +104,28 @@ def build_schema(spec, base_id, base_name, tables_response):
     if "statuses" in spec:
         schema["statuses"] = spec["statuses"]
 
+    by_id = {t["id"]: t for t in tables_response}
     for table in spec["tables"]:
-        live = by_name.get(table["name"])
+        previous = (existing or {}).get("tables", {}).get(table["key"], {})
+        live = by_id.get(previous.get("id")) or by_name.get(table["name"])
         if live is None:
             raise SystemExit(f"table '{table['name']}' is missing from the base")
-        live_fields = {f["name"]: f["id"] for f in live["fields"]}
+        live_fields = {f["name"]: f for f in live["fields"]}
+        fields_by_id = {f["id"]: f for f in live["fields"]}
 
         fields = {}
         for field in table["fields"]:
-            field_id = live_fields.get(field["name"])
-            if field_id is None:
+            old_id = previous.get("fields", {}).get(field["key"])
+            match = fields_by_id.get(old_id) or live_fields.get(field["name"])
+            if match is None:
                 raise SystemExit(
                     f"field '{field['name']}' is missing from table '{table['name']}'"
                 )
-            fields[field["key"]] = field_id
+            expected = "multipleRecordLinks" if field["type"] == "link" else field["type"]
+            accepted = {expected, "richText"} if field["key"] == "description" else {expected}
+            if match["type"] not in accepted:
+                raise SystemExit(f"{live['name']}.{match['name']} is {match['type']}, expected {expected}")
+            fields[field["key"]] = match["id"]
 
         schema["tables"][table["key"]] = {"id": live["id"], "fields": fields}
 
@@ -177,6 +188,7 @@ def main():
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--workspace", help="workspace ID (wsp...) to create the base in")
     parser.add_argument("--base", help="adopt an existing base (app...) instead of creating one")
+    parser.add_argument("--refresh", action="store_true", help="refresh live field IDs using read-only metadata")
     parser.add_argument("--name", default="Links CMS", help="name for the new base")
     parser.add_argument("--dry-run", action="store_true",
                         help="print the payloads without calling Airtable")
@@ -195,24 +207,32 @@ def main():
         print()
         return
 
-    if bool(args.workspace) == bool(args.base):
-        raise SystemExit("pass exactly one of --workspace (create) or --base (adopt)")
+    if sum(map(bool, (args.workspace, args.base, args.refresh))) != 1:
+        raise SystemExit("pass one of --workspace, --base, or --refresh")
 
     token = os.environ.get("AIRTABLE_TOKEN")
     if not token:
         raise SystemExit("AIRTABLE_TOKEN is not set")
 
-    if args.base:
+    existing = None
+    if args.refresh:
+        with open(SCHEMA_PATH, encoding="utf-8") as f:
+            existing = json.load(f)
+        base_id = existing["baseId"]
+    elif args.base:
         base_id = args.base
         print(f"Adopting existing base {base_id}")
     else:
         base_id = create_base(spec, args.workspace, args.name, token)
 
-    print("Adding link fields...")
-    add_link_fields(spec, base_id, token)
+    if args.workspace:
+        print("Adding link fields...")
+        add_link_fields(spec, base_id, token)
 
     live = api("GET", f"/bases/{base_id}/tables", token)["tables"]
-    schema = build_schema(spec, base_id, args.name, live)
+    schema = build_schema(spec, base_id, args.name, live, existing)
+    if existing:
+        schema = {**existing, "tables": schema["tables"]}
 
     with open(SCHEMA_PATH, "w", encoding="utf-8") as f:
         json.dump(schema, f, indent=2, ensure_ascii=False)

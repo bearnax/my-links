@@ -1,19 +1,27 @@
 name: Sync links data from Airtable
 
 on:
-  workflow_dispatch: {}
-  schedule:
-    # Weekday mornings, off the hour so this is not queued with everything
-    # else that runs at :00.
-    - cron: "23 12 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      refresh_schema:
+        description: Refresh field IDs (requires schema.bases:read)
+        type: boolean
+        default: false
 
 permissions:
   contents: write
   pull-requests: write
 
+concurrency:
+  group: links-airtable-sync
+  cancel-in-progress: false
+
 jobs:
   sync:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    env:
+      SYNC_BRANCH: links-sync
     steps:
       - uses: actions/checkout@v4
 
@@ -21,127 +29,100 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Build links.json from Airtable
+      - name: Find the current sync branch and pull request
+        id: pending
         env:
-          # A personal access token scoped to the Links CMS base. Read-only is
-          # enough — this job never writes back to Airtable.
-          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+          GH_TOKEN: ${{ secrets.SYNC_PR_TOKEN || github.token }}
         run: |
+          set -euo pipefail
+          pr=$(gh pr list --head "$SYNC_BRANCH" --base main --state open --json number --jq '.[0].number // empty')
+          ref="refs/heads/$SYNC_BRANCH"
+          current=$(git ls-remote --heads origin "$ref" | cut -f1)
+          if [ -n "$pr" ]; then
+            git fetch --no-tags origin "$ref"
+            current=$(git rev-parse FETCH_HEAD)
+            git show FETCH_HEAD:data/links.json > "$RUNNER_TEMP/pending-links.json"
+          fi
+          echo "pr=$pr" >> "$GITHUB_OUTPUT"
+          echo "sha=$current" >> "$GITHUB_OUTPUT"
+
+      - name: Read Airtable and compare snapshots
+        id: sync
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+          REFRESH_SCHEMA: ${{ inputs.refresh_schema }}
+        run: |
+          set -euo pipefail
           if [ -z "$AIRTABLE_TOKEN" ]; then
-            echo "::error::AIRTABLE_TOKEN secret is not set. Create a token with data.records:read scoped to the Links CMS base and add it as a repository secret."
+            echo "::error::Set the AIRTABLE_TOKEN repository secret with data.records:read for the Links CMS base."
             exit 1
           fi
-          python3 scripts/sync-links.py /tmp/links-sync-out.json 2>&1 | tee /tmp/links-sync.log
-          exit "${PIPESTATUS[0]}"
-        shell: bash
-
-      - name: Report sync failure
-        if: failure()
-        run: |
-          {
-            echo "### Airtable sync failed"
-            echo '```'
-            tail -c 4000 /tmp/links-sync.log 2>/dev/null || echo "(no log)"
-            echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Surface warnings
-        if: success()
-        run: |
-          # Warnings mean a record could not be placed — a person with no
-          # section, say. The sync deliberately does not fail on these, so
-          # they need somewhere visible to land.
-          if grep -q '^warning:' /tmp/links-sync.log; then
-            {
-              echo "### Records skipped"
-              echo '```'
-              grep '^warning:' /tmp/links-sync.log
-              echo '```'
-            } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$REFRESH_SCHEMA" = "true" ]; then
+            python3 scripts/init-base.py --refresh
           fi
-
-      - name: Diff against data/links.json
-        id: diff
-        run: |
-          if diff -q /tmp/links-sync-out.json data/links.json > /dev/null; then
+          pending="$RUNNER_TEMP/pending-links.json"
+          python3 scripts/sync-links.py --pending "$pending" "$RUNNER_TEMP/links.json" 2>&1 | tee "$RUNNER_TEMP/links-sync.log"
+          body="$RUNNER_TEMP/sync-summary.md"
+          python3 scripts/diff-links.py data/links.json "$RUNNER_TEMP/links.json" > "$body"
+          if ! git diff --quiet -- data/airtable-schema.json; then
+            printf '\n- Refresh Airtable field mappings.\n' >> "$body"
+          fi
+          if grep -q '^warning:' "$RUNNER_TEMP/links-sync.log"; then
+            printf '\n#### Airtable warnings\n\n' >> "$body"
+            sed -n 's/^warning: /- /p' "$RUNNER_TEMP/links-sync.log" >> "$body"
+          fi
+          cat "$body" >> "$GITHUB_STEP_SUMMARY"
+          cp "$RUNNER_TEMP/links.json" data/links.json
+          if git diff --quiet -- data/airtable-schema.json data/links.json; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Summarize changes
-        if: steps.diff.outputs.changed == 'true'
-        run: |
-          python3 scripts/diff-links.py data/links.json /tmp/links-sync-out.json > /tmp/links-sync-summary.md
-          cat /tmp/links-sync-summary.md >> "$GITHUB_STEP_SUMMARY"
-
       - uses: actions/setup-node@v4
-        if: steps.diff.outputs.changed == 'true'
+        if: steps.sync.outputs.changed == 'true'
         with:
           node-version: "22"
           cache: npm
 
-      - name: Check the site still builds with the new data
-        if: steps.diff.outputs.changed == 'true'
+      - name: Verify the synced snapshot
+        if: steps.sync.outputs.changed == 'true'
         run: |
-          # The PR would deploy on merge, so a build failure should surface
-          # here rather than on main.
-          cp /tmp/links-sync-out.json data/links.json
           npm ci
-          npm run build
+          npm test
           test -s _site/index.html
 
-      - name: Open pull request
-        if: steps.diff.outputs.changed == 'true'
+      - name: Update the sync pull request
         env:
-          # A PAT with repo scope in SYNC_PR_TOKEN lets the job open the PR even when
-          # "Allow GitHub Actions to create and approve pull requests" is turned off.
           GH_TOKEN: ${{ secrets.SYNC_PR_TOKEN || github.token }}
+          PENDING_PR: ${{ steps.pending.outputs.pr }}
+          PENDING_SHA: ${{ steps.pending.outputs.sha }}
+          CHANGED: ${{ steps.sync.outputs.changed }}
         run: |
-          branch="links-sync-$(date +%Y%m%d)"
-
-          if gh pr list --head "$branch" --state open --json number --jq '. | length' | grep -qv '^0$'; then
-            echo "An open PR already exists for branch $branch; skipping."
+          set -euo pipefail
+          if [ "$CHANGED" = "false" ]; then
+            if [ -n "$PENDING_PR" ]; then
+              gh pr close "$PENDING_PR"
+            fi
+            exit 0
+          fi
+          ref="refs/heads/$SYNC_BRANCH"
+          if [ -n "$PENDING_PR" ] && git diff --quiet "$PENDING_SHA" -- data/airtable-schema.json data/links.json; then
+            echo "The open sync PR already contains this snapshot." >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          git checkout -b "$branch"
-          git add data/links.json
+          git add data/airtable-schema.json data/links.json
           git commit -m "Sync links data from Airtable"
+          git push --force-with-lease="$ref:$PENDING_SHA" origin "HEAD:$ref"
 
-          # Force is safe here: we bailed out above if an open PR targets this branch,
-          # and links-sync-* branches are only ever written by this job. It lets a
-          # rerun replace a leftover branch from an earlier run that failed after push.
-          git push --force -u origin "$branch"
-
-          if gh pr create \
-            --title "Sync links data from Airtable ($(date +%Y-%m-%d))" \
-            --body-file /tmp/links-sync-summary.md \
-            --base main \
-            --head "$branch" 2> /tmp/links-sync-pr.log; then
-            exit 0
-          fi
-
-          cat /tmp/links-sync-pr.log >&2
-
-          if ! grep -q "not permitted to create or approve pull requests" /tmp/links-sync-pr.log; then
+          body="$RUNNER_TEMP/sync-summary.md"
+          if [ -n "$PENDING_PR" ]; then
+            gh pr edit "$PENDING_PR" --body-file "$body"
+          elif ! gh pr create --base main --head "$SYNC_BRANCH" --title "Sync links data from Airtable" --body-file "$body"; then
+            echo "Open the sync PR from the pushed branch:" >> "$GITHUB_STEP_SUMMARY"
+            echo "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/compare/main...$SYNC_BRANCH?expand=1" >> "$GITHUB_STEP_SUMMARY"
             exit 1
           fi
-
-          # The synced data is pushed and safe; only PR creation is blocked by repo
-          # policy. Surface the compare link instead of failing the whole sync.
-          {
-            echo "### Branch pushed, but the pull request could not be opened"
-            echo
-            echo "GitHub Actions is not allowed to create pull requests in this repository."
-            echo "Turn on **Settings -> Actions -> General -> Workflow permissions ->**"
-            echo "**Allow GitHub Actions to create and approve pull requests**, or add a"
-            echo '`SYNC_PR_TOKEN` secret holding a PAT with `repo` scope.'
-            echo
-            echo "The synced data is on \`$branch\`. Open the PR here:"
-            echo
-            echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/compare/main...${branch}?expand=1"
-          } >> "$GITHUB_STEP_SUMMARY"
