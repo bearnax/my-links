@@ -7,6 +7,10 @@ on:
         description: Refresh field IDs (requires schema.bases:read)
         type: boolean
         default: false
+      update_review_branch:
+        description: Write the synced snapshot to the selected review branch
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -18,7 +22,7 @@ concurrency:
 
 jobs:
   sync:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || (inputs.update_review_branch && github.ref_type == 'branch')
     runs-on: ubuntu-latest
     env:
       SYNC_BRANCH: links-sync
@@ -30,6 +34,7 @@ jobs:
           python-version: "3.x"
 
       - name: Find the current sync branch and pull request
+        if: github.ref == 'refs/heads/main'
         id: pending
         env:
           GH_TOKEN: ${{ secrets.SYNC_PR_TOKEN || github.token }}
@@ -92,7 +97,17 @@ jobs:
           npm test
           test -s _site/index.html
 
+      - name: Update the selected review branch
+        if: github.ref != 'refs/heads/main' && steps.sync.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/airtable-schema.json data/links.json
+          git commit -m "Sync live Airtable data for review"
+          git push origin "HEAD:$GITHUB_REF"
+
       - name: Update the sync pull request
+        if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ secrets.SYNC_PR_TOKEN || github.token }}
           PENDING_PR: ${{ steps.pending.outputs.pr }}

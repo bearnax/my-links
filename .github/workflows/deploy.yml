@@ -36,6 +36,18 @@ jobs:
       - name: Check the build produced a page
         run: test -s _site/index.html && test -s _site/style.css
 
+      - name: Test the site in Chrome
+        if: github.event_name == 'pull_request'
+        run: |
+          npm install --prefix "$RUNNER_TEMP/links-browser" playwright@1.56.1
+          python3 -m http.server 8080 --bind localhost --directory _site &
+          trap 'kill "$!"' EXIT
+          for attempt in {1..10}; do
+            if curl -fsS http://localhost:8080/ >/dev/null; then break; fi
+            sleep 1
+          done
+          NODE_PATH="$RUNNER_TEMP/links-browser/node_modules" node tests/site-smoke.cjs
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

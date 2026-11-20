@@ -110,3 +110,8 @@ change and grant the token `schema.bases:read` for that run.
 GitHub Actions must be allowed to open PRs, or `SYNC_PR_TOKEN` must have
 permission to do so for this repository. If PR creation fails after the
 branch is pushed, the run summary includes a link to open it manually.
+
+To test a schema or design change with live data before merging, select your
+review branch and enable **Update review branch**. The workflow validates the
+snapshot and commits it to that branch. Enable **Refresh field IDs** if the
+branch needs a new field mapping.
