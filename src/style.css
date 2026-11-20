@@ -270,6 +270,7 @@ a {
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: 16px;
+    overflow: hidden;
     margin-bottom: 12px;
     box-shadow: 0 3px 9px color-mix(in srgb, var(--shadow-dark) 35%, transparent);
 }
@@ -283,8 +284,10 @@ a {
     min-height: 56px;
     list-style: none;
     cursor: pointer;
-    border-radius: inherit;
+    border-radius: 15px;
 }
+
+.section-panel[open] > .section-summary { border-radius: 15px 15px 0 0; }
 .section-summary::-webkit-details-marker { display: none; }
 .section-summary:hover { background: color-mix(in srgb, var(--section-accent, var(--blue)) 7%, transparent); }
 
