@@ -61,6 +61,14 @@ class CollectionSyncTest(unittest.TestCase):
         self.assertNotEqual(after_delete["contentUpdated"], previous["contentUpdated"])
         self.assertEqual(sync.with_content_date(empty, previous, after_delete, set_date=True), after_delete)
 
+    def test_content_edit_changes_date_and_pending_rerun_keeps_it(self):
+        before = {"favorites": [], "sections": [{"id": "projects", "title": "Projects"}],
+                  "contentUpdated": "2020-01-01T00:00:00+00:00"}
+        edited = {"favorites": [], "sections": [{"id": "projects", "title": "Experiments"}]}
+        pending = sync.with_content_date(edited, before, {}, set_date=True)
+        self.assertNotEqual(pending["contentUpdated"], before["contentUpdated"])
+        self.assertEqual(sync.with_content_date(edited, before, pending, set_date=True), pending)
+
     def test_image_url_requires_https(self):
         with self.assertRaisesRegex(ValueError, "invalid image URL"):
             sync.validate_url("http://example.com/image", "Example", "image", https_only=True)
