@@ -26,7 +26,8 @@ export default async function () {
   }
 
   destinations.delete("");
-  const updated = data.contentUpdated && new Date(data.contentUpdated);
+  const contentDate = process.env.LINKS_PUBLISHED_AT || data.contentUpdated;
+  const updated = contentDate && new Date(contentDate);
   data.stats = {
     links: destinations.size,
     projects,

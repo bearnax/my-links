@@ -23,6 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -31,7 +33,13 @@ jobs:
 
       - run: npm ci
 
-      - run: npm test
+      - name: Build and test
+        run: |
+          if [ "$GITHUB_REF" = "refs/heads/main" ]; then
+            published_at=$(git log --first-parent -1 --format=%cI -- data/links.json)
+            export LINKS_PUBLISHED_AT="$published_at"
+          fi
+          npm test
 
       - name: Check the build produced a page
         run: test -s _site/index.html && test -s _site/style.css

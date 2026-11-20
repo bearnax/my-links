@@ -65,8 +65,8 @@ Use **Description** to explain an unfamiliar link in a sentence. **Is Project**
 adds the item to the Projects count. Choose **Featured** under **Presentation**
 for a larger card, with an optional **Image URL**. Upload public images to R2
 and paste the stable HTTPS URL. The page counts distinct destination URLs,
-including secondary links, and displays the last content-change date from the
-published snapshot. Unchanged syncs keep the existing date.
+including secondary links, and displays the date that the published collection snapshot last changed on
+`main`. Unchanged syncs and rebuilds keep the existing date.
 
 ### Checking the setup
 
