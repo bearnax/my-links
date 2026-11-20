@@ -20,6 +20,8 @@ concurrency:
 
 jobs:
   build:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,6 +32,20 @@ jobs:
         with:
           node-version: "22"
           cache: npm
+
+      - name: Load live data for draft PR 18
+        if: github.event_name == 'pull_request' && github.event.pull_request.number == 18 && github.event.pull_request.head.repo.full_name == github.repository
+        id: live
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: |
+          if [ -z "$AIRTABLE_TOKEN" ]; then
+            echo "::notice::No Airtable secret is configured for the live preview."
+            exit 0
+          fi
+          python3 scripts/init-base.py --refresh
+          python3 scripts/sync-links.py
+          echo "ready=true" >> "$GITHUB_OUTPUT"
 
       - run: npm ci
 
@@ -55,6 +71,19 @@ jobs:
             sleep 1
           done
           NODE_PATH="$RUNNER_TEMP/links-browser/node_modules" node tests/site-smoke.cjs
+
+      - name: Attach the validated snapshot to PR 18
+        if: steps.live.outputs.ready == 'true'
+        env:
+          REVIEW_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git diff --quiet -- data/links.json data/airtable-schema.json && exit 0
+          git switch --detach "$REVIEW_SHA"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/links.json data/airtable-schema.json
+          git commit -m "Sync live Airtable data for review"
+          git push origin HEAD:refs/heads/codex/links-directory-refresh
 
       - uses: actions/upload-pages-artifact@v3
         with:
