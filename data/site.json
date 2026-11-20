@@ -5,7 +5,7 @@
   ],
   "title": "Will's Links",
   "brand": ["Will's", "Links"],
-  "tagline": ["Personal link", "hub"],
+  "tagline": ["Projects, tools, and useful links."],
   "lang": "en",
   "storagePrefix": "wl",
   "airtableBaseName": "Links CMS"

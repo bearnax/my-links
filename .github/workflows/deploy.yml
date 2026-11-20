@@ -23,24 +23,38 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
           cache: npm
 
-      # Offline checks only — no token needed. Catches a fork whose schema or
-      # site.json was never filled in, before the build produces a page that
-      # says "undefined" in the title.
-      - name: Check the site config
-        run: python3 scripts/doctor.py
-
       - run: npm ci
 
-      - run: npm run build
+      - name: Build and test
+        run: |
+          if [ "$GITHUB_REF" = "refs/heads/main" ]; then
+            published_at=$(git log --first-parent -1 --format=%cI -- data/links.json)
+            export LINKS_PUBLISHED_AT="$published_at"
+          fi
+          npm test
 
       - name: Check the build produced a page
         run: test -s _site/index.html && test -s _site/style.css
+
+      - name: Test the site in Chrome
+        if: github.event_name == 'pull_request'
+        run: |
+          npm install --prefix "$RUNNER_TEMP/links-browser" playwright@1.56.1
+          python3 -m http.server 8080 --bind localhost --directory _site &
+          trap 'kill "$!"' EXIT
+          for attempt in {1..10}; do
+            if curl -fsS http://localhost:8080/ >/dev/null; then break; fi
+            sleep 1
+          done
+          NODE_PATH="$RUNNER_TEMP/links-browser/node_modules" node tests/site-smoke.cjs
 
       - uses: actions/upload-pages-artifact@v3
         with:

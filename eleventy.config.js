@@ -10,25 +10,14 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/index.js");
   eleventyConfig.addPassthroughCopy("src/static");
 
-  // Matches the favicon service the page used when it rendered client-side.
-  eleventyConfig.addFilter("faviconUrl", function (url) {
-    try {
-      return "https://www.google.com/s2/favicons?sz=64&domain=" + new URL(url).hostname;
-    } catch (e) {
-      return "";
-    }
-  });
-
-  // Section numbers are displayed as 01, 02, ...
-  eleventyConfig.addFilter("sectionNumber", function (index) {
-    return String(index).padStart(2, "0");
-  });
-
-
-  // `search` is optional in the data; fall back to the lowercased label or title.
-  eleventyConfig.addFilter("searchTerms", function (item) {
-    return item.search || (item.title || item.label || item.name || "").toLowerCase();
-  });
+  eleventyConfig.setNunjucksEnvironmentOptions({ autoescape: true });
+  eleventyConfig.addFilter("searchTerms", (item) => [
+    item.title || item.label,
+    item.search,
+    item.description,
+    item.primaryUrlLabel,
+    ...(item.links ?? []).map((link) => link.label),
+  ].filter(Boolean).join(" "));
 
   return {
     dir: {

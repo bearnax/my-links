@@ -26,8 +26,20 @@ def build(data):
     sections = []
     items = []
 
-    # If there are favorites, add them as a Favorites section (order 0)
-    fav_list = data.get("favorites", [])
+    favorites = data.get("favorites", [])
+    favorite_ids = {favorite["id"] for favorite in favorites if favorite.get("id")}
+    legacy_urls = {favorite["url"] for favorite in favorites if not favorite.get("id") and favorite.get("url")}
+    regular_items = [
+        item for section in data.get("sections", []) if section["id"] != "quick-access"
+        for item in section.get("items", [])
+    ]
+    regular_ids = {item["id"] for item in regular_items if item.get("id")}
+    regular_urls = {item.get("primaryUrl") or item.get("url") for item in regular_items}
+    # Keep only favorites without a corresponding item in the main directory.
+    fav_list = [
+        favorite for favorite in favorites
+        if not (favorite["id"] in regular_ids if favorite.get("id") else favorite.get("url") in regular_urls)
+    ]
     if fav_list:
         sections.append({
             "Slug": "favorites",
@@ -43,6 +55,11 @@ def build(data):
                 "Section": "favorites",
                 "Order": i,
                 "Search": fav.get("search", ""),
+                "Description": "",
+                "Presentation": "",
+                "Image URL": "",
+                "Is Project": False,
+                "Favorite": True,
                 "Primary URL": fav.get("url", ""),
                 "Primary URL Label": fav.get("label", ""),
                 "Link1 URL": "",
@@ -84,6 +101,11 @@ def build(data):
                 "Section": sec["id"],
                 "Order": it.get("order", i),
                 "Search": it.get("search", ""),
+                "Description": it.get("description", ""),
+                "Presentation": it.get("presentation", "").capitalize(),
+                "Image URL": it.get("imageUrl", ""),
+                "Is Project": bool(it.get("isProject")),
+                "Favorite": bool(it.get("favorite") or it.get("id") in favorite_ids or primary_url in legacy_urls),
                 "Primary URL": primary_url,
                 "Primary URL Label": primary_label,
                 "Link1 URL": "",

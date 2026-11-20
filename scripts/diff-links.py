@@ -34,7 +34,7 @@ def kind_of(item, default):
     """Items carry a type since the Airtable cutover. Older data does not, so
     fall back to shape: only projects ever had a status."""
     if "title" in item:
-        return "item"
+        return "project" if item.get("isProject") else "item"
     if "type" in item:
         return item["type"]
     if "status" in item:
@@ -54,7 +54,7 @@ def diff_list(old_items, new_items, default_kind="website"):
         if key not in new_by_key:
             lines.append(f"- Remove {kind_of(item, default_kind)}: {label_for(item)}")
     for key, item in new_by_key.items():
-        if key in old_by_key and old_by_key[key] != item:
+        if key in old_by_key and describe_edit(old_by_key[key], item):
             lines.append(f"- Edit {kind_of(item, default_kind)}: {label_for(item)}{describe_edit(old_by_key[key], item)}")
     return lines
 
@@ -62,7 +62,7 @@ def diff_list(old_items, new_items, default_kind="website"):
 def describe_edit(old, new):
     """Name the fields that changed, so a one-character tweak is not
     indistinguishable from a rewrite in the PR body."""
-    changed = sorted(k for k in set(old) | set(new) if old.get(k) != new.get(k))
+    changed = sorted(k for k in set(old) | set(new) if k != "id" and old.get(k) != new.get(k))
     return f" ({', '.join(changed)})" if changed else ""
 
 
@@ -89,12 +89,27 @@ def main():
         item_lines = diff_list(items_of(old_sections.get(sid, {})), items_of(section))
         if sid not in old_sections:
             lines.append(f"- Add section: {section['title']}")
+        else:
+            previous = old_sections[sid]
+            metadata_changes = describe_edit(
+                {k: v for k, v in previous.items() if k != "items"},
+                {k: v for k, v in section.items() if k != "items"},
+            )
+            if metadata_changes:
+                lines.append(f"- Edit section: {section['title']}{metadata_changes}")
+            elif not item_lines and items_of(previous) != items_of(section):
+                old_order = [key_for(item) for item in items_of(previous)]
+                new_order = [key_for(item) for item in items_of(section)]
+                if old_order != new_order:
+                    lines.append(f"- Reorder items in {section['title']}")
         lines.extend(item_lines)
 
     for sid, section in old_sections.items():
         if sid not in new_sections:
             lines.append(f"- Remove section: {section['title']}")
 
+    if old.get("contentUpdated") != new.get("contentUpdated"):
+        lines.append("- Update the collection date.")
     print("\n".join(lines) if lines else "No changes detected.")
 
 

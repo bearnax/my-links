@@ -10,17 +10,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..900&display=swap" rel="stylesheet">
-    {#
-      The palette is settled before first paint so the page never flashes one
-      colour and lands on another. Kept inline for that reason — index.js is a
-      module and therefore deferred. A saved override from the footer picker
-      wins; with none saved, one of the three flats is drawn at random.
-    #}
     <script>
       (function () {
         var saved = null;
         try { saved = localStorage.getItem("{{ site.storagePrefix }}-theme"); } catch (e) {}
-        if (!saved) {
+        if (saved !== "light" && saved !== "dark") {
           saved = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
         document.documentElement.setAttribute("data-theme", saved);
@@ -35,8 +29,17 @@
       <main id="main-content">
 
         <header class="page-header">
-          <h1 class="brand">{{ site.brand | join("<br>") | safe }}</h1>
-          <p class="brand-label">{{ site.tagline | join("<br>") | safe }}</p>
+          <div>
+            <h1 class="brand">{% for line in site.brand %}<span>{{ line }}</span>{% endfor %}</h1>
+            <p class="brand-label">{{ site.tagline | join(" ") }}</p>
+          </div>
+          <dl class="collection-stats">
+            <div><dt>Links</dt><dd>{{ links.stats.links }}</dd></div>
+            <div><dt>Projects</dt><dd>{{ links.stats.projects }}</dd></div>
+            {% if links.stats.updated %}
+            <div class="updated-stat"><dt>Links updated</dt><dd><time datetime="{{ links.stats.updated.iso }}">{{ links.stats.updated.label }}</time></dd></div>
+            {% endif %}
+          </dl>
         </header>
 
         {% if links.favorites and links.favorites.length %}
@@ -49,7 +52,7 @@
         {% endif %}
 
         <div id="sections-container">
-          {%- for sec in links.sections %}{{ cards.section(sec, loop.index) }}{% endfor -%}
+          {%- for sec in links.sections %}{{ cards.section(sec) }}{% endfor -%}
         </div>
 
       </main>
@@ -69,22 +72,21 @@
     </nav>
 
     <!-- Search Modal Popup -->
-    <div id="search-modal" class="search-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="search-modal-title">
-      <div class="search-backdrop" id="search-backdrop"></div>
+    <dialog id="search-modal" class="search-modal" aria-labelledby="search-modal-title">
       <div class="search-dialog">
         <h2 id="search-modal-title" class="sr-only">Search Bookmarks</h2>
         <div class="search-input-wrapper">
           <span class="search-input-icon" aria-hidden="true">⌕</span>
-          <input type="text" id="search-input" class="search-input" placeholder="Search links, keywords..." autocomplete="off" spellcheck="false">
+          <input type="text" id="search-input" class="search-input" placeholder="Search links, keywords…" aria-label="Search links and projects" autofocus autocomplete="off" spellcheck="false">
           <button type="button" class="search-close-btn" id="close-search-btn" aria-label="Close search">
             <kbd aria-hidden="true">esc</kbd>
           </button>
         </div>
-        <div class="search-results-container" id="search-results" role="listbox">
+        <div class="search-results-container" id="search-results">
           <div class="search-empty-state">Type to search through all bookmarks...</div>
         </div>
       </div>
-    </div>
+    </dialog>
 
     <script src="index.js" type="module"></script>
   </body>
